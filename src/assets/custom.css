@@ -1,0 +1,35 @@
+*{
+  -webkit-overflow-scrolling: touch;
+}
+.container{
+  padding: 0 0.75rem;
+  background: #fff;
+}
+.fz20{
+  font-size: .5rem;
+}
+.fz26{
+  font-size: .65rem;
+}
+.fz32{
+  font-size: .8rem;
+}
+.fz34{
+  font-size: .85rem;
+}
+.btn{
+  width: 2.85rem;
+  height: 1.2rem;
+  text-align: center;
+  line-height: 1.2rem;
+  box-sizing: border-box;
+  border-radius: .125rem;
+}
+.defaut-btn{
+  color: #fff;
+  background: #FC2A3E;
+}
+.end-btn{
+  color: #666666;
+  border: 1px solid;
+}

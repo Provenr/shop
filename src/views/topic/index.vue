@@ -45,3 +45,48 @@ export default {
 }
 </script>
 
+<style lang="less" scoped>
+.home-sale-wrapper{
+  margin: .6rem 0;
+  box-sizing: border-box;
+  .time-list{
+    background: #fff;
+    ul{
+      overflow-x: scroll;
+      overflow-y: hidden;
+      white-space: nowrap;
+      // height: 2.5rem;
+      box-sizing: border-box;
+      li{
+        width: 3.6rem;
+        height: 2.5rem;
+        display: inline-block;
+        z-index: 1111;
+        padding:0.3rem;
+        div{
+          // height: 2.5rem;
+
+          width: 1.6rem;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          margin: 0 auto;
+          .time{
+
+          }
+        }
+
+        &.active {
+          color: #FC2A3E;
+          border-bottom: .1rem solid;
+          // &::after{
+          //   content: '';
+          //   display: block;
+          // }
+        }
+      }
+    }
+  }
+}
+</style>
