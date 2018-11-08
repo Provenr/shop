@@ -72,9 +72,6 @@ export default {
           justify-content: center;
           align-items: center;
           margin: 0 auto;
-          .time{
-
-          }
         }
 
         &.active {

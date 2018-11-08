@@ -53,12 +53,12 @@
     <section class="home-sale-wrapper">
       <div class="time-list">
         <!-- <ul> -->
-          <div :class="{active: index==1}" v-for="(item, index) in navlist" :key="index">
-            <div>
-              <span class="time fz32">{{item.time}}</span>
-              <span class="status fz20">{{item.status}}</span>
-            </div>
-          </div>
+        <ul :class="{active: index==0}" class="nav-item" v-for="(item, index) in navlist" :key="index">
+          <li>
+            <span class="time fz32">{{item.time}}</span>
+            <span class="status fz20">{{item.status}}</span>
+          </li>
+        </ul>
 
         <!-- </ul> -->
       </div>
@@ -76,36 +76,20 @@
           </div>
         </div>
       </div>
-      <div class="good-list">
-        <div v-for="item in goodsList" :key="item.goodsId" class="good-item" @click.stop='toGoodDetail(item.goodsId)'>
-          <div class="good-img">
-            <img :src="item.img" alt="">
-          </div>
-          <div class="good-info">
-            <div class="aui-ellipsis-2 good-name fz26">{{item.name}}</div>
-            <div class="good-price-wrapper">
-              <div class="good-price-box">
-                <span>¥{{item.price}}</span>
-                <del>¥{{item.del}}</del>
-              </div>
-              <div class="btn defaut-btn fz26" v-if='item.status == 1' @click.self="toGoodDetail(item.goodsId)">马上抢</div>
-              <div class="btn end-btn fz26" v-if='item.status == 2' @click.self="toGoodDetail(item.goodsId)">已售罄</div>
-              <div class="btn defaut-btn fz26" v-if='item.status == 3' @click.self="toGoodDetail(item.goodsId)">购买</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <column-list-item :List='goodsList'></column-list-item>
     </section>
   </div>
 </template>
 
 <script>
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
+import columnListItem from '@/components/ColumnListItem'
 export default {
   name:'home',
   components: {
     swiper,
     swiperSlide,
+    columnListItem
   },
   data() {
     return {
@@ -113,7 +97,8 @@ export default {
       swiperOption: {
         pagination: {
           el:'.swiper-pagination',
-          dynamicBullets: true
+          paginationType:'fraction',
+          // dynamicBullets: true
         },
         loop:true
       },
@@ -174,9 +159,12 @@ export default {
     document.removeEventListener('click', this.handleClick)
   },
    methods: {
-    tabchange(name){
+    tabchange(name) {
       let _this = this;
       _this.$router.push({ path: name });
+    },
+    toGoodDetail(id) {
+
     }
   },
 }
@@ -186,7 +174,8 @@ export default {
 @import '../../node_modules/swiper/dist/css/swiper.css';
 
 .aui-row{
-  line-height: 1
+  line-height: 1;
+  padding-top: 2.25rem;
 }
 .swiper-pagination-bullet-active {
   opacity: 1;
@@ -229,43 +218,31 @@ export default {
   box-sizing: border-box;
   .time-list{
     background: #fff;
+    box-sizing: border-box;
     overflow-x: scroll;
     overflow-y: hidden;
     white-space: nowrap;
-    // ul{
-
-      // height: 2.5rem;
-    box-sizing: border-box;
-    div{
+    &::-webkit-scrollbar{
+      display: none;
+    }
+    .nav-item{
       width: 3.6rem;
       height: 2.5rem;
       display: inline-block;
-      z-index: 1111;
-      padding:0.3rem;
-      // div{
-      //   // height: 2.5rem;
-
-      //   width: 1.6rem;
-      //   display: flex;
-      //   flex-direction: column;
-      //   justify-content: center;
-      //   align-items: center;
-      //   margin: 0 auto;
-      //   .time{
-
-      //   }
-      // }
-
       &.active {
         color: #FC2A3E;
         border-bottom: .1rem solid;
-        // &::after{
-        //   content: '';
-        //   display: block;
-        // }
+      }
+      li{
+        height: 2.5rem;
+        width: 1.6rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto;
       }
     }
-    // }
   }
   .img-title{
     padding: .75rem;
@@ -297,59 +274,6 @@ export default {
     }
 
   }
-  .good-list{
-    background: #fff;
-    .good-item{
-      border-top: 1px solid #eee;
-      height: 6.85rem;
-      display: flex;
-      align-items: center;
-      padding: 0 .75rem;
-      .good-img{
-        width: 5.25rem;
-        height: 5.25rem;
-        margin-right: 1.15rem;
-        img{
-          display: block;
-          width: 5.25rem;
-          height: 5.25rem;
-        }
-      }
-      .good-info{
-        height: 5.25rem;
-        flex-grow: 1;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        .good-name{
-          width:10.525rem;
-          line-height: 1.5;
-        }
-        .good-price-wrapper{
-          // position: absolute;
-          display: flex;
-          justify-content: space-between;
-          bottom: 0;
-          left: 0;
-          .good-price-box{
-            font-size: .85rem;
-            color: #FC2A3E;
-            font-weight: 500;
-            del{
-              font-size: .65rem;
-              color: #999;
-              margin-left: .75rem
-            }
-          }
-          .btn{
-            // position: absolute;
-            right: 0;
-            bottom: 0;
-          }
-        }
-      }
-    }
-  }
+
 }
 </style>

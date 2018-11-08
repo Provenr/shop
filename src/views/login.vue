@@ -15,10 +15,10 @@
                 </div>
                 <div class="item-inner">
                   <div class="item-input">
-                    <input type="tel" placeholder="请输入手机号" id="tel" maxlength="11" v-model="phone">
+                    <input type="number" placeholder="请输入手机号" oninput="if(value.length > 11) value = value.slice(0, 11)" v-model="loginForm.mobile">
                   </div>
                 </div>
-                <div class="item-clear" style="margin-right: 0.5rem" id="clearTel" @click="clearTel">
+                <div class="item-clear" style="margin-right: 0.5rem" @click="clearTel">
                   <i class="iconfont icon-clear"></i>
                 </div>
               </div>
@@ -27,139 +27,81 @@
               <div class="item-content">
                 <div class="item-inner">
                   <div class="item-input">
-                    <input type="tel" placeholder="验证码" id="vcode" maxlength="6" style="padding: 0;"  v-model="vcode">
+                    <input type="number" placeholder="验证码" oninput="if(value.length > 6) value = value.slice(0, 6)" style="padding: 0;" v-model="loginForm.mobilecode">
                   </div>
                   <div class="item-clear hide" id="clearVcode" style="margin-right: 0.2rem;">
                     <i class="iconfont icon-clear"></i>
                   </div>
                 </div>
-                <input class="get-vcode"  type="button" id="get_vcode" value="获取验证码" @click="get_vcode();">
+                <input class="get-vcode" type="button" :disabled="disabled" :value="ttext" @click="getVCode">
               </div>
             </li>
           </ul>
         </div>
       </div>
-      <div class="login-button" @click="login">登录</div>
+      <div class="login-button" @click="submitLogin">登录</div>
     </div>
   </div>
 </template>
 
 <script>
-import qs from 'qs'
-//获取 验证码
-var times = 60, // 时间设置60秒
-timer = null;
+import { sendVCode } from '@/api/user'
+import { validatMobile } from '@/utils/validate'
+import tips from '@/utils/tip'
+
 export default {
-  name: 'login',
+  name: "login",
   data() {
     return {
-      titlemsg: "登录",
-      value:[1],
-      phone:'',
-      password:'',
-      captcha:'',
-      vcode:''
+      loginForm: {
+        mobile: "",
+        mobilecode: ""
+      },
+      disabled: false,
+      ttext: '获取验证码'
     }
   },
   methods: {
-    clearTel(){
-      this.phone = "";
+    clearTel() {
+      this.loginForm.mobile = ''
     },
-    get_vcode(){
-      var that = this;
-      if(!that.checkPhone()) {
-        document.getElementById("get_vcode").readOnly=false;
-        document.getElementById("get_vcode").disabled=false;
-        return;
+    getVCode() {
+      if(!validatMobile(this.loginForm.mobile)) {
+        tips.error('请输入正确的手机号')
+        return
       }
-      document.getElementById("get_vcode").readOnly=true;
-      document.getElementById("get_vcode").disabled=true;
-      // axios.post(that.PHPAPI + "User/qloginSendcode", {
-      //   mobile: that.phone
-      // }, {
-      //     transformRequest:[(data) => {
-      //       return qs.stringify(data)
-      //     }],
-      //     headers: {
-      //       "Content-Type": 'application/x-www-form-urlencoded;charset=UTF-8'
-      //     }
-      // })
-      //   .then(
-      //     function(res) {
-      //       console.log(res);
-      //     },
-      //     function(error) {
-      //       console.log(error);
-      //     }
-      //   );
-
-      //   timer = setInterval(function() {
-      //     times--;
-      //     if(times <= 0) {
-      //       document.getElementById("get_vcode").value="获取验证码";
-      //       clearInterval(timer);
-      //       document.getElementById("get_vcode").readOnly=false;
-      //       document.getElementById("get_vcode").disabled=false;
-      //       times = 60;
-      //     } else {
-      //       document.getElementById("get_vcode").value = times + '秒后重试';
-      //       document.getElementById("get_vcode").readOnly=true;
-      //       document.getElementById("get_vcode").disabled=true;
-      //     }
-      //   }, 1000);
+      let that = this;
+      let t = 60
+      var timer = setInterval(function () {
+        t--
+        if (t > 0) {
+            that.ttext = t + '秒后重试'
+            that.disabled = true;
+        } else {
+            that.disabled = false;
+            that.ttext = '获取验证码'
+            clearInterval(timer)
+        }
+      }, 1000);
+      sendVCode({ mobile: this.loginForm.mobile, type: 3 }).then(response => {}).catch(error => {
+        console.log(error)
+      })
     },
-    // 手机验证
-    checkPhone(){
-      var that = this;
-      var reg = /^1[34578]\d{9}$/;
-      if(that.phone == "") {
-        that.$toast("手机号码不能为空");
-        return false;
-      } else if(that.phone.length < 11) {
-        that.$toast("手机号码长度有误");
-        return false;
-      } else if(!reg.test(that.phone)) {
-        that.$toast("手机号格式错误");
-        return false;
-      } else {
-        return true;
+    submitLogin() {
+      if(!validatMobile(this.loginForm.mobile)) {
+        this.$toast('请输入正确的手机号')
+        return
       }
-    },
-    // 验证码验证
-    checkVcode() {
-      var that = this;
-      var reg = /^\d{6}$/;
-      if(that.vcode == "") {
-        that.$toast("验证码不能为空");
-        return false;
-      } else if(that.vcode.length < 6) {
-        that.$toast("验证码长度有误");
-        return false;
-      } else if(!reg.test(that.vcode)) {
-        that.$toast("验证码格式错误");
-        return false;
-      } else {
-        return true;
+      if(!this.loginForm.mobilecode) {
+        this.$toast('请输入短信验证码')
+        return
       }
-    },
-    login() {
-      var that = this;
-      // // 1,判断手机号码是否有效
-      // if(!that.checkPhone()){
-      //   return;
-      // }
-
-      // // 2,判断验证码是发有效
-      // if(!that.checkVcode()){
-      //   return;
-      // }
-      // 3,判断是否同意注册协议，原型中没有这项
-
-      that.$router.push({ path: "/home" });
+      tips.loading('登陆中...')
+      this.$store.dispatch('LoginByUser', this.loginForm).then(() => {
+        tips.loaded()
+        this.$router.push({ path: '/' })
+      })
     }
-  },
-  mounted() {
-
   }
 }
 </script>

@@ -1,9 +1,49 @@
 *{
   -webkit-overflow-scrolling: touch;
 }
+.aui-bar-nav{
+  position: fixed;
+}
+.aui-row{
+  line-height: 1;
+  padding-top: 2.25rem;
+}
 .container{
   padding: 0 0.75rem;
   background: #fff;
+}
+
+.ph-nav-gap {
+  height: .75rem;
+}
+.ph-mr30 {
+  margin-left: .75rem;
+}
+.ph-title-line {
+  border-bottom: 1px solid #E8E8E8;
+  margin-right: .75rem;
+  margin-left: .75rem;
+}
+.ph-line {
+  border-bottom: 1px solid #E8E8E8;
+}
+
+.banner_swiper {
+  width:100%;
+  height:auto;
+}
+.swiper-pagination-bullet {
+  width: .5rem;
+  height: .5rem;
+  background:#fff;
+  opacity:0.5;
+}
+.swiper-pagination-bullet-active {
+  opacity: 1;
+  background:#fff
+}
+.fz18{
+  font-size: .45rem;
 }
 .fz20{
   font-size: .5rem;
@@ -16,6 +56,9 @@
 }
 .fz34{
   font-size: .85rem;
+}
+.fw{
+  font-weight: 600;
 }
 .btn{
   width: 2.85rem;

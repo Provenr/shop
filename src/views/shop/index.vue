@@ -1,41 +1,57 @@
 <template>
   <div class="aui-row">
-    <header class="aui-bar aui-bar-nav">心愿单</header>
+    <header class="aui-bar aui-bar-nav">{{title}}</header>
+
+    <section class="topic-head-img">
+      <img :src="headimg" alt="altText"/>
+    </section>
 
     <div class="content">
-
-
-
+      <goods-list :List='goodsList'></goods-list>
     </div>
-
-    <footer class="aui-bar aui-bar-tab" id="footer" >
-      <div class="aui-bar-tab-item" tapmode @click="tabchange('/home')">
-        <i class="iconfont icon-home"></i>
-        <div class="aui-bar-tab-label">首页</div>
-      </div>
-      <div class="aui-bar-tab-item aui-active"  tapmode @click="tabchange('/cart')">
-        <div class="aui-badge">99</div>
-        <i class="iconfont icon-xinyuandan"></i>
-        <div class="aui-bar-tab-label">心愿单</div>
-      </div>
-      <div class="aui-bar-tab-item"  tapmode @click="tabchange('/mine')">
-        <div class="aui-dot"></div>
-        <i class="iconfont icon-mine"></i>
-        <div class="aui-bar-tab-label">我的</div>
-      </div>
-    </footer>
   </div>
 </template>
 
 <script>
-// import
+import GoodsList from '@/components/GoodsList'
 export default {
-  name: 'login',
+  name: 'shop',
+   components: {
+    GoodsList
+  },
   data() {
     return {
-      selected: '/cart'
+      title: '',
+      headimg:'https://img-zscdn.ponhu.cn/FsrUhU8lFrpki6bk1spi2ffuW0K5',
+      goodsList: [
+        {
+          goodsId: 453069,
+          price: "7288",
+          del: "13999",
+          status:1,
+          img: "https://img-ppcdn.ponhu.cn/Fr09uZEPaVVbxypQacKP8UIwILWv?imageView2/1/w/640/h/540",
+          name: "98新香奈儿方胖子链条包98新香奈儿方胖子链条包98新香奈儿方胖子链条包9"
+        },
+        {
+          goodsId: 290764,
+          price: "6888",
+          del: "10999",
+          status:2,
+          img: "https://img-ppcdn.ponhu.cn/Fr_Y0bqEcOsND9TUIAW1AV3ajAni?imageView2/1/w/640/h/540",
+          name: "95新 LV老花邮差包LV老花邮差包LV老花邮差包L"
+        },
+        {
+          goodsId: 456746,
+          price: "8666",
+          del: "11599",
+          status:3,
+          img: "https://img-ppcdn.ponhu.cn/Fj2dxeWanYPaDKDqbtksVMzem5oK?imageView2/1/w/640/h/540",
+          name: "95新古驰Padlock两用包"
+        }
+      ]
     }
   },
+
   methods: {
     tabchange(name){
       let _this = this;
@@ -44,13 +60,24 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$route)
+    let _this = this;
+    _this.title = this.$route.meta.title;
   }
 }
 </script>
 
-<style scoped>
-
+<style lang="less" scoped>
+.topic-head-img{
+  height: 10.5rem;
+  img{
+    display: block;
+    width: 100%;
+    height: 10.5rem;
+  }
+}
+.content{
+  padding: .45rem;
+}
 </style>
 
 

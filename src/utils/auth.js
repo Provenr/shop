@@ -27,3 +27,7 @@ export function removeUser() {
   return removeLocalStorage(UserKey)
 }
 
+// 适应旧版本页面
+export function OldSetUserInfo(user) {
+  
+}

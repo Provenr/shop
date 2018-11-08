@@ -34,12 +34,12 @@ service.interceptors.response.use(
     if (res.code == 200) {
       return res.list
     }
-    else if (res.code == 100) {
-      this.$router.push({ path: '/login', replace: true })
+    else if (res.code == 100) { // token超时
+      router.push({ path: "/login" })
     }
     else { // 服务器异常
       tips.error('服务器忙，请稍后重试');
-      console.log(res)
+      console.log(res.msg)
     }
   },
   error => {
@@ -57,7 +57,8 @@ export function get(url, params = {}) {
       params: params
     })
     .then(response => {
-      resolve(response.data);
+      console.log(response);
+      resolve(response);
     })
     .catch(err => {
       reject(err)
@@ -72,7 +73,7 @@ export function post(url, data = {}) {
   return new Promise((resolve, reject) => {
     service.post(url, data)
       .then(response => {
-        resolve(response.data);
+        resolve(response);
       }, err => {
         reject(err)
       })
