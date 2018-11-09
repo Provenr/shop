@@ -61,22 +61,21 @@ i{
 .good-list {
   display: flex;
   flex-wrap: wrap;
+  width: 100%;
   .good-item {
     margin-bottom: 0.45rem;
     height: 12.05rem;
-    width: 8.7rem;
-    // display: flex;
-    // align-items: center;
+    width: calc((100% - 0.45rem) / 2);
     background: #fff;
     &:nth-child(2n+1){
       margin-right: 0.45rem;
     }
     .good-img {
-      width: 8.7rem;
+      // width: 8.7rem;
       height: 8.7rem;
       img {
         display: block;
-        width: 8.7rem;
+        // width: 8.7rem;
         height: 8.7rem
       }
     }
@@ -87,7 +86,7 @@ i{
       padding: 0 .3rem;
       flex-grow: 1;
       .good-name {
-        width: 8.675rem;
+        width: 100%;
         line-height: 1.5;
         color: #333;
         margin: .4rem 0;

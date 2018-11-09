@@ -67,7 +67,7 @@ export default {
     },
     getVCode() {
       if(!validatMobile(this.loginForm.mobile)) {
-        tips.error('请输入正确的手机号')
+        tips.toast('请输入正确的手机号')
         return
       }
       let that = this;
@@ -89,11 +89,11 @@ export default {
     },
     submitLogin() {
       if(!validatMobile(this.loginForm.mobile)) {
-        this.$toast('请输入正确的手机号')
+        tips.toast('请输入正确的手机号')
         return
       }
       if(!this.loginForm.mobilecode) {
-        this.$toast('请输入短信验证码')
+        tips.toast('请输入短信验证码')
         return
       }
       tips.loading('登陆中...')
@@ -148,7 +148,7 @@ export default {
 
 .login-content .list-block {
 	padding: 0 1.05rem;
-	font-size: 0.28rem;
+	font-size: .7rem;
   margin-top: 0.93rem;
 }
 
@@ -201,7 +201,7 @@ export default {
 	margin: 0;
 	line-height: 0.4rem;
 	width: 90%;
-	font-size: 0.28rem;
+	font-size: .7rem;
 	padding: 0 0 0 15px;
 	-webkit-user-select: text;
 	border: none;

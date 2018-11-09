@@ -17,10 +17,10 @@
             var toastHtml = '';
             switch (params.type) {
                 case "success":
-                    var iconHtml = '<i class="aui-iconfont aui-icon-correct"></i>';
+                    var iconHtml = '<i class="iconfont icon-success fz80"></i>';
                     break;
                 case "fail":
-                    var iconHtml = '<i class="aui-iconfont aui-icon-close"></i>';
+                    var iconHtml = '<i class="iconfont icon-error fz80"></i>';
                     break;
                 case "custom":
                     var iconHtml = params.html;

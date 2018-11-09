@@ -24,6 +24,18 @@ export default class Tips {
     });
   }
   /**
+   * 提示框
+   */
+  static toast(title, duration = 2000) {
+    var toast = new auiToast({});
+    toast.custom({
+      title: title,
+      html: '',
+      duration: duration
+    });
+  }
+
+  /**
    * 弹出加载提示
    */
   static loading(title = '加载中', duration = 2000) {

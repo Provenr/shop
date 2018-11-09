@@ -12,6 +12,16 @@
   padding: 0 0.75rem;
   background: #fff;
 }
+.aui-toast-content {
+    margin: 0.75rem 0 0.75rem;
+    font-size: .6rem;
+}
+.aui-toast .aui-iconfont {
+  font-size: 1.8rem;
+}
+.aui-toast {
+    min-height: 3em;
+}
 
 .ph-nav-gap {
   height: .75rem;
@@ -48,6 +58,9 @@
 .fz20{
   font-size: .5rem;
 }
+.fz22{
+  font-size: .55rem;
+}
 .fz26{
   font-size: .65rem;
 }
@@ -56,6 +69,9 @@
 }
 .fz34{
   font-size: .85rem;
+}
+.fz80{
+  font-size: 2rem;
 }
 .fw{
   font-weight: 600;
@@ -75,4 +91,10 @@
 .end-btn{
   color: #666666;
   border: 1px solid;
+}
+.vux-no-group-title{
+  margin-top: 0 !important;
+}
+.weui-cells{
+   margin-top: 0 !important;
 }

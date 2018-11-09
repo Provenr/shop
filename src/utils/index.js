@@ -67,16 +67,17 @@ export function decryptAES(data) {//解密
 export function setLocalStorage(key, content) {
   if (!key) return
   if (typeof content !== 'string') {
-    content = encryptAES(JSON.stringify(content))
+    content = JSON.stringify(content)
   }
-  window.localStorage.setItem(key, content)
+  window.localStorage.setItem(key, encryptAES(content))
 }
 
 export function getLocalStorage(key) {
   if (!key) return
   let content = window.localStorage.getItem(key)
   if (!content) return
-  return JSON.parse(decryptAES(content))
+  //return JSON.parse(decryptAES(content))
+  return decryptAES(content)
 }
 
 export function removeLocalStorage(key) {
