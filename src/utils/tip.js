@@ -63,7 +63,6 @@ export default class Tips {
       msg: text,
       buttons: ['确定']
     }, function (ret) {
-      console.log(ret)
     })
   }
 

@@ -9,37 +9,37 @@ export const constantRouterMap = [
     path: '/',
     component: _import('home'),
     name: 'home',
-    meta: { title: '胖虎商城' }
+    meta: { title: '胖虎商城', isAuth: false }
   },
   {
     path: '/login',
     component: _import('login'),
     name: 'login',
-    meta: { title: '登录' }
+    meta: { title: '登录', isAuth: false  }
   },
   {
-    path: '/topic',
+    path: '/topic/:id',
     component: _import('topic/index'),
     name: 'topic',
-    meta: { title: '专题' }
+    meta: { title: '专题', isAuth: false  }
   },
   {
     path: '/goods/:id',
     component: _import('goods/index'),
     name: 'goodsDetail',
-    meta: { title: '商品详情' }
+    meta: { title: '商品详情', isAuth: false  }
   },
   {
     path: '/goods/:id/balance',
     component: _import('goods/balance'),
     name: 'goodsBalance',
-    meta: { title: '付款' }
+    meta: { title: '付款', isAuth: true  }
   },
   {
     path: '/shop',
     component: _import('shop/index'),
     name: 'shop',
-    meta: { title: '胖虎优选' }
+    meta: { title: '胖虎优选', isAuth: false }
   },
   {
     path: '/mine',

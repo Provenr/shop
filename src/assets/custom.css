@@ -22,6 +22,11 @@
 .aui-toast {
     min-height: 3em;
 }
+.aui-toast-loading {
+  margin: 0.75rem 0 0;
+  height: 2rem;
+  width: 2rem;
+}
 
 .ph-nav-gap {
   height: .75rem;

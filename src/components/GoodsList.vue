@@ -1,14 +1,14 @@
 <!-- 竖排商品列表组件 -->
 <template>
 <section class="good-list">
-  <div class="good-item"  v-for="item in List" :key="item.goodsId">
+  <div class="good-item" target="_blank" v-for="item in list" :key="item.goodsId" @click="to(item.goodsId)">
      <div class="good-img">
-          <img :src="item.img" alt="">
+          <img v-lazy="item.img" alt="">
       </div>
       <div class="good-info">
         <div class="aui-ellipsis-1 good-name fz26">{{item.name}}</div>
         <div class="good-price-wrapper">
-          <div class="good-price-box" v-if="item.status=='1'">
+          <div class="good-price-box" v-if="item.status==1">
             <span class="red fz32"><i class="fz18">特价 ¥</i>{{item.price}}</span>
             <del class="fz18">原价¥{{item.del}}</del>
           </div>
@@ -24,25 +24,14 @@
 <script>
 export default {
   props: {
-    List: {
+    list: {
       type: Array,
-      default: ""
+      default: []
     }
   },
-  computed: {
-    listeners() {
-      return {
-        // Pass all component listeners directly to input
-        ...this.$listeners,
-        // Override input listener to work with v-model
-        input: event => this.$emit("input", event.target.value)
-      }
-    },
-
-  },
   methods: {
-    toGoodDetail(id) {
-      console.log(id)
+    to(gid) {
+      this.$router.push({name: 'goodsDetail', params: {id: gid}})
     }
   }
 }

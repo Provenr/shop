@@ -1,44 +1,57 @@
 <template>
-  <div class="aui-content-padded">
-    <div class="aui-btn aui-btn-block aui-btn-warning" @click="dialoga()">dialog1</div>
-    <div class="aui-btn aui-btn-block aui-btn-warning" @click="dialogb()">dialog2</div>
-    <div class="aui-btn aui-btn-block aui-btn-warning" @click="login()">登陆请求</div>
+  <div class="aui-row">
+    <header class="aui-bar aui-bar-nav">
+      <a class="aui-pull-left aui-btn" @click="$router.back(-1)">
+        <span class="iconfont icon-leftarrow" style="font-size: 1rem"></span>
+      </a>
+      <div class="aui-title">{{topic.title}}</div>
+    </header>
+    <div class="ph-topic-title">
+      <img :src="topic.image" />
+    </div>
+    <div class="ph-topic-goods">
+      <goods-list :list="goodsList"></goods-list>
+    </div>
   </div>
 </template>
 
 <script>
-import { login } from '@/api/user'
+import { getTopicInfo } from '@/api/goods'
 import tips from '@/utils/tip'
 
+import GoodsList from '@/components/GoodsList'
+
 export default {
-  name: 'login',
+  name: 'topics',
+  components: { GoodsList },
   data() {
-    return {}
+    return {
+      topic: {},
+      goodsList: [],
+    }
+  },
+  created() {
+    this.getData()
   },
   methods: {
-    toasta() {
-      tips.success("保存成功")
-    },
-    toastb() {
-      tips.error("失败")
-    },
-    toastc() {
+    // 获取数据
+    getData() {
+      let that = this;
       tips.loading();
-      setTimeout(function () {
-        tips.loaded();
-      }, 3000)
-    },
-    dialoga() {
-      tips.alert("保存成功", "温馨提示")
-    },
-    dialogb() {
-      tips.confirm('确认删除选择的代理商家？').then(() => {
-        console.log('then方法');
-      }).catch((error) => console.log(error));
-    },
-    login() {
-      login({ mobile: 18627316306, password: '123456' }).then(data => {
-        console.log(data);
+      getTopicInfo(this.$route.params.id).then(res => {
+        this.topic = res.special;
+        // 商品
+        let glist = res.list;
+        glist.forEach(function (item) {
+          that.goodsList.push({
+            goodsId: item.id,
+            img: item.goods_images,
+            name: item.goods_name,
+            status: item.is_discount,
+            price: item.is_discount==0?item.goods_price:item.discount_price,
+            del: item.goods_price
+          });
+        });
       });
     }
   }
@@ -46,44 +59,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.home-sale-wrapper{
-  margin: .6rem 0;
-  box-sizing: border-box;
-  .time-list{
-    background: #fff;
-    ul{
-      overflow-x: scroll;
-      overflow-y: hidden;
-      white-space: nowrap;
-      // height: 2.5rem;
-      box-sizing: border-box;
-      li{
-        width: 3.6rem;
-        height: 2.5rem;
-        display: inline-block;
-        z-index: 1111;
-        padding:0.3rem;
-        div{
-          // height: 2.5rem;
-
-          width: 1.6rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          margin: 0 auto;
-        }
-
-        &.active {
-          color: #FC2A3E;
-          border-bottom: .1rem solid;
-          // &::after{
-          //   content: '';
-          //   display: block;
-          // }
-        }
-      }
-    }
-  }
+.ph-topic-title {
+  margin: 0 auto;
+}
+.ph-topic-goods {
+  padding: .45rem;
 }
 </style>

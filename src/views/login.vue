@@ -45,7 +45,8 @@
 </template>
 
 <script>
-import { sendVCode } from '@/api/user'
+import { sendVCode, getUserInfo } from '@/api/user'
+import { OldSetUserInfo } from '@/utils/auth'
 import { validatMobile } from '@/utils/validate'
 import tips from '@/utils/tip'
 
@@ -96,10 +97,17 @@ export default {
         tips.toast('请输入短信验证码')
         return
       }
-      tips.loading('登陆中...')
+      tips.loading('登陆中')
       this.$store.dispatch('LoginByUser', this.loginForm).then(() => {
+        getUserInfo().then(user => {
+          OldSetUserInfo(user.list)
+          console.log(user);
+        });
         tips.loaded()
-        this.$router.push({ path: '/' })
+        this.$router.push({ path: this.$route.query.url || '/' })
+      }).catch(error => {
+        tips.loaded()
+        tips.toast(error)
       })
     }
   }

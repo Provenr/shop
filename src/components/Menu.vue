@@ -21,7 +21,28 @@
 
 <script>
   export default {
-
+    methods:{
+      tabchange(name){
+      let _this = this;
+      _this.selected = name;
+      if(name == 'category') {
+        this.show_category = true;
+        return
+      }
+      if(name == 'brand') {
+        this.show_brand = true;
+        return
+      }
+      if(name == 'filter') {
+        this.show_filter = true;
+        return
+      }
+      if(name == 'sort') {
+        this.show_sort = true;
+        return
+      }
+    },
+    }
   }
 </script>
 

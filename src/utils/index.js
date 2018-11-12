@@ -35,6 +35,38 @@ export function encryptMD5(str) {
   return str;
 }
 
+// 获取移动端平台
+export function getPlatform() {
+  let ua = navigator.userAgent.toLowerCase()
+  if (ua.indexOf('Android') > -1 || ua.indexOf('Adr') > -1) {
+    return 'android'
+  }
+  if (!!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
+    return 'ios'
+  }
+  return 'pc'
+}
+
+export function secTotime(s) {
+  var t;
+  if(s > -1){
+      var hour = Math.floor(s/3600);
+      var min = Math.floor(s/60) % 60;
+      var sec = s % 60;
+      if(hour < 10) {
+          t = '0'+ hour + ":";
+      } else {
+          t = hour + ":";
+      }
+
+      if(min < 10){t += "0";}
+      t += min + ":";
+      if(sec < 10){t += "0";}
+      t += sec.toFixed();
+  }
+  return t;
+}
+
 /* -----------------------------加密解密------------------------------------ Start */
 const ivs = 'pH!@#_7', keys = 'Ph201812'
 //AES加密

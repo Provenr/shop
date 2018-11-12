@@ -25,8 +25,7 @@
 export default {
   props: {
     List: {
-      type: Array,
-      default: ""
+      type: Array
     }
   },
   computed: {

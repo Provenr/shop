@@ -12,11 +12,13 @@ export function sendVCode(data) {
 export function getUserInfo() {
   return post('/Myhome/getUserInfo')
 }
+// 获取默认用户地址
+export function getUserDefaultAddress() {
+  return post('/Myaddress/getDefaultAddress')
+}
+
 //  资金明细
 export function myAccount(data) {
   return post('/Myaccount/moneyDetail', data)
 }
-//  商品详情
-export function goodsDetail(data) {
-  return post('/Goods/goodsDetailtop', data)
-}
+
