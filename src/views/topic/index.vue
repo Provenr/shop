@@ -6,12 +6,14 @@
       </a>
       <div class="aui-title">{{topic.title}}</div>
     </header>
-    <div class="ph-topic-title">
-      <img :src="topic.image" />
-    </div>
-    <div class="ph-topic-goods">
-      <goods-list :list="goodsList"></goods-list>
-    </div>
+    <vue-scroll :ops="ops" @load-before-deactivate="handleLBD" @load-start="handleLoadStart">
+      <div class="ph-topic-title">
+        <img :src="topic.image" />
+      </div>
+      <div class="ph-topic-goods">
+        <goods-list :list="goodsList"></goods-list>
+      </div>
+    </vue-scroll>
   </div>
 </template>
 
@@ -26,33 +28,82 @@ export default {
   components: { GoodsList },
   data() {
     return {
+      sid: this.$route.params.id,
       topic: {},
       goodsList: [],
+      ops: {
+        vuescroll: {
+          mode: 'slide',
+          pullRefresh: {
+            enable: false
+          },
+          pushLoad: {
+            enable: true,
+            tips: {
+              deactive: '',
+              active: '',
+              start: '加载中...',
+              beforeDeactive: '已全部加载'
+            },
+            auto: false,
+            autoLoadDistance: 10
+          }
+        }
+      },
+      page: 1,
+      noData: false
     }
   },
   created() {
-    this.getData()
+    this.getData(true)
   },
   methods: {
     // 获取数据
-    getData() {
+    getData(refresh) {
       let that = this;
-      tips.loading();
-      getTopicInfo(this.$route.params.id).then(res => {
+      getTopicInfo(this.sid, this.page).then(res => {
         this.topic = res.special;
         // 商品
         let glist = res.list;
-        glist.forEach(function (item) {
-          that.goodsList.push({
-            goodsId: item.id,
-            img: item.goods_images,
-            name: item.goods_name,
-            status: item.is_discount,
-            price: item.is_discount==0?item.goods_price:item.discount_price,
-            del: item.goods_price
+        let _glist = [];
+        if(glist) {
+          glist.forEach(function (item) {
+            _glist.push({
+              goodsId: item.id,
+              img: item.goods_images,
+              name: item.goods_name,
+              status: item.is_discount,
+              price: item.is_discount==0?item.goods_price:item.discount_price,
+              del: item.goods_price
+            });
           });
-        });
+
+          if (refresh) {
+            that.goodsList = _glist;
+          }
+          else {
+            that.goodsList = [...that.goodsList, ..._glist];
+          }
+          this.noData = false;
+        }
+        else {
+          this.noData = true;
+        }
       });
+    },
+    handleLoadStart(vm, dom, done) {
+      let that = this;
+      if (!that.noData) {
+        that.page++;
+        that.getData();
+      }
+      setTimeout(function(){
+        done();
+      }, 2000)
+    },
+    handleLBD(vm, refreshDom, done) {
+      console.log(vm, refreshDom, 'handleBeforeDeactivate');
+      done();
     }
   }
 }

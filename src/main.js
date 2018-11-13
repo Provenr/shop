@@ -11,6 +11,11 @@ Vue.use(VueLazyLoad, {
   loading: './static/img/back_loading.png'
 })
 
+import vuescroll from 'vuescroll/dist/vuescroll-slide';
+import 'vuescroll/dist/vuescroll.css'
+Vue.use(vuescroll);
+
+
 //import './permission'
 
 

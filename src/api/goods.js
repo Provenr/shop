@@ -1,8 +1,8 @@
 import { post, get } from '@/utils/request'
 
 // 获取专题
-export function getTopicInfo(tid) {
-  return post('/Index/showSpecail', { sid: tid })
+export function getTopicInfo(tid, page) {
+  return post('/Index/showSpecail', { sid: tid, p: page })
 }
 
 // 获取商品详情

@@ -2,5 +2,6 @@
 module.exports = {
   NODE_ENV: '"development"',
   ENV_CONFIG: '"dev"',
-  SERVICE_API: '"/api/"'
+  SERVICE_API: '"/api/"',
+  RESOURC_URL: '"http://localhost:8086/#"'
 }

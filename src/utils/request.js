@@ -19,6 +19,7 @@ service.interceptors.request.use(config => {
   // 请求头
   config.headers['os'] = '7'
   config.headers['token'] = store.getters.token || ''
+  config.headers['version'] = 'ccby1.0'
   config.data = qs.stringify(config.data)
 
   return config

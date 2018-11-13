@@ -14,26 +14,29 @@
       <div class="box-title">
         <span class="l">配送方式</span>
         <span class="rl">
-          <a href="javascript">快递到家<i class="iconfont icon-youjiantou1"></i></a>
+          <a href="javascript:;" @click="showDistribution=true">{{distribution}}<i class="iconfont icon-youjiantou1"></i></a>
         </span>
       </div>
-      <div class="ph-title-line" v-if="addrFlag!=0"></div>
-      <div class="adder_add" v-if="addrFlag==1">
-        <div class="con">
-          <div class="c"><i class="iconfont icon-jiahao"></i>请添加收货地址</div>
-          <div class="rl"><i class="iconfont icon-youjiantou1"></i></div>
-        </div>
-      </div>
-      <div class="adder_dis" v-if="addrFlag==2">
-        <div class="con">
-          <div class="c">
-            <p class="cl fz26 fw" style="padding-bottom: .3rem;">姓名<span class="tel">18511112222</span></p>
-            <p class="fz22">地址：是垃圾地方快老实交代发昆仑山搭街坊立刻历史交锋流水数据副书记发射基地</p>
+      <div v-if="showAddr">
+        <div class="ph-title-line"></div>
+        <div class="adder_add" v-if="addrFlag==1">
+          <div class="con">
+            <div class="c"><i class="iconfont icon-jiahao"></i>请添加收货地址</div>
+            <div class="rl"><i class="iconfont icon-youjiantou1"></i></div>
           </div>
-          <div class="rl"><i class="iconfont icon-youjiantou1"></i></div>
         </div>
+        <div class="adder_dis" v-if="addrFlag==2">
+          <div class="con">
+            <div class="c">
+              <p class="cl fz26 fw" style="padding-bottom: .3rem;">姓名<span class="tel">18511112222</span></p>
+              <p class="fz22">地址：是垃圾地方快老实交代发昆仑山搭街坊立刻历史交锋流水数据副书记发射基地</p>
+            </div>
+            <div class="rl"><i class="iconfont icon-youjiantou1"></i></div>
+          </div>
+        </div>
+        <img src="/static/img/address-line.png" alt="">
       </div>
-      <img src="/static/img/address-line.png" alt="">
+      
     </div>
     <div class="ph-nav-gap"></div>
     <div class="ph-bal-goods">
@@ -47,42 +50,88 @@
         </div>
       </div>
       <div class="ly">
-        <textarea placeholder="给卖家留言"></textarea>
+        <textarea placeholder="给卖家留言" v-model="form.message"></textarea>
       </div>
     </div>
     <div class="ph-nav-gap"></div>
     <div class="ph-bal-pay">
       <div class="item">
         <span class="l"><i class="iconfont icon-jianhang jh"></i> 龙支付</span>
-        <label><input class="aui-radio" type="radio" name="demo1" checked></label>
+        <label><input class="aui-radio" type="radio" name="payBank" v-model="form.payid" value="10"></label>
       </div>
       <div class="ph-line"></div>
       <div class="item">
         <span class="l"><i class="iconfont icon-weixinzhifu1 wx"></i> 微信支付</span>
-        <label><input class="aui-radio" type="radio" name="demo1" checked></label>
+        <label><input class="aui-radio" type="radio" name="payBank" v-model="form.payid" value="2"></label>
       </div>
     </div>
     <div style="margin-bottom: 3.2rem;"></div>
-    <div class="ph-bal-bar">
-      <div class="sum-price">应付：￥16122.00</div>
-      <input type="button" class="button" value="立即支付">
+
+    <div v-transfer-dom>
+      <popup v-model="showDistribution" position="bottom">
+        <group>
+          <radio :options="distributionList" @on-change="distributionChange" v-model="form.shipping_type"></radio>
+        </group>
+      </popup>
     </div>
+
+    <div class="ph-bal-bar">
+      <div class="sum-price">应付：￥{{form.total}}</div>
+      <input type="button" class="button" @click="submit" value="立即支付">
+    </div>
+
+    <form name="mbcpay_b2c">
+      <input type="hidden" name="TXCODE" value=" SP7010" />
+      <input type="hidden" name="WAPVER" value="1.2" />
+      <input type="hidden" name="MERCHANTID" value="105100000020361" />
+      <input type="hidden" name="ORDERID" value="" />
+      <input type="hidden" name="PAYMENT" value="0.01" />
+      <input type="hidden" name="MAGIC" value="" />
+      <input type="hidden" name="BRANCHID" value="110000000" />
+      <input type="hidden" name="POSID" value="008181422" />
+      <input type="hidden" name="CURCODE" value="01" />
+      <input type="hidden" name="REMARK1" value="" />
+      <input type="hidden" name="REMARK2" value="" />
+      <input type="hidden" name="SUPPORTACCOUNTTYPE" value="3" />
+    </form>
+
   </div>
 </template>
 
 <script>
-import { getGoodsPay } from '@/api/goods'
-import { getUserInfo, getUserDefaultAddress } from '@/api/user'
-import tips from '@/utils/tip'
 
-import { TransferDom, Popup, Radio } from 'vux'
+function getCCBY_PaySign() {
+  return "TXCODE=" + mbcpay_b2c.TXCODE.value + "," +
+		"WAPVER=" + mbcpay_b2c.WAPVER.value + "," +
+		"MERCHANTID=" + mbcpay_b2c.MERCHANTID.value + "," +
+		"ORDERID=" + mbcpay_b2c.ORDERID.value + "," +
+		"PAYMENT=" + mbcpay_b2c.PAYMENT.value + "," +
+		"MAGIC=" + mbcpay_b2c.MAGIC.value + "," +
+		"BRANCHID=" + mbcpay_b2c.BRANCHID.value + "," +
+		"POSID=" + mbcpay_b2c.POSID.value + "," +
+		"CURCODE=" + mbcpay_b2c.CURCODE.value + "," +
+		"REMARK1=" + mbcpay_b2c.REMARK1.value + "," +
+		"REMARK2=" + mbcpay_b2c.REMARK2.value + "," +
+    "SUPPORTACCOUNTTYPE=" + mbcpay_b2c.SUPPORTACCOUNTTYPE.value;
+}
+// ios 建行支付
+function MBC_PAYINFO() {
+  return "{" + getCCBY_PaySign() + "}";
+}
+
+import { getGoodsPay } from '@/api/goods'
+import { getUserInfo, getUserDefaultAddress, getAddress } from '@/api/user'
+import { createOrder } from '@/api/order'
+import tips from '@/utils/tip'
+import { getPlatform } from '@/utils'
+
+import { TransferDom, Popup, Radio, Group } from 'vux'
+import wx from 'weixin-js-sdk'
 
 export default {
   name: 'goodsBalance',
   directives: { TransferDom },
-  components: {
-    Popup
-  },
+  components: { Popup, Radio, Group },
   computed: {
     token() {
       return this.$store.getters.token;
@@ -96,13 +145,22 @@ export default {
       goods: {},
       userAddr: {},
       addrFlag: 1,
+      showAddr: true,
+      showDistribution: false,
+      distribution: '快递到家',
+      distributionList: [{
+        key: '1',
+        value: '快递到家'
+      }, {
+        key: '2',
+        value: '到店自提（仅支持北京自提）'
+      }],
       form: {
         goodsid_str: '',
-        payid: '3',
+        payid: '10',
         youhui_type: '3',
         shipping_type: '1',
         total: 0,
-        is_use: 0,
         message: '',
         prid: '',
         addrid: ''
@@ -124,7 +182,11 @@ export default {
         // 获取用户默认地址
         getUserDefaultAddress().then(addr => {
           if(addr.list) {
+            this.addrFlag = 2;
+            this.userAddr = addr.list;
 
+          } else {
+            this.addrFlag = 1;
           }
         }).catch(error => {
           tips.loaded();
@@ -135,12 +197,58 @@ export default {
         tips.loaded()
         tips.alert(error)
       });
+    },
+    distributionChange (value, label) {
+      this.form.shipping_type = value;
+      this.distribution = label;
+      this.showDistribution = false;
+      if (value == "1") {
+        this.showAddr = true;
+      }
+      else {
+        this.showAddr = false;
+        this.form.addrid = '';
+      }
+    },
+    // 支付提交
+    submit() {
+      if(this.form.shipping_type == "1") {
+        if(this.form.addrid == "") {
+          tips.toast("请添加收货地址");
+          return;
+        }
+      }
+      tips.loading("支付中...");
+      createOrder(this.form).then(res => {
+        if(this.form.payid == "10") { // 建行支付
+          $("input[name='ORDERID']").val(res.order_sn);
+          $("input[name='PAYMENT']").val(res.total_fee);
+          $("input[name='MAGIC']").val(res.message);
+          // 判断平台
+          let os = getPlatform();
+          if(os == "android") {
+            window.mbcpay.b2c(getCCBY_PaySign());
+          } else if (os == "ios")  {
+            window.location = "/mbcpay.b2c ";
+          }
+        } else { // 微信支付
+          window.location.href = res.mweb_url + "&redirect_url=" + "/goods/pay/notice";
+        }
+        tips.loaded()
+      }).catch(error => {
+        tips.loaded()
+        tips.alert(error)
+      });
+      
     }
   },
 }
 </script>
 
 <style lang="less" scoped>
+
+@radio-checked-icon-color:#09B6F2;
+
 .ph-bal-taikang {
   position: relative;
   display: block;
@@ -328,6 +436,10 @@ export default {
     float:right;
   }
 }
+.vux-popup-dialog {
+  z-index: 1002;
+}
+
 </style>
 
 

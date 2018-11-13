@@ -36,6 +36,12 @@ export const constantRouterMap = [
     meta: { title: '付款', isAuth: true  }
   },
   {
+    path: '/goods/pay/notice',
+    component: _import('goods/paynotice'),
+    name: 'payNotice',
+    meta: { title: '支付通知', isAuth: true }
+  },
+  {
     path: '/shop',
     component: _import('shop/index'),
     name: 'shop',

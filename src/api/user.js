@@ -16,6 +16,10 @@ export function getUserInfo() {
 export function getUserDefaultAddress() {
   return post('/Myaddress/getDefaultAddress')
 }
+// 获取地址信息
+export function getAddress(aid) {
+  return post('/Myaddress/getAddr', { aid: aid })
+}
 
 //  资金明细
 export function myAccount(data) {
