@@ -26,34 +26,70 @@
             <div v-for="(item, index) in firstCategoryList" :key="index" class="left-item" :class="['left-item', firstCategoryId == item.id ? 'activeColor' : '']"  @click="firstCategory(item.id)">{{item.name}}</div>
           </div>
           <div class="right">
-            <div v-for="(item, index) in secondCategoryList" :key="item.id" class="right-item" @click="secondCategory(item.id)">{{item.name}} {{index}}</div>
+            <div v-for="(item, index) in secondCategoryList" :key="item.id" class="right-item" @click="secondCategory(item.id)">{{item.name}}</div>
           </div>
       </popup>
       </div>
       <div class="brand"  v-transfer-dom>
         <popup v-model="show_brand" position="left"  width="100%">
         <group>
-          <brand-list></brand-list>
-         <div class="brand-item" @click="chooseBrand()">发布时间</div>
+          <brand-list :Alphabetic="index_list" @jump='anchor'></brand-list>
+         <div class="brand-box" v-for="(value, key) in brandlist" :key="key">
+            <div class="brand-title" :id="key">{{key}}</div>
+            <div v-for="item in value" :key='item.id' @click="chooseBrand(item.id)" class="brand-item line">
+              <span class="logo">
+                <img :src="item.logo" alt="" srcset="">
+              </span>
+              <span class="brand-name">{{item.name}}</span>
+            </div>
+         </div>
         </group>
       </popup>
       </div>
       <div class="sort"  v-transfer-dom>
         <popup v-model="show_sort" position="bottom" max-height="50%">
           <group>
-            <div class="sort-item" @click="toSort('time')">发布时间</div>
-            <div class="sort-item" @click="toSort('up')">价格升序</div>
-            <div class="sort-item" @click="toSort('dowm')">价格降序</div>
+            <div class="sort-item" @click="toSort(1)">发布时间</div>
+            <div class="sort-item" @click="toSort(2)">价格升序</div>
+            <div class="sort-item" @click="toSort(3)">价格降序</div>
           </group>
         </popup>
       </div>
       <div class="filter"  v-transfer-dom>
-        <popup v-model="show_filter" position="right" max-height="100%" width="60%">
+        <popup v-model="show_filter" position="right" max-height="100%" width="80%">
           <group>
-            <cell v-for="i in 20" :key="i" :title="i"></cell>
+            <div class="filter-wrapper">
+              <div class="filter-tit">价格</div>
+              <div class="filter-box">
+                <div class="filter-btn price-btn" v-for="(val,key) in filterParam.price" :key="key" :class="filterPrice == key ? 'filtercheck': ''">{{val}} 
+                  <input type='radio' :value='key' v-model="filterPrice" style="opcility:0;">
+                </div>
+                <div>{{filterPrice}}</div>
+                <!-- <div class="filter-btn price-btn">¥1000以下 <input type='radio' value='1'></div>
+                <div class="filter-btn price-btn">¥1000-5000 <input type='radio' value='2'></div>
+                <div class="filter-btn price-btn">¥5000-1万</div>
+                <div class="filter-btn price-btn">¥1万-10万</div>
+                <div class="filter-btn price-btn">¥10万以上</div> -->
+              </div>
+              <div class="filter-tit">适用人群</div>
+              <div class="filter-box">
+                <div class="filter-btn gender-btn">所有人</div>
+                <div class="filter-btn gender-btn">男士</div>
+                <div class="filter-btn gender-btn">女士</div>
+              </div>
+              <div class="filter-tit">成色</div>
+              <div class="filter-box">
+                <div class="filter-btn fineness-btn">全新</div>
+                <div class="filter-btn fineness-btn">98新</div>
+                <div class="filter-btn fineness-btn">95新</div>
+                <div class="filter-btn fineness-btn">9新</div>
+                <div class="filter-btn fineness-btn">85新</div>
+              </div>
+            </div>
           </group>
-          <div style="padding: 15px;">
-            <x-button @click.native="show_filter = false" plain type="primary"> Close Me </x-button>
+          <div class="filter-btn-wrapper">
+            <x-button @click.native="show_filter = false" plain type="primary">取消</x-button>
+            <x-button @click.native="filterConfirm" plain type="primary">确定</x-button>
           </div>
         </popup>
       </div>
@@ -107,17 +143,48 @@ export default {
       ph_goods_total:'123456',
       activeCateItem: 1,
 
+      filterParam:{
+        'price':{
+          1:"¥1000以下",
+          2:"¥1000-5000",
+          3:"¥5000-1万",
+          4:"¥1万-10万",
+          5:"¥10万以上",
+        },
+        'gender':{
+          1:'所有人',
+          2:'男士',
+          3:'女士'
+        },
+        'fineness':{
+          1:'全新',
+          2:'98新',
+          3:'95新',
+          4:'9新',
+          5:'85新',
+        }
+      }, 
+
       firstCategoryId: '',
       secondCategoryId: '',
-      brandid: '',
+      brandId: '',
       sortType: '', // 排序
 
       secondCate: new Map(),
 
-      filterList: [],
+      // filterList: [],
+      where: {
+        storeid: '',
+        cateid: 0
+      },
+      filterPrice:null,  
+      filterGender:null,      
+      filterFineness:null,      
+
       firstCategoryList: [],
       secondCategoryList: [],
       brandlist:[],
+      index_list:[],
       headimg:'https://img-zscdn.ponhu.cn/FsrUhU8lFrpki6bk1spi2ffuW0K5',
       goodsList: [
         {
@@ -159,8 +226,10 @@ export default {
       if(name == 'brand') {
         this.show_brand = true;
         getBrandList().then(res => {
-          let brandlist = res.BrandList;
-          this.brandlist = dealBrandList(brandlist);
+          let brandlist = res.list;
+          this.brandlist = dealBrandList(brandlist).brand_list;
+          this.index_list = dealBrandList(brandlist).index_list;
+          // console.log(this.brandlist)
         });
         return
       }
@@ -188,16 +257,32 @@ export default {
     },
     toSort(param) {
       console.log("排序方法" + param)
+      this.sortType= param;
       this.show_sort= false
     },
     chooseBrand(id) {
-
+      this.brandId = id;
       console.log("品牌id" + id)
       this.show_brand = false
     },
     chooseFilter(id) {
        console.log("品牌id" + id)
       this.show_brand = false
+    },
+    anchor(anchorId) {
+      console.log(anchorId)
+      let el = '#' + anchorId;
+      let node = document.querySelector(el);
+      let node_wrapper = document.querySelector('.brand');
+      console.log(node)
+      let _Top = node.offsetTop;
+      node.scrollTop = _Top;
+       node.scrollIntoView();
+      // document.scrollTop = _Top;
+      console.log(_Top)
+    },
+    filterConfirm(){
+
     }
   },
   mounted() {
@@ -235,28 +320,36 @@ export default {
 }
 
 function dealBrandList(arr) {
-  let all = [];
+  let all = {};
+  all['brand_list'] = {}; //  品牌列表
+  all['index_list'] = []; //  字母索引表
   let baseArr = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '#'];
+  let _index = []; 
   for(let i of baseArr){
     let tmp = $.Enumerable.From(arr)
-      .Where("x => x.first_letter==i")
+      .Where("val => val.first_letter=='" + i + "'")
       .Select()
       .ToArray();
-      all[i] = tmp;
+      if(tmp.length > 0) {
+        all['brand_list'][i] = tmp;
+        all['index_list'].push(i)
+      }else{
+        
+      }
   }
-
-
-  let B = $.Enumerable.From(arr)
-  .Where("x => x.first_letter=='A'")
-  .Select()
-  .ToArray();
-  console.log(all)
-
+  // all['index_list'] = _index;
+  // all['brand_list'] = _index;
+  // console.log(all)
+  return all
 }
 
 </script>
 
 <style lang="less" scoped>
+.filtercheck{
+  background: #09B6F2 !important;
+  color: #fff;
+}
 .selectedClass{
   color: #09B6F2;
 }
@@ -350,13 +443,75 @@ function dealBrandList(arr) {
   transform-origin: 0 0;
   -webkit-transform: scaleY(0.5);
   transform: scaleY(0.5);
-  left: 0;
 }
+
 .weui-cell{
   text-align: left;
 }
 .activeColor{
   background: #fff;
+}
+
+.brand-title{
+  background: #f7f7f7;
+  padding: 0 0.8rem;
+  line-height: 1.5rem;
+}
+.brand-item{
+  padding: 0 0.8rem;
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  position: relative;
+  line-height: 2.5rem;
+  .logo{
+    width: 3rem;
+    // height: 2rem;
+    img{
+      display: block;
+      width: 3rem;
+      // height: 2rem;
+    }
+  }
+  .brand-name{
+    margin-left: .4rem;
+    font-size: 0.44rem;
+  }
+}
+
+.sort{
+  .sort-item{
+    font-size:.65rem;
+  }
+}
+.filter-box{
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 .5rem;
+  // justify-content: space-between;
+}
+.filter-btn{
+  width: 30%;
+  font-size: .5rem;
+  margin-right: .3rem;
+  background: #f7f7f7;
+  margin-bottom: .5rem;
+  text-align: center;
+  line-height: 1.5rem;
+  position: relative;
+  input{
+    width: 100%;
+    height: 1.5rem;
+    display: block;
+    background: red;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity:0;    
+  }
+}
+.filter-box{
+
 }
 </style>
 

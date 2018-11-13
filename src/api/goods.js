@@ -11,8 +11,11 @@ export function getGoodsInfo(gid) {
 }
 // 获取品牌列表
 export function getBrandList(gid) {
-  return post('/Newhome/newcategory', { })
+  return post('/Homepage/getbrand', { })
 }
+// export function getBrandList(gid) {
+//   return post('/Newhome/newcategory', { })
+// }
 // 一级分类
 export function getFirstCate(gid) {
   return post('/Homepage/firstCate', { })
