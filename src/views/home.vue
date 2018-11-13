@@ -4,14 +4,14 @@
     <section class="banner">
       <swiper :options="swiperOption">
         <swiper-slide>
-          <img src="https://img-zscdn.ponhu.cn/FsrUhU8lFrpki6bk1spi2ffuW0K5" />
+          <img src="/static/img/home-bank.png"/>
         </swiper-slide>
-        <swiper-slide>
+        <!-- <swiper-slide>
           <img src="https://img-zscdn.ponhu.cn/Fq8RQIk2pINFDmBAG7O7-em_HUsw" />
         </swiper-slide>
         <swiper-slide>
           <img src="https://img-zscdn.ponhu.cn/Fg00e_HsKjUWVjUcMG5yE6rv5_mv" />
-        </swiper-slide>
+        </swiper-slide> -->
         <div class="swiper-pagination"  slot="pagination"></div>
       </swiper>
     </section>
@@ -24,7 +24,7 @@
         </div>
         <div class="aui-col-xs-3 ph-home-nav-item">
             <i class="iconfont icon-yanghuweixiu"></i>
-            <div class="aui-grid-label">养护保养</div>
+            <div class="aui-grid-label">维护保养</div>
         </div>
         <div class="aui-col-xs-3 ph-home-nav-item">
             <i class="iconfont icon-zhaopianjianding"></i>

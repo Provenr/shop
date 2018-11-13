@@ -64,26 +64,20 @@
                 <div class="filter-btn price-btn" v-for="(val,key) in filterParam.price" :key="key" :class="filterPrice == key ? 'filtercheck': ''">{{val}} 
                   <input type='radio' :value='key' v-model="filterPrice" style="opcility:0;">
                 </div>
-                <div>{{filterPrice}}</div>
-                <!-- <div class="filter-btn price-btn">¥1000以下 <input type='radio' value='1'></div>
-                <div class="filter-btn price-btn">¥1000-5000 <input type='radio' value='2'></div>
-                <div class="filter-btn price-btn">¥5000-1万</div>
-                <div class="filter-btn price-btn">¥1万-10万</div>
-                <div class="filter-btn price-btn">¥10万以上</div> -->
               </div>
               <div class="filter-tit">适用人群</div>
               <div class="filter-box">
-                <div class="filter-btn gender-btn">所有人</div>
-                <div class="filter-btn gender-btn">男士</div>
-                <div class="filter-btn gender-btn">女士</div>
+                <div class="filter-btn gender-btn" v-for="(val,key) in filterParam.gender" :key="key" :class="filterGender == key ? 'filtercheck': ''">{{val}}
+                   <input type='radio' :value='key' v-model="filterGender" style="opcility:0;">
+                </div>
+                <div>{{filterGender}}</div>
               </div>
               <div class="filter-tit">成色</div>
               <div class="filter-box">
-                <div class="filter-btn fineness-btn">全新</div>
-                <div class="filter-btn fineness-btn">98新</div>
-                <div class="filter-btn fineness-btn">95新</div>
-                <div class="filter-btn fineness-btn">9新</div>
-                <div class="filter-btn fineness-btn">85新</div>
+                <div class="filter-btn gender-btn" v-for="(val,key) in filterParam.fineness" :key="key" :class="filterFineness == key ? 'filtercheck': ''">{{val}}
+                   <input type='radio' :value='key' v-model="filterFineness" style="opcility:0;">
+                </div>
+                <div>{{filterFineness}}</div>
               </div>
             </div>
           </group>
