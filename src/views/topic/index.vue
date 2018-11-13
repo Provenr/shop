@@ -51,7 +51,8 @@ export default {
         }
       },
       page: 1,
-      noData: false
+      noData: false,
+      showEmpty: false
     }
   },
   created() {
@@ -102,8 +103,9 @@ export default {
       }, 2000)
     },
     handleLBD(vm, refreshDom, done) {
-      console.log(vm, refreshDom, 'handleBeforeDeactivate');
-      done();
+      setTimeout(function(){
+        done();
+      }, 2000)
     }
   }
 }
