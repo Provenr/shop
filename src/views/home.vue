@@ -6,18 +6,12 @@
         <swiper-slide>
           <img src="/static/img/home-bank.png"/>
         </swiper-slide>
-        <!-- <swiper-slide>
-          <img src="https://img-zscdn.ponhu.cn/Fq8RQIk2pINFDmBAG7O7-em_HUsw" />
-        </swiper-slide>
-        <swiper-slide>
-          <img src="https://img-zscdn.ponhu.cn/Fg00e_HsKjUWVjUcMG5yE6rv5_mv" />
-        </swiper-slide> -->
         <div class="swiper-pagination"  slot="pagination"></div>
       </swiper>
     </section>
     <!-- 导航 -->
     <section class="aui-grid">
-      <div class="aui-row">
+      <!-- <div class="aui-row"> -->
         <div class="aui-col-xs-3 ph-home-nav-item">
             <i class="iconfont icon-shepinhuishou"></i>
             <div class="aui-grid-label">奢品回收</div>
@@ -34,7 +28,7 @@
             <i class="iconfont icon-shiwujianding"></i>
             <div class="aui-grid-label">实物鉴定</div>
         </div>
-      </div>
+      <!-- </div> -->
     </section>
     <section class="container home-topic-wrapper">
       <div class="left">

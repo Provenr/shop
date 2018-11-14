@@ -24,5 +24,19 @@ export function getFirstCate(gid) {
 // 立即购买
 export function getGoodsPay(gid) {
   return post('/Shoppingcart/goSettlementOne', { goodsid: gid })
+}
 
+//  胖虎优选
+export function getOptimalGoods(option, page) {
+  return post('/Goods/zyindex', 
+  { 
+    storeid: option.storeid,
+    cateid: option.secondCategoryId, 
+    brandid: option.brandId, 
+    order: option.sortType, 
+    priceflag: option.filterPrice,
+    people: option.filterGender,
+    colour: option.filterFineness,
+    p: page
+  })
 }

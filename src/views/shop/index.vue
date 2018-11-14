@@ -26,24 +26,26 @@
             <div v-for="(item, index) in firstCategoryList" :key="index" class="left-item" :class="['left-item', firstCategoryId == item.id ? 'activeColor' : '']"  @click="firstCategory(item.id)">{{item.name}}</div>
           </div>
           <div class="right">
-            <div v-for="(item, index) in secondCategoryList" :key="item.id" class="right-item" @click="secondCategory(item.id)">{{item.name}}</div>
+            <div v-for="item in secondCategoryList" :key="item.id" class="right-item" @click="secondCategory(item.id)">{{item.name}}</div>
           </div>
       </popup>
       </div>
-      <div class="brand"  v-transfer-dom>
-        <popup v-model="show_brand" position="left"  width="100%">
-        <group>
-          <brand-list :Alphabetic="index_list" @jump='anchor'></brand-list>
-         <div class="brand-box" v-for="(value, key) in brandlist" :key="key">
-            <div class="brand-title" :id="key">{{key}}</div>
-            <div v-for="item in value" :key='item.id' @click="chooseBrand(item.id)" class="brand-item line">
-              <span class="logo">
-                <img :src="item.logo" alt="" srcset="">
-              </span>
-              <span class="brand-name">{{item.name}}</span>
+      <div  v-transfer-dom>
+        <popup v-model="show_brand" position="left"  width="100%" should-scroll-top-on-show >
+          <div class="brand">
+          <group>
+            <brand-list :Alphabetic="index_list" @jump='anchor'></brand-list>
+            <div class="brand-box vux-scrollable" v-for="(value, key) in brandlist" :key="key">
+              <div class="brand-title" :id="key">{{key}}</div>
+              <div v-for="item in value" :key='item.id' @click="chooseBrand(item.id)" class="brand-item line">
+                <span class="logo">
+                  <!-- <img :src="item.logo" alt="" srcset=""> -->
+                </span>
+                <span class="brand-name">{{item.name}}</span>
+              </div>
             </div>
-         </div>
-        </group>
+          </group>
+          </div>
       </popup>
       </div>
       <div class="sort"  v-transfer-dom>
@@ -56,50 +58,49 @@
         </popup>
       </div>
       <div class="filter"  v-transfer-dom>
-        <popup v-model="show_filter" position="right" max-height="100%" width="80%">
+        <popup v-model="show_filter" position="right" max-height="100%" width="80%" :hide-on-blur=false>
           <group>
             <div class="filter-wrapper">
               <div class="filter-tit">价格</div>
               <div class="filter-box">
-                <div class="filter-btn price-btn" v-for="(val,key) in filterParam.price" :key="key" :class="filterPrice == key ? 'filtercheck': ''">{{val}} 
-                  <input type='radio' :value='key' v-model="filterPrice" style="opcility:0;">
+                <div class="filter-btn price-btn" v-for="(val,key) in filterParam.price" :key="key" :class="where.filterPrice == key ? 'filtercheck': ''">{{val}} 
+                  <input type='radio' :value='key' v-model="where.filterPrice" style="opcility:0;">
                 </div>
               </div>
               <div class="filter-tit">适用人群</div>
               <div class="filter-box">
-                <div class="filter-btn gender-btn" v-for="(val,key) in filterParam.gender" :key="key" :class="filterGender == key ? 'filtercheck': ''">{{val}}
-                   <input type='radio' :value='key' v-model="filterGender" style="opcility:0;">
+                <div class="filter-btn gender-btn" v-for="(val,key) in filterParam.gender" :key="key" :class="where.filterGender == key ? 'filtercheck': ''">{{val}}
+                   <input type='radio' :value='key' v-model="where.filterGender" style="opcility:0;">
                 </div>
-                <div>{{filterGender}}</div>
               </div>
               <div class="filter-tit">成色</div>
               <div class="filter-box">
-                <div class="filter-btn gender-btn" v-for="(val,key) in filterParam.fineness" :key="key" :class="filterFineness == key ? 'filtercheck': ''">{{val}}
-                   <input type='radio' :value='key' v-model="filterFineness" style="opcility:0;">
+                <div class="filter-btn gender-btn" v-for="(val,key) in filterParam.fineness" :key="key" :class="where.filterFineness == key ? 'filtercheck': ''">{{val}}
+                   <input type='radio' :value='key' v-model="where.filterFineness" style="opcility:0;">
                 </div>
-                <div>{{filterFineness}}</div>
               </div>
             </div>
           </group>
           <div class="filter-btn-wrapper">
-            <x-button @click.native="show_filter = false" plain type="primary">取消</x-button>
-            <x-button @click.native="filterConfirm" plain type="primary">确定</x-button>
+            <button @click="filterCancel"  class="cancel">取消</button>
+            <button @click="filterConfirm" >确定</button>
           </div>
         </popup>
       </div>
 
     </div>
+    <vue-scroll :ops="ops" @load-before-deactivate="handleLBD" @load-start="handleLoadStart">
+      <section class="topic-head-img">
+        <img :src="headimg" alt="altText"/>
+      </section>
 
-    <section class="topic-head-img">
-      <img :src="headimg" alt="altText"/>
-    </section>
-
-    <div class="content">
-      <div class="count-total fz22">
-        共为你找到{{ph_goods_total}}个商品
+      <div class="content">
+        <div class="count-total fz22">
+          共为你找到{{ph_goods_total}}个商品
+        </div>
+          <goods-list :list='goodsList'></goods-list>
       </div>
-      <goods-list :list='goodsList'></goods-list>
-    </div>
+    </vue-scroll>
   </div>
 </template>
 
@@ -107,10 +108,10 @@
 import GoodsList from '@/components/GoodsList'
 import BrandList from '@/components/BrandList'
 
-import { getBrandList, getFirstCate } from '@/api/goods'
+import { getBrandList, getFirstCate, getOptimalGoods} from '@/api/goods'
 import tips from '@/utils/tip'
 
-import { TransferDom, Popup, Group, Cell, XButton, XSwitch, Toast, XAddress, ChinaAddressData } from 'vux'
+import { TransferDom, Popup, Group} from 'vux'
 
 export default {
   name: 'shop',
@@ -121,22 +122,24 @@ export default {
     GoodsList,
     BrandList,
     Popup,
-    TransferDom,
-    Group,
-    Cell,
-    XButton
+
+    Group
   },
   data() {
     return {
       title: '',
-      selected: '',
-      show_category: false,
+      selected: '', // tab切换 选择状态
+
+      show_category: false, // popup 显隐状态
       show_brand: false,
       show_sort: false,
       show_filter: false,
-      ph_goods_total:'123456',
-      activeCateItem: 1,
+      nodata: false,
 
+      ph_goods_total:'123456', //总商品数量
+
+      page: 1, // 页码
+      // 过滤条件
       filterParam:{
         'price':{
           1:"¥1000以下",
@@ -159,53 +162,55 @@ export default {
         }
       }, 
 
+      ops: {
+        vuescroll: {
+          mode: 'slide',
+          pullRefresh: {
+            enable: false
+          },
+          pushLoad: {
+            enable: true,
+            tips: {
+              deactive: '',
+              active: '',
+              start: '加载中...',
+              beforeDeactive: '加载完成'
+            },
+            auto: false,
+            autoLoadDistance: 10
+          }
+        }
+      },
+
       firstCategoryId: '',
-      secondCategoryId: '',
-      brandId: '',
-      sortType: '', // 排序
+      // secondCategoryId: '',
+      // brandId: '',
+      // sortType: '', // 排序
+
+      // filterPrice:null,  
+      // filterGender:null,      
+      // filterFineness:null,      
 
       secondCate: new Map(),
 
-      // filterList: [],
-      where: {
-        storeid: '',
-        cateid: 0
-      },
-      filterPrice:null,  
-      filterGender:null,      
-      filterFineness:null,      
 
-      firstCategoryList: [],
-      secondCategoryList: [],
-      brandlist:[],
-      index_list:[],
-      headimg:'https://img-zscdn.ponhu.cn/FsrUhU8lFrpki6bk1spi2ffuW0K5',
-      goodsList: [
-        {
-          goodsId: 453069,
-          price: "7288",
-          del: "13999",
-          status:1,
-          img: "https://img-ppcdn.ponhu.cn/Fr09uZEPaVVbxypQacKP8UIwILWv?imageView2/1/w/640/h/540",
-          name: "98新香奈儿方胖子链条包98新香奈儿方胖子链条包98新香奈儿方胖子链条包9"
-        },
-        {
-          goodsId: 290764,
-          price: "6888",
-          del: "10999",
-          status:2,
-          img: "https://img-ppcdn.ponhu.cn/Fr_Y0bqEcOsND9TUIAW1AV3ajAni?imageView2/1/w/640/h/540",
-          name: "95新 LV老花邮差包LV老花邮差包LV老花邮差包L"
-        },
-        {
-          goodsId: 456746,
-          price: "8666",
-          del: "11599",
-          status:3,
-          img: "https://img-ppcdn.ponhu.cn/Fj2dxeWanYPaDKDqbtksVMzem5oK?imageView2/1/w/640/h/540",
-          name: "95新古驰Padlock两用包"
-        }
-      ]
+      // filterList: [],
+      where: { 
+        storeid: 110,
+        secondCategoryId: '', 
+        brandId: '', 
+        sortType: '', 
+        filterPrice: '',
+        filterGender: '',
+        filterFineness: ''
+      },
+      
+      firstCategoryList: [], // 一级分类列表
+      secondCategoryList: [], // 二级分类列表
+      brandlist:[], // 品牌列表
+      index_list:[], // 字母索引
+      headimg:'https://img-zscdn.ponhu.cn/FsrUhU8lFrpki6bk1spi2ffuW0K5', // banner图
+      goodsList: []
     }
   },
 
@@ -238,29 +243,25 @@ export default {
     },
     firstCategory(id) {
       this.firstCategoryId = id;
-      this.activeCateItem = id;
-
       // 设置 二级分类
       this.secondCategoryList = this.secondCate.get(id);
-      console.log("一级分类id" + id)
     },
     secondCategory(id) {
-      this.secondCategoryId = id;
-      console.log("二级分类id" + id)
+      this.where.secondCategoryId = id;
       this.show_category = false
+      this.getData(true)
     },
     toSort(param) {
-      console.log("排序方法" + param)
-      this.sortType= param;
-      this.show_sort= false
+      this.where.sortType = param;
+      this.show_sort = false
+      this.getData(true)
     },
     chooseBrand(id) {
-      this.brandId = id;
-      console.log("品牌id" + id)
+      this.where.brandId = id;
       this.show_brand = false
+      this.getData(true)
     },
     chooseFilter(id) {
-       console.log("品牌id" + id)
       this.show_brand = false
     },
     anchor(anchorId) {
@@ -268,26 +269,84 @@ export default {
       let el = '#' + anchorId;
       let node = document.querySelector(el);
       let node_wrapper = document.querySelector('.brand');
-      console.log(node)
       let _Top = node.offsetTop;
-      node.scrollTop = _Top;
-       node.scrollIntoView();
-      // document.scrollTop = _Top;
-      console.log(_Top)
+        node.scrollIntoView()
+
+        // node_wrapper.scrollTop = _Top;  // todo 滚动 兼容
+    },
+    filterCancel() {
+      this.show_filter = false;
+      this.where.filterPrice = '';
+      this.where.filterGender = '';
+      this.where.filterFineness = '';
     },
     filterConfirm(){
-
+      this.show_filter = false;
+      this.getData(true)
+    },
+    //  获取数据
+    getData(refresh) {
+      let _this = this;
+      getOptimalGoods(this.where, this.page).then(res => {
+        console.log(res)
+        _this.ph_goods_total = res.goodsnum
+        
+        // 商品
+        let glist = res.list;
+        let _glist = [];
+        if(glist) {
+          glist.forEach(function (item) {
+            _glist.push({
+              goodsId: item.id,
+              img: item.goods_images,
+              name: item.goods_name,
+              status: item.is_discount,
+              price: item.ph_price,
+              del: item.original_price
+            });
+          });
+          if (refresh) {
+            _this.goodsList = _glist;
+          } else {
+            _this.goodsList = [..._this.goodsList, ..._glist];
+          }
+          this.noData = false;
+        }
+        else {
+          this.noData = true;
+        }
+        tips.loaded()
+      });
+    },
+    handleLoadStart(vm, dom, done) {
+      let _this = this;
+      if (!_this.noData) {
+        _this.page++;
+        _this.getData();
+      }
+      setTimeout(function(){
+        done();
+      }, 2000)
+    },
+    handleLBD(vm, refreshDom, done) {
+      setTimeout(function(){
+        done();
+      }, 2000)
     }
   },
   mounted() {
     let _this = this;
     _this.title = this.$route.meta.title;
+
+    //  商品数据
+    tips.loading();
+    _this.getData(true)
+    // 分类列表
     getFirstCate().then(res =>{
       // console.log(res)
       let firstCate = [];
       let Category_list = res.list;
 
-      // this.activeCateItem = Category_list[0].id; // 默认 第一个一级分类id 为选中状态
       this.firstCategoryId = Category_list[0].id; // 默认 第一个一级分类id 为选中状态
 
       for (let item of Category_list){
@@ -302,13 +361,10 @@ export default {
       this.firstCategoryList = firstCate;
 
       let _firstCategoryId = this.firstCategoryId
-      console.log(this.secondCate)
+      // console.log(this.secondCate)
 
       this.secondCategoryList = this.secondCate.get(_firstCategoryId);
 
-      console.log(_firstCategoryId)
-      console.log(this.secondCate.get())
-      console.log(this.secondCategoryList)
     })
   }
 }
@@ -331,9 +387,6 @@ function dealBrandList(arr) {
         
       }
   }
-  // all['index_list'] = _index;
-  // all['brand_list'] = _index;
-  // console.log(all)
   return all
 }
 
@@ -356,6 +409,7 @@ function dealBrandList(arr) {
   }
 }
 .ph-shop-filter{
+  border-bottom:1px solid #f7f7f7;
   height: 2rem;
   padding: 0 0.3rem;
   background: #fff;
@@ -365,6 +419,7 @@ function dealBrandList(arr) {
   text-align: center;
   position: fixed;
   width: 100%;
+  z-index: 10;
 }
 .content{
   padding: 0 .45rem 0.45rem;
@@ -472,7 +527,10 @@ function dealBrandList(arr) {
     font-size: 0.44rem;
   }
 }
-
+.brand{
+  height: 100%;
+  overflow: auto;
+}
 .sort{
   .sort-item{
     font-size:.65rem;
@@ -483,6 +541,10 @@ function dealBrandList(arr) {
   flex-wrap: wrap;
   padding: 0 .5rem;
   // justify-content: space-between;
+}
+.filter-tit{
+  padding: .5rem;
+  font-size: .7rem;
 }
 .filter-btn{
   width: 30%;
@@ -506,6 +568,26 @@ function dealBrandList(arr) {
 }
 .filter-box{
 
+}
+.filter-btn-wrapper{
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1rem;
+  button{
+    margin: 0;
+    padding: 0;
+    border: 1px solid transparent;  //自定义边框
+    outline: none;
+    width: 3rem;
+    height: 1.5rem;
+    background: #09B6F2;
+    color: #fff;
+  }
+  .cancel{
+    background: #eee;
+    color: #333;
+    border: 1px solid #09B6F2;
+  }
 }
 </style>
 
