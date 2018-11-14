@@ -190,6 +190,7 @@ export default {
   margin: .6rem 0;
   padding-top: .8rem;
   padding-bottom: .8rem;
+  justify-content: space-between;
   .left{
     width: 8.375rem;
     height: 7.2rem;
@@ -200,11 +201,16 @@ export default {
     }
   }
   .right{
-    width: 8.375rem;
+    // width: 8.375rem;
+    // flex-grow: 1;
     margin-left: .4rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    img{
+      display: block;
+      height: 3.4rem;
+    }
   }
 }
 .home-sale-wrapper{

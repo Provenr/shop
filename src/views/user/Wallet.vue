@@ -1,6 +1,11 @@
 <template>
-  <div class="user-center">
-    <!-- <Header :title='titlemsg'></Header>
+  <div class="aui-row">
+    <header class="aui-bar aui-bar-nav">
+      <a class="aui-pull-left aui-btn" @click="$router.back(-1)">
+        <span class="iconfont icon-leftarrow" style="font-size: 1rem"></span>
+      </a>
+      <div class="aui-title">{{title}}</div>
+    </header>
     <div class="content">
       <div class="wallet-info">
         <div class="wallet-info-wrapper">
@@ -16,7 +21,7 @@
 
       <div class="consume-list" >
         <div class="title fb f30" ref="tit">资金明细</div>
-         <div class="consume-list-wrapper" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="10" infinite-scroll-immediate-check	= 'false' :style="{ height : wrapperHeight + 'px' }">
+         <!-- <div class="consume-list-wrapper" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="10" infinite-scroll-immediate-check	= 'false' :style="{ height : wrapperHeight + 'px' }">
             <div class="consume-item" v-for="(list,index) in lists" :key="index">
               <div class="item-top">
                 <div class="name fb">{{list.remark}}</div>
@@ -28,9 +33,9 @@
             </div>
             <div class="loading f28" v-if='!loading'><mt-spinner type="fading-circle"></mt-spinner><span>加载中...</span></div>
             <div class="loadend" v-if='allLoaded'>已加载全部</div>
-         </div>
+         </div> -->
       </div>
-    </div> -->
+    </div> 
   </div>
 </template>
 <script>
@@ -41,29 +46,29 @@
 // import axios from "axios";
 // import { MessageBox } from 'mint-ui';
 
-// export default {
+export default {
 //   components: {
 //     Header,
 //     Menu
 //   },
-//   data() {
-//     return {
-//       titlemsg: "我的钱包",
-//       balance: 0,// 余额
-//       userinfo: {
-//         nickname: "风度翩翩的少年",
-//         head: "http://7xl1gc.com2.z0.glb.qiniucdn.com/1526613328789.304932"
-//       },
-//       wrapperHeight: 0,
-//       lists: [],
-//       loading:true,
-//       isalldata:false,
-//       pageNo:0,
-//       totalpage:0,
-//       pageSize:10,
-//       allLoaded:false,
-//     };
-//   },
+  data() {
+    return {
+      title: "我的钱包",
+      balance: 0,// 余额
+      userinfo: {
+        nickname: "风度翩翩的少年",
+        head: "http://7xl1gc.com2.z0.glb.qiniucdn.com/1526613328789.304932"
+      },
+      wrapperHeight: 0,
+      lists: [],
+      loading:true,
+      isalldata:false,
+      pageNo:0,
+      totalpage:0,
+      pageSize:10,
+      allLoaded:false,
+    };
+  },
 //   methods: {
 //     makecall: function() {
 //       location.href='tel:400-086-5285'
@@ -233,10 +238,24 @@
 //     // console.log(document.documentElement.clientHeight)
 //     // console.log(this.$refs.tit.getBoundingClientRect().top)
 //   }
-// }
+}
 </script>
- <style scoped>
-/* //   @import '../../../assets/css/pages/mine/wallet' */
- </style>
+<style lang="less" scoped>
+  .wallet-info{
+    background: #fff;
+    padding: 1.75rem 0.8rem 1.25rem;
+    .wallet-info-wrapper{
+      margin: 0 auto;
+      background: url('/static/img//me_wallet_bg.png') no-repeat;
+      background-size: 100% 100%;
+      overflow: hidden;
+      // width: 17.125rem;
+      height: 8.7rem;
+      position: relative;
+      color: #ffffff;
+    }
+  }
+</style>
+
 
 
