@@ -1,6 +1,6 @@
 <template>
   <div class="aui-row">
-    <header class="aui-bar aui-bar-nav">{{title}}</header>
+    <header class="aui-bar aui-bar-nav">{{$route.meta.title}}</header>
     <section class="banner">
       <swiper :options="swiperOption">
         <swiper-slide>
@@ -11,7 +11,7 @@
     </section>
     <!-- 导航 -->
     <section class="aui-grid">
-      <!-- <div class="aui-row"> -->
+
         <div class="aui-col-xs-3 ph-home-nav-item">
             <i class="iconfont icon-shepinhuishou"></i>
             <div class="aui-grid-label">奢品回收</div>
@@ -28,56 +28,64 @@
             <i class="iconfont icon-shiwujianding"></i>
             <div class="aui-grid-label">实物鉴定</div>
         </div>
-      <!-- </div> -->
+
     </section>
     <section class="container home-topic-wrapper">
-      <div class="left">
+      <router-link class="left" :to="'/shop'">
         <img src="/static/img/home-ziying.png" alt="">
-      </div>
+      </router-link>
       <div class="right">
-        <div>
+        <router-link class="special_list" :to="'/topic/'+special_top.id">
           <img src="/static/img/home-shagnxin.png" alt="">
-        </div>
-        <div>
+          <div class="title">{{special_top.title}}</div>
+          <div class="num">{{special_top.count}}款</div>
+        </router-link>
+        <router-link class="special_list" :to="'/topic/'+special_button.id">
           <img src="/static/img/home-jianlou.png" alt="">
-        </div>
+          <div class="title">{{special_button.title}}</div>
+          <div class="num">{{special_button.zhe}}</div>
+        </router-link>
+
       </div>
     </section>
     <!-- 限时抢购 -->
     <section class="home-sale-wrapper">
       <div class="time-list">
-        <!-- <ul> -->
-        <ul :class="{active: index==0}" class="nav-item" v-for="(item, index) in navlist" :key="index">
+        <ul :class="item.isActive?'active':''" class="nav-item" v-for="(item, index) in special_list" :key="index" @click="clickTime(index, item)">
           <li>
             <span class="time fz32">{{item.time}}</span>
-            <span class="status fz20">{{item.status}}</span>
+            <span class="status fz20">{{item.day}}</span>
           </li>
         </ul>
-
-        <!-- </ul> -->
       </div>
       <div class="img-title">
-        <img src="/static/img/home-temai.png" alt="" srcset="">
+        <img :src="special.img" alt="">
         <div class="countdown-head-box">
           <strong class="shop-head-name fz34">
-            限时抢购中
+            {{special.stxt}}
           </strong>
-          <div class="shop-head-time">
-            <span>{{xh_list.flag.day}}</span>
-            <span>{{hour}}</span>
-            <span>{{minute}}</span>
-            <span>{{second}}</span>
+          <div class="shop-head-time" v-if="special.state!='3'">
+            <span>{{special.ttxt}}</span>
+            <span>{{special.time.hour}}</span>
+            <span>{{special.time.minute}}</span>
+            <span>{{special.time.second}}</span>
           </div>
         </div>
       </div>
-      <column-list-item :List='goodsList'></column-list-item>
+      <column-list-item :List='goodsList' @userSetRemind="setRemind"></column-list-item>
     </section>
   </div>
 </template>
 
 <script>
+import 'swiper/dist/css/swiper.css'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
+import { getSpecialSum, getSpecialList, getSpecialGoodsList, setSpecialRemind } from '@/api/shop'
+import { secTotime } from '@/utils'
+import tips from '@/utils/tip'
+
 import columnListItem from '@/components/ColumnListItem'
+
 export default {
   name:'home',
   components: {
@@ -87,7 +95,6 @@ export default {
   },
   data() {
     return {
-      title:'胖虎商城',
       swiperOption: {
         pagination: {
           el:'.swiper-pagination',
@@ -96,77 +103,159 @@ export default {
         },
         loop:true
       },
-      navlist:[
-        {time:'80:00',status:'浅沟中'},
-        {time:'80:00',status:'浅沟中'},
-        {time:'80:00',status:'浅沟中'},
-        {time:'80:00',status:'浅沟中'},
-        {time:'80:00',status:'浅沟中'},
-        {time:'80:00',status:'浅沟中'},
-      ],
-      xh_list:{
-        flag:{
-          day:'距结束'
-        }
+      currentSid: 0, // 当前专场ID
+      page: 1,
+      noData: false,
+      special: {
+        time: {}
       },
-      hour: '00',
-      minute: '50',
-      second: '38',
-      goodsList: [
-        {
-          goodsId: 453069,
-          price: "7288",
-          del: "13999",
-          status:1,
-          img: "https://img-ppcdn.ponhu.cn/Fr09uZEPaVVbxypQacKP8UIwILWv?imageView2/1/w/640/h/540",
-          name: "98新香奈儿方胖子链条包98新香奈儿方胖子链条包98新香奈儿方胖子链条包9"
-        },
-        {
-          goodsId: 290764,
-          price: "6888",
-          del: "10999",
-          status:2,
-          img: "https://img-ppcdn.ponhu.cn/Fr_Y0bqEcOsND9TUIAW1AV3ajAni?imageView2/1/w/640/h/540",
-          name: "95新 LV老花邮差包LV老花邮差包LV老花邮差包L"
-        },
-        {
-          goodsId: 456746,
-          price: "8666",
-          del: "11599",
-          status:3,
-          img: "https://img-ppcdn.ponhu.cn/Fj2dxeWanYPaDKDqbtksVMzem5oK?imageView2/1/w/640/h/540",
-          name: "95新古驰Padlock两用包"
-        }
-      ]
+      special_top: {},
+      special_button: {},
+      special_list: [],
+      setInter: '',
+      goodsList: []
+    }
+  },
+  computed: {
+    token() {
+      return this.$store.getters.token;
     }
   },
   created () {
-    document.addEventListener('click', this.handleClick)
+    this.getData();
   },
-  mounted() {
-    let _this = this;
-    _this.title = this.$route.meta.title;
-    console.log(this.$route)
-    console.log(this.$route.title)
-  },
-  beforeDestroy () {
-    document.removeEventListener('click', this.handleClick)
-  },
-   methods: {
-    tabchange(name) {
-      let _this = this;
-      _this.$router.push({ path: name });
-    },
-    toGoodDetail(id) {
+  methods: {
+    getData() {
+      tips.loading();
+      // 获取统计数据
+      getSpecialSum().then(res => {
+        if (res.list.length > 1) {
+          this.special_top = res.list[0];
+          this.special_button = res.list[1];
+        }
+      });
+      // 获取专场数据
+      getSpecialList().then(res => {
+        let sList = res.list;
+        if(res.msg == 1) {
+          // 获取当前专场ID
+          for (let i = 0; i < sList.length; i++) {
+            if (sList[i].state == "1") {
+              sList[i].isActive = true;
+              this.currentSid = sList[i].id;
+              break;
+            }
+          }
+          this.special_list = sList;
+          // 获取特卖专场商品
+          this.getSpecialGoods(true);
+        }
+        else {
 
+        }
+      });
+    },
+    clickTime(index, item) {
+      this.special_list.forEach(function (sp) {
+        sp.isActive = false;
+      });
+      item.isActive = true;
+      this.special_list.splice(index, 1, item);
+      this.currentSid = item.id;
+      tips.loading();
+      this.getSpecialGoods(true);
+    },
+    getSpecialGoods(refresh) {
+      getSpecialGoodsList({ id: this.currentSid, p: this.page }).then(res => {
+        let glist = res.list;
+        let _glist = [];
+        let that = this;
+
+        if(glist) {
+          let state = res.flag.state;
+          glist.forEach(function (item) {
+            let astate = 0;
+            if (item.shelevs_type=='1') {
+              if (state == '2') {
+                if (that.token) {
+                  astate = item.is_set=='1'?3:2;
+                } else {
+                  astate = 2;
+                }
+              } else if (state == '3') {
+                astate = 4;
+              } else {
+                astate = 1;
+              }
+            }
+
+            _glist.push({
+              goodsId: item.id,
+              img: item.goods_images,
+              name: item.goods_name,
+              status: astate,
+              price: item.sale_price,
+              del: item.ph_price
+            });
+          });
+
+
+          if (refresh) {
+            this.special = {
+              stxt: res.flag.title,
+              ttxt: res.flag.time,
+              img: res.flag.img,
+              state: res.flag.state,
+              time: {}
+            }
+            clearInterval(that.setInter);
+            if(res.flag.state != '3') {
+              let s = parseInt(res.flag.ends);
+              that.setInter = setInterval(function () {
+                s--
+                if (s > 0) {
+                  let s_time = secTotime(s);
+                  let _s_time = s_time.split(':');
+                  that.special.time = {
+                    hour: _s_time[0],
+                    minute: _s_time[1],
+                    second: _s_time[2]
+                  }
+                } else {
+                  clearInterval(that.setInter)
+                }
+              }, 1000);
+            }
+
+            that.goodsList = _glist;
+            tips.loaded();
+          }
+          else {
+            that.goodsList = [...that.goodsList, ..._glist];
+          }
+
+          this.noData = false;
+        } else {
+          this.noData = true;
+        }
+      });
+    },
+    setRemind(index) {
+      let item = this.goodsList[index];
+      setSpecialRemind({ id: this.currentSid, goodsid: item.goodsId }).then(res => {
+        if(res.code == 200) {
+          tips.toast(res.msg);
+          this.goodsList[index].status = 3;
+        }
+      }).catch(error => {
+        tips.alert(error)
+      });
     }
   },
 }
 </script>
 
 <style lang="less" scoped>
-@import '../../node_modules/swiper/dist/css/swiper.css';
-
 .aui-row{
   line-height: 1;
   padding-top: 2.25rem;
@@ -176,7 +265,7 @@ export default {
   background: #09B6F2 !important
 }
 .aui-grid{
-  padding: .3rem 0 !important;
+  padding: .5rem 0 !important;
 }
 .ph-home-nav-item{
   padding: 0;
@@ -205,6 +294,24 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    .special_list {
+      position:relative;
+      .num {
+        top: 1.8rem;
+        position: absolute;
+        font-size: .65rem;
+        color: #666666;
+        left: .8rem;
+      }
+      .title {
+        position: absolute;
+        top: .8rem;
+        left: .8rem;
+        font-size:.85rem;
+        font-weight:500;
+        color: #333333;
+      }
+    }
   }
 }
 .home-sale-wrapper{
@@ -235,6 +342,7 @@ export default {
         justify-content: center;
         align-items: center;
         margin: 0 auto;
+        .status { padding-top: .2rem}
       }
     }
   }

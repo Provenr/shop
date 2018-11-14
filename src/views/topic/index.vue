@@ -6,14 +6,17 @@
       </a>
       <div class="aui-title">{{topic.title}}</div>
     </header>
-    <vue-scroll :ops="ops" @load-before-deactivate="handleLBD" @load-start="handleLoadStart">
-      <div class="ph-topic-title">
-        <img :src="topic.image" />
-      </div>
-      <div class="ph-topic-goods">
-        <goods-list :list="goodsList"></goods-list>
-      </div>
-    </vue-scroll>
+    <div style="height:100vh;overflow:auto;">
+      <vue-scroll :ops="ops" @load-before-deactivate="handleLBD" @load-start="handleLoadStart">
+        <div class="ph-topic-title">
+          <img :src="topic.image" />
+        </div>
+        <div class="ph-topic-goods">
+          <goods-list :list="goodsList"></goods-list>
+        </div>
+      </vue-scroll>
+    </div>
+    
   </div>
 </template>
 
@@ -35,7 +38,7 @@ export default {
         vuescroll: {
           mode: 'slide',
           pullRefresh: {
-            enable: false
+            enable: true
           },
           pushLoad: {
             enable: true,
@@ -51,8 +54,7 @@ export default {
         }
       },
       page: 1,
-      noData: false,
-      showEmpty: false
+      noData: false
     }
   },
   created() {
