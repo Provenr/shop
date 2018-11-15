@@ -1,6 +1,11 @@
 <template>
   <div class="aui-row">
-    <header class="aui-bar aui-bar-nav">{{title}}</header>
+    <header class="aui-bar aui-bar-nav">
+      <a class="aui-pull-left aui-btn" @click="$router.back(-1)">
+        <span class="iconfont icon-leftarrow" style="font-size: 1rem"></span>
+      </a>
+      <div class="aui-title">{{title}}</div>
+    </header>
     <div class="ph-shop-filter">
       <div class="aui-col-xs-3" :class="selected == 'category' ? 'selectedClass' : ''" @click="tabchange('category')">
         <span>类别</span>
