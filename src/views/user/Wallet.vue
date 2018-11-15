@@ -10,10 +10,11 @@
       <div class="wallet-info">
         <div class="wallet-info-wrapper">
           <div class="wallet-wrapper">
-            <div class="balance f60">{{balance}}</div>
+            <div class="balance fz80">{{balance}}</div>
             <div class="my-wallet f28" style="color:#fff">账户余额(元)</div>
           </div>
           <div class="wallet-exchange f28" @click="exchange()">
+            <i class="iconfont icon-qiandai"></i>
             提现
           </div>
         </div>
@@ -21,19 +22,19 @@
 
       <div class="consume-list" >
         <div class="title fb f30" ref="tit">资金明细</div>
-         <!-- <div class="consume-list-wrapper" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="10" infinite-scroll-immediate-check	= 'false' :style="{ height : wrapperHeight + 'px' }">
+         <div class="consume-list-wrapper" >
             <div class="consume-item" v-for="(list,index) in lists" :key="index">
               <div class="item-top">
                 <div class="name fb">{{list.remark}}</div>
-                <div class="num">{{list.sign}}{{list.trand_amt}}</div>
+                <div class="num fz30">{{list.symbol}}{{list.trand_amt}}</div>
               </div>
               <div class="item-date">
                 {{list.datetime}}
               </div>
             </div>
-            <div class="loading f28" v-if='!loading'><mt-spinner type="fading-circle"></mt-spinner><span>加载中...</span></div>
-            <div class="loadend" v-if='allLoaded'>已加载全部</div>
-         </div> -->
+            <!-- <div class="loading f28" v-if='!loading'><mt-spinner type="fading-circle"></mt-spinner><span>加载中...</span></div> -->
+            <!-- <div class="loadend" v-if='allLoaded'>已加载全部</div> -->
+         </div>
       </div>
     </div> 
   </div>
@@ -45,11 +46,12 @@
 // // import {getServiceTime} from '@/utils/index'
 // import axios from "axios";
 // import { MessageBox } from 'mint-ui';
-
+import tips from '@/utils/tip'
+import { myAccount } from '@/api/user'
 export default {
 //   components: {
 //     Header,
-//     Menu
+//     Menu`
 //   },
   data() {
     return {
@@ -63,181 +65,68 @@ export default {
       lists: [],
       loading:true,
       isalldata:false,
-      pageNo:0,
+      page:1,
       totalpage:0,
       pageSize:10,
       allLoaded:false,
     };
   },
-//   methods: {
-//     makecall: function() {
-//       location.href='tel:400-086-5285'
-//     },
-//     myWallet: function() {
-//       this.$router.push({ path: "/wallet" });
-//     },
-//     exchange: function(){
-//       //this.$confirm('下载胖虎奢侈品APP进行提现');
-//        MessageBox.confirm('', {
-//         message: '下载胖虎奢侈品APP进行提现',
-//         title: '提示',
-//         confirmButtonText: '确定',
-//         cancelButtonText: '退出'
-//         }).then(action => {
-//         if (action == 'confirm') {     //确认的回调
-//           console.log(1);
-//           window.location.href = "http://www.52panghu.com/shouji.html";
-//         }
-//         }).catch(err => {
-//         if (err == 'cancel') {     //取消的回调
-//           return;
-//         }
-//       })
-//       // this.$confirm('下载胖虎奢侈品APP进行提现').then(()=>{
-//       //   location.href = 'http://www.52panghu.com/shouji.html'
-//       // }).catch()
-//     },
+  methods: {
+    makecall: function() {
+      location.href='tel:400-086-5285'
+    },
+    exchange: function(){
+      tips.confirm('下载胖虎奢侈品APP进行提现').then(() => {
+        window.location.href = "https://www.ponhu.cn/shouji.html?plg_nld=1&plg_uin=1&plg_auth=1&plg_usr=1&plg_vkey=1&plg_dev=1";
+      }).catch(() => {})
+    },
+    getData(refresh) {
+      let _this = this;
+      myAccount(_this.page).then(res => {
+        _this.balance = res.account
+        
+        // 商品
+        let glist = res.list;
+        let _glist = [];
+        if(glist) {
+          // glist.forEach(function (item) {
+          //   _glist.push({
+          //     goodsId: item.id,
+          //     img: item.goods_images,
+          //     name: item.goods_name,
+          //     status: item.is_discount,
+          //     price: item.ph_price,
+          //     del: item.original_price
+          //   });
+          // });
+          if (refresh) {
+            _this.lists = glist;
+          } else {
+            _this.lists = [..._this.lists, ...glist];
+          }
+          this.noData = false;
+        }
+        else {
+          this.noData = true;
+        }
+        tips.loaded()
+      });
+    },
+  },
 
-//     loadPageList:function(pageNo,fn){
-//       // 初次 查询数据
-//       let that = this;
-//       let params={
-//         token:that.$Auth.getToken(),
-//         p:pageNo
-//       }
-//         axios.post(that.PHPAPI + "/Myaccount/moneyDetail",params,
-//         {
-//           transformRequest:[(data) => {
-//             return qs.stringify(data)
-//           }],
-//           headers: {
-//             "Content-Type": 'application/x-www-form-urlencoded;charset=UTF-8'
-//           }
-//       })
-//         .then(function (response) {
-//           let rsp = response.data;
-//          // console.log(rsp);
-//           if(rsp.stat == "200"){
-//             console.log(rsp.message);
-//             that.isalldata = false;
 
-//             for(let i=0;i<rsp.message.length;i++){
-//               let type = rsp.message[i].type*1;
-//               switch (type) {
-//                 case 1:
-//                 case 4:
-//                 case 5:
-//                 case 7:
-//                 case 8:
-//                 case 9:
-//                 case 12:
-//                 case 14:
-//                 case 16:
-//                   that.$set(rsp.message[i], "sign", "+");
-//                   break;
-//                 case 2:
-//                 case 3:
-//                 case 6:
-//                 case 10:
-//                 case 11:
-//                 case 13:
-//                 case 15:
-//                 case 17:
-//                   that.$set(rsp.message[i], "sign", "-");
-//                   break;
-//                 default:
-//                   break;
-//               }
+  mounted(){
+    let _this = this;
+    _this.title = this.$route.meta.title;
 
-//             }
-//             fn(rsp.message);
-//             that.$toast("加载完成")
-
-//           }else if(rsp.stat == "201"){
-//              that.allLoaded = true;
-//              that.loading = true;
-//              that.isalldata = true;
-//              //fn(rsp.message);
-//           }
-//         })
-//         .catch(function (error) {
-//           that.$toast("网络连接错误,稍后重试")
-//           // that.loadingShow = false;
-//         });
-
-//     },
-//     loadMore: function() {
-
-//       var that = this;
-
-//       that.loading = true;
-//       setTimeout(() => {
-
-//         that.pageNo++;
-//         that.loadPageList(that.pageNo,(rsp) => {
-//           that.lists = [...that.lists , ...rsp]
-//           that.loading = false
-//         });
-//       }, 2500);
-//     },
-//     isHaveMore:function(){
-//       // 是否还有下一页，如果没有就禁止上拉刷新
-//       if(this.pageNo == this.totalpage){
-//         this.allLoaded = true;
-//       }
-//     },
-//     handleBottomChange(status) {
-//       this.topStatus = status;
-//     },
-//     getAccountBalance:function(){
-//     // 初次 查询数据
-//       let that = this;
-//       let params={
-//         token:that.$Auth.getToken()
-//       }
-//       axios.post(that.PHPAPI + "/Myaccount/getAccountBalance",params,
-//         {
-//           transformRequest:[(data) => {
-//             return qs.stringify(data)
-//           }],
-//           headers: {
-//             "Content-Type": 'application/x-www-form-urlencoded;charset=UTF-8'
-//           }
-//       })
-//         .then(function (response) {
-//           let rsp = response.data;
-//          // console.log(rsp);
-//           if(rsp.stat == "200"){
-//             that.balance = rsp.message.balance;
-//           }
-//         })
-//         .catch(function (error) {
-//           that.$toast("网络连接错误,稍后重试")
-//           // that.loadingShow = false;
-//         });
-
-//     }
-//   },
-
-//   mounted(){
-//     var that = this;
-//     that.getAccountBalance();
-//     //let pageNo = this.pageNo;
-//     // let pageSize = this.pageSize;
-//     that.loadPageList(that.pageNo,(rsp) => {
-//       that.lists = [...that.lists , ...rsp]
-//       if(that.lists.length < that.pageSize){
-//         that.loading = true;
-//       }
-//       // that.loading = false;
-//     });  //初次访问查询列表
-//     //this.loadMore();
+    tips.loading();
+    _this.getData(true)
 //     // this.wrapperHeight = document.documentElement.clientHeight - this.$refs.walletInfo.offsetHeight - this.$refs.tit.offsetHeight;
 //     this.wrapperHeight = document.documentElement.clientHeight - this.$refs.tit.getBoundingClientRect().top;
 //     // console.log(this.wrapperHeight)
 //     // console.log(document.documentElement.clientHeight)
 //     // console.log(this.$refs.tit.getBoundingClientRect().top)
-//   }
+  }
 }
 </script>
 <style lang="less" scoped>
@@ -253,8 +142,61 @@ export default {
       height: 8.7rem;
       position: relative;
       color: #ffffff;
+      .wallet-wrapper{
+        position: absolute;
+        top: 4rem;
+        left: 0.75rem;
+        margin-bottom: .3rem
+      }
+      .wallet-exchange{
+        position: absolute;
+        top: 5.5rem;
+        right: 0.75rem;
+        width: 4.4rem;
+        height: 1.25rem;
+        line-height: 1.25rem;
+        text-align: center;
+        border: 1px solid #ffffff;
+        border-radius: 0.625rem;
+      }
     }
   }
+.consume-list{
+  background: #ffffff;
+  margin-top: 0.6rem;
+  width: 100%;
+  min-height: 7.6rem;
+  height: auto;
+}
+.page-loadmore{
+  overflow: scroll;
+  margin-top: 1rem;
+}
+.title{
+  height: 2.45rem;
+  line-height: 2.45rem;
+  padding-left: 0.75rem;
+}
+.consume-list-wrapper{
+  overflow-y: scroll;
+  .consume-item{
+    font-size: 0.6rem;
+    padding: 0 .75rem;
+    height: 3.25rem;
+    border-top: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    // align-items: center
+    justify-content: space-around;
+    .item-top{
+      display: flex;
+      justify-content: space-between;
+      .num{
+        color: #00b7f7;
+      }
+    }
+  }
+}
 </style>
 
 
