@@ -6,7 +6,7 @@
       </a>
       <div class="aui-title">{{$route.meta.title}}</div>
     </header>
-    <div class="ph-goods-detail">
+    <div class="ph-goods-detail" style="height:100vh;padding-top:2.25rem">
       <div class="img-lb">
         <swiper :options="swiperOption">
           <swiper-slide v-for="(banner, index) in banners" :key="index">
@@ -14,11 +14,11 @@
           </swiper-slide>
           <div class="swiper-pagination" slot="pagination"></div>
         </swiper>
-        <div class="sold-out">
+        <!-- <div class="sold-out">
           <div class="out_icon">售罄</div>
-        </div>
+        </div> -->
       </div>
-      
+
       <div class="down_con" v-if="isdown">限时特卖 {{down_time}}</div>
       <div class="detail_price">
         <span class="price">￥{{isdown?goods.discount_price:goods.ph_price}}</span>
@@ -303,7 +303,7 @@ export default {
     line-height:2.5rem;
   }
   .content {
-    color: #333333; 
+    color: #333333;
     font-size: .7rem;
     padding-bottom: 1rem;
     h5 { font-weight:bold; padding-bottom: .4rem; }
@@ -338,7 +338,7 @@ export default {
         text-align: -webkit-left;
         width: 4rem;
         display:-moz-inline-box;
-        display:inline-block; 
+        display:inline-block;
       }
     }
   }
@@ -346,7 +346,7 @@ export default {
 .ph-goods_brand {
   background-color: #fff;
   .s_img {
-    display: flex;    
+    display: flex;
     justify-content:center;
     align-items:Center;
     padding: 1rem 0;

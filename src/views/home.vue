@@ -1,7 +1,9 @@
 <template>
-  <div class="aui-row">
+  <div >
     <header class="aui-bar aui-bar-nav">{{$route.meta.title}}</header>
-    <section class="banner">
+    <div style="height;100vh;">
+    <!-- <div class="head-tmp "></div> -->
+    <section class="banner" style="padding-top:2.25rem">
       <swiper :options="swiperOption">
         <swiper-slide>
           <img src="/static/img/home-bank.png"/>
@@ -74,6 +76,7 @@
       </div>
       <column-list-item :List='goodsList' @userSetRemind="setRemind"></column-list-item>
     </section>
+    </div>
   </div>
 </template>
 
@@ -106,6 +109,7 @@ export default {
       currentSid: 0, // 当前专场ID
       page: 1,
       noData: false,
+      noDataTxt: '已全部加载',
       special: {
         time: {}
       },
@@ -241,15 +245,20 @@ export default {
       });
     },
     setRemind(index) {
-      let item = this.goodsList[index];
-      setSpecialRemind({ id: this.currentSid, goodsid: item.goodsId }).then(res => {
-        if(res.code == 200) {
-          tips.toast(res.msg);
-          this.goodsList[index].status = 3;
-        }
-      }).catch(error => {
-        tips.alert(error)
-      });
+      if (this.token) {
+        let item = this.goodsList[index];
+        setSpecialRemind({ id: this.currentSid, goodsid: item.goodsId }).then(res => {
+          if(res.code == 200) {
+            tips.toast(res.msg);
+            this.goodsList[index].status = 3;
+          }
+        }).catch(error => {
+          tips.alert(error)
+        });
+      }
+      else {
+        this.$router.replace({ path: "/login", query: { url: this.$router.history.current.fullPath } })
+      }
     }
   },
 }
@@ -258,7 +267,8 @@ export default {
 <style lang="less" scoped>
 .aui-row{
   line-height: 1;
-  padding-top: 2.25rem;
+  // padding-top: 2.25rem;
+  margin-top: 2.25rem;
 }
 .swiper-pagination-bullet-active {
   opacity: 1;

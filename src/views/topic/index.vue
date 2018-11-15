@@ -6,17 +6,16 @@
       </a>
       <div class="aui-title">{{topic.title}}</div>
     </header>
-    <div style="height:100vh;overflow:auto;">
-      <vue-scroll :ops="ops" @load-before-deactivate="handleLBD" @load-start="handleLoadStart">
+    <div style="height:100vh;">
+      <scroller :on-infinite="infinite" :noDataText="noDataTxt" ref="my_scroller" style="padding-top:2.25rem">
         <div class="ph-topic-title">
           <img :src="topic.image" />
         </div>
         <div class="ph-topic-goods">
           <goods-list :list="goodsList"></goods-list>
         </div>
-      </vue-scroll>
+      </scroller>
     </div>
-    
   </div>
 </template>
 
@@ -34,27 +33,10 @@ export default {
       sid: this.$route.params.id,
       topic: {},
       goodsList: [],
-      ops: {
-        vuescroll: {
-          mode: 'slide',
-          pullRefresh: {
-            enable: true
-          },
-          pushLoad: {
-            enable: true,
-            tips: {
-              deactive: '',
-              active: '',
-              start: '加载中...',
-              beforeDeactive: '已全部加载'
-            },
-            auto: false,
-            autoLoadDistance: 10
-          }
-        }
-      },
       page: 1,
-      noData: false
+      noData: false,
+      noDataTxt: '已全部加载',
+      wrapperHeight:0
     }
   },
   created() {
@@ -92,22 +74,21 @@ export default {
         else {
           this.noData = true;
         }
+      }).catch(error => {
+        tips.alert(error)
       });
     },
-    handleLoadStart(vm, dom, done) {
-      let that = this;
-      if (!that.noData) {
+    infinite: function (done) {
+      if(this.noData) {
+        this.$refs.my_scroller.finishInfinite(true);
+        return;
+      }
+      var that = this
+      setTimeout(function () {
         that.page++;
         that.getData();
-      }
-      setTimeout(function(){
         done();
-      }, 2000)
-    },
-    handleLBD(vm, refreshDom, done) {
-      setTimeout(function(){
-        done();
-      }, 2000)
+      }, 1500)
     }
   }
 }

@@ -3,6 +3,9 @@ import App from './App'
 import router from './router'
 import store from './store'
 
+import VConsole from 'vconsole'
+const vConsole = new VConsole()
+
 import '@/assets/custom.css'
 
 import VueLazyLoad from 'vue-lazyload'
@@ -11,10 +14,8 @@ Vue.use(VueLazyLoad, {
   loading: './static/img/back_loading.png'
 })
 
-import vuescroll from 'vuescroll/dist/vuescroll-slide';
-import 'vuescroll/dist/vuescroll.css'
-Vue.use(vuescroll);
-
+import VueScroller from 'vue-scroller'
+Vue.use(VueScroller)
 
 //import './permission'
 

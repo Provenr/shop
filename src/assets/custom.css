@@ -5,11 +5,17 @@ html,body{
   scroll-behavior: smooth;
 }
 .aui-bar-nav{
+  /* position: absolute; */
   position: fixed;
+  z-index: 1000;
 }
 .aui-row{
   line-height: 1;
-  margin-top: 2.25rem;
+  /* margin-top: 2.25rem; */
+  /* padding-top: 2.25rem; */
+}
+.head-tmp{
+  height: 2.25rem;
 }
 .container{
   padding: 0 0.75rem;
