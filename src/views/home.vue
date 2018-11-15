@@ -1,81 +1,79 @@
 <template>
-  <div >
+  <div>
     <header class="aui-bar aui-bar-nav">{{$route.meta.title}}</header>
-    <div style="height;100vh;">
-    <!-- <div class="head-tmp "></div> -->
-    <section class="banner" style="padding-top:2.25rem">
-      <swiper :options="swiperOption">
-        <swiper-slide>
-          <img src="/static/img/home-bank.png"/>
-        </swiper-slide>
-        <div class="swiper-pagination"  slot="pagination"></div>
-      </swiper>
-    </section>
-    <!-- 导航 -->
-    <section class="aui-grid">
-
-        <div class="aui-col-xs-3 ph-home-nav-item">
+    <div class="ph-scroller">
+      <scroller :on-infinite="infinite" :noDataText="noDataTxt" ref="my_scroller" style="padding-top:2.25rem">
+        <section class="banner">
+          <swiper :options="swiperOption">
+            <swiper-slide>
+              <img src="/static/img/home-bank.png"/>
+            </swiper-slide>
+            <div class="swiper-pagination"  slot="pagination"></div>
+          </swiper>
+        </section>
+        <!-- 导航 -->
+        <section class="aui-grid">
+          <div class="aui-col-xs-3 ph-home-nav-item" @click="recycle">
             <i class="iconfont icon-shepinhuishou"></i>
             <div class="aui-grid-label">奢品回收</div>
-        </div>
-        <div class="aui-col-xs-3 ph-home-nav-item">
+          </div>
+          <div class="aui-col-xs-3 ph-home-nav-item" @click="repair">
             <i class="iconfont icon-yanghuweixiu"></i>
             <div class="aui-grid-label">维护保养</div>
-        </div>
-        <div class="aui-col-xs-3 ph-home-nav-item">
+          </div>
+          <div class="aui-col-xs-3 ph-home-nav-item" @click="identifyPic">
             <i class="iconfont icon-zhaopianjianding"></i>
             <div class="aui-grid-label">图片鉴定</div>
-        </div>
-        <div class="aui-col-xs-3 ph-home-nav-item">
+          </div>
+          <div class="aui-col-xs-3 ph-home-nav-item" @click="identifyPhy">
             <i class="iconfont icon-shiwujianding"></i>
             <div class="aui-grid-label">实物鉴定</div>
-        </div>
-
-    </section>
-    <section class="container home-topic-wrapper">
-      <router-link class="left" :to="'/shop'">
-        <img src="/static/img/home-ziying.png" alt="">
-      </router-link>
-      <div class="right">
-        <router-link class="special_list" :to="'/topic/'+special_top.id">
-          <img src="/static/img/home-shagnxin.png" alt="">
-          <div class="title">{{special_top.title}}</div>
-          <div class="num">{{special_top.count}}款</div>
-        </router-link>
-        <router-link class="special_list" :to="'/topic/'+special_button.id">
-          <img src="/static/img/home-jianlou.png" alt="">
-          <div class="title">{{special_button.title}}</div>
-          <div class="num">{{special_button.zhe}}</div>
-        </router-link>
-
-      </div>
-    </section>
-    <!-- 限时抢购 -->
-    <section class="home-sale-wrapper">
-      <div class="time-list">
-        <ul :class="item.isActive?'active':''" class="nav-item" v-for="(item, index) in special_list" :key="index" @click="clickTime(index, item)">
-          <li>
-            <span class="time fz32">{{item.time}}</span>
-            <span class="status fz20">{{item.day}}</span>
-          </li>
-        </ul>
-      </div>
-      <div class="img-title">
-        <img :src="special.img" alt="">
-        <div class="countdown-head-box">
-          <strong class="shop-head-name fz34">
-            {{special.stxt}}
-          </strong>
-          <div class="shop-head-time" v-if="special.state!='3'">
-            <span>{{special.ttxt}}</span>
-            <span>{{special.time.hour}}</span>
-            <span>{{special.time.minute}}</span>
-            <span>{{special.time.second}}</span>
           </div>
-        </div>
-      </div>
-      <column-list-item :List='goodsList' @userSetRemind="setRemind"></column-list-item>
-    </section>
+        </section>
+        <section class="container home-topic-wrapper">
+          <router-link class="left" :to="'/shop'">
+            <img src="/static/img/home-ziying.png" alt="">
+          </router-link>
+          <div class="right">
+            <router-link class="special_list" :to="'/topic/'+special_top.id">
+              <img src="/static/img/home-shagnxin.png" alt="">
+              <div class="title">{{special_top.title}}</div>
+              <div class="num">{{special_top.count}}款</div>
+            </router-link>
+            <router-link class="special_list" :to="'/topic/'+special_button.id">
+              <img src="/static/img/home-jianlou.png" alt="">
+              <div class="title">{{special_button.title}}</div>
+              <div class="num">{{special_button.zhe}}</div>
+            </router-link>
+          </div>
+        </section>
+        <!-- 限时抢购 -->
+        <section class="home-sale-wrapper">
+          <div class="time-list">
+            <ul :class="item.isActive?'active':''" class="nav-item" v-for="(item, index) in special_list" :key="index" @click="clickTime(index, item)">
+              <li>
+                <span class="time fz32">{{item.time}}</span>
+                <span class="fz24">{{item.day}}</span>
+              </li>
+            </ul>
+          </div>
+          <div class="img-title">
+            <img :src="special.img" alt="">
+            <div class="countdown-head-box">
+              <strong class="shop-head-name fz34">
+                {{special.stxt}}
+              </strong>
+              <div class="shop-head-time" v-if="special.state!='3'">
+                <span>{{special.ttxt}}</span>
+                <span>{{special.time.hour}}</span>
+                <span>{{special.time.minute}}</span>
+                <span>{{special.time.second}}</span>
+              </div>
+            </div>
+          </div>
+          <column-list-item :List='goodsList' @userSetRemind="setRemind"></column-list-item>
+        </section>
+      </scroller>
     </div>
   </div>
 </template>
@@ -117,7 +115,8 @@ export default {
       special_button: {},
       special_list: [],
       setInter: '',
-      goodsList: []
+      goodsList: [],
+      toUrl: process.env.WAP_URL
     }
   },
   computed: {
@@ -175,7 +174,7 @@ export default {
         let _glist = [];
         let that = this;
 
-        if(glist) {
+        if(glist.length > 0) {
           let state = res.flag.state;
           glist.forEach(function (item) {
             let astate = 0;
@@ -202,7 +201,6 @@ export default {
               del: item.ph_price
             });
           });
-
 
           if (refresh) {
             this.special = {
@@ -237,10 +235,9 @@ export default {
           else {
             that.goodsList = [...that.goodsList, ..._glist];
           }
-
-          this.noData = false;
+          that.noData = false;
         } else {
-          this.noData = true;
+          that.noData = true;
         }
       });
     },
@@ -259,17 +256,55 @@ export default {
       else {
         this.$router.replace({ path: "/login", query: { url: this.$router.history.current.fullPath } })
       }
-    }
+    },
+    infinite: function (done) {
+      if(this.noData) {
+        this.$refs.my_scroller.finishInfinite(true);
+        return;
+      }
+      var that = this
+      setTimeout(function () {
+        that.page++;
+        that.getSpecialGoods();
+        done();
+      }, 1500)
+    },
+    recycle() {
+			if (this.token) {
+				location.href = this.toUrl + '/pages/recycle/index.html'
+			}else{
+        this.$router.replace({ path: "/login", query: { url: this.$router.history.current.fullPath } })
+			}
+    },
+    repair() {
+      if (this.token) {
+        let token = window.localStorage.getItem('token');	
+        let userid = window.localStorage.getItem('userid');	
+				let os = window.localStorage.getItem('os');	
+				windows.location.href = 'https://apiv2-app.ponhu.cn/ccbyh/yanghu?userid='+userid+'&token='+token+'&os='+os;
+			}else{
+        this.$router.replace({ path: "/login", query: { url: this.$router.history.current.fullPath } })
+			}
+    },
+    identifyPic() {
+      if (this.token) {
+				windows.location.href = process.env.WAP_URL + '/pages/identifyPic/index.html'
+			}else{
+        this.$router.replace({ path: "/login", query: { url: this.$router.history.current.fullPath } })
+			}
+    },
+    identifyPhy() {
+      if (this.token) {
+				windows.location.href = process.env.WAP_URL + '/pages/identifyPhy/index.html'
+			}else{
+        this.$router.replace({ path: "/login", query: { url: this.$router.history.current.fullPath } })
+			}
+    },
   },
 }
 </script>
 
 <style lang="less" scoped>
-.aui-row{
-  line-height: 1;
-  // padding-top: 2.25rem;
-  margin-top: 2.25rem;
-}
 .swiper-pagination-bullet-active {
   opacity: 1;
   background: #09B6F2 !important
@@ -283,7 +318,9 @@ export default {
 .iconfont{
   font-size: 1.5rem;
 }
-
+.aui-grid .aui-grid-label {
+  margin-top: 0  !important;
+}
 .home-topic-wrapper{
   display: flex;
   margin: .6rem 0;
@@ -352,7 +389,6 @@ export default {
         justify-content: center;
         align-items: center;
         margin: 0 auto;
-        .status { padding-top: .2rem}
       }
     }
   }
@@ -384,8 +420,6 @@ export default {
         }
       }
     }
-
   }
-
 }
 </style>

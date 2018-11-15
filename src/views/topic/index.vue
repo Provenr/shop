@@ -6,7 +6,7 @@
       </a>
       <div class="aui-title">{{topic.title}}</div>
     </header>
-    <div style="height:100vh;">
+    <div class="ph-scroller">
       <scroller :on-infinite="infinite" :noDataText="noDataTxt" ref="my_scroller" style="padding-top:2.25rem">
         <div class="ph-topic-title">
           <img :src="topic.image" />
@@ -19,7 +19,7 @@
   </div>
 </template>
 
-<script>
+<script> 
 import { getTopicInfo } from '@/api/goods'
 import tips from '@/utils/tip'
 
@@ -35,8 +35,7 @@ export default {
       goodsList: [],
       page: 1,
       noData: false,
-      noDataTxt: '已全部加载',
-      wrapperHeight:0
+      noDataTxt: '已全部加载'
     }
   },
   created() {
