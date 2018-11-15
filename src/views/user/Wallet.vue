@@ -6,46 +6,40 @@
       </a>
       <div class="aui-title">{{title}}</div>
     </header>
+
     <div class="content">
-      <div class="wallet-info">
-        <div class="wallet-info-wrapper">
-          <div class="wallet-wrapper">
-            <div class="balance fz80">{{balance}}</div>
-            <div class="my-wallet f28" style="color:#fff">账户余额(元)</div>
-          </div>
-          <div class="wallet-exchange f28" @click="exchange()">
-            <i class="iconfont icon-qiandai"></i>
-            提现
+      <scroller :on-infinite="infinite" :noDataText="noDataTxt" ref="my_scroller" style="padding-top:2.25rem">
+        <div class="wallet-info">
+          <div class="wallet-info-wrapper">
+            <div class="wallet-wrapper">
+              <div class="balance fz80">{{balance}}</div>
+              <div class="my-wallet f28" style="color:#fff">账户余额(元)</div>
+            </div>
+            <div class="wallet-exchange f28" @click="exchange()">
+              <i class="iconfont icon-qiandai"></i>
+              提现
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="consume-list" >
         <div class="title fb f30" ref="tit">资金明细</div>
-         <div class="consume-list-wrapper" >
-            <div class="consume-item" v-for="(list,index) in lists" :key="index">
-              <div class="item-top">
-                <div class="name fb">{{list.remark}}</div>
-                <div class="num fz30">{{list.symbol}}{{list.trand_amt}}</div>
-              </div>
-              <div class="item-date">
-                {{list.datetime}}
-              </div>
+
+        <div class="consume-list-wrapper">
+          <div class="consume-item" v-for="(list,index) in lists" :key="index">
+            <div class="item-top">
+              <div class="name fb">{{list.remark}}</div>
+              <div class="num fz30">{{list.symbol}}{{list.trand_amt}}</div>
             </div>
-            <!-- <div class="loading f28" v-if='!loading'><mt-spinner type="fading-circle"></mt-spinner><span>加载中...</span></div> -->
-            <!-- <div class="loadend" v-if='allLoaded'>已加载全部</div> -->
-         </div>
-      </div>
+            <div class="item-date">
+              {{list.datetime}}
+            </div>
+          </div>
+        </div>
+      </scroller> 
     </div> 
   </div>
 </template>
 <script>
-// import Header from "@/components/Header";
-// import Menu from "@/components/Menu";
-// import qs from 'qs';
-// // import {getServiceTime} from '@/utils/index'
-// import axios from "axios";
-// import { MessageBox } from 'mint-ui';
 import tips from '@/utils/tip'
 import { myAccount } from '@/api/user'
 export default {
@@ -58,17 +52,13 @@ export default {
       title: "我的钱包",
       balance: 0,// 余额
       userinfo: {
-        nickname: "风度翩翩的少年",
+        nickname: "",
         head: "http://7xl1gc.com2.z0.glb.qiniucdn.com/1526613328789.304932"
       },
       wrapperHeight: 0,
-      lists: [],
-      loading:true,
-      isalldata:false,
+      lists: [], 
       page:1,
-      totalpage:0,
-      pageSize:10,
-      allLoaded:false,
+      noDataTxt: '已全部加载',
     };
   },
   methods: {
@@ -112,20 +102,26 @@ export default {
         tips.loaded()
       });
     },
+    infinite: function (done) {
+      if(this.noData) {
+        this.$refs.my_scroller.finishInfinite(true);
+        return;
+      }
+      let _this = this
+      setTimeout(function () {
+        _this.page++;
+        _this.getData();
+        done();
+      }, 1000)
+    }
   },
 
 
   mounted(){
     let _this = this;
     _this.title = this.$route.meta.title;
-
     tips.loading();
     _this.getData(true)
-//     // this.wrapperHeight = document.documentElement.clientHeight - this.$refs.walletInfo.offsetHeight - this.$refs.tit.offsetHeight;
-//     this.wrapperHeight = document.documentElement.clientHeight - this.$refs.tit.getBoundingClientRect().top;
-//     // console.log(this.wrapperHeight)
-//     // console.log(document.documentElement.clientHeight)
-//     // console.log(this.$refs.tit.getBoundingClientRect().top)
   }
 }
 </script>
@@ -176,9 +172,14 @@ export default {
   height: 2.45rem;
   line-height: 2.45rem;
   padding-left: 0.75rem;
+  background: #fff;
 }
 .consume-list-wrapper{
   overflow-y: scroll;
+  // min-height: 40vh;
+  // height: 100vh;
+  background: #fff;
+  // position: relative;
   .consume-item{
     font-size: 0.6rem;
     padding: 0 .75rem;

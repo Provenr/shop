@@ -94,7 +94,7 @@
       </div>
 
     </div>
-    <vue-scroll :ops="ops" @load-before-deactivate="handleLBD" @load-start="handleLoadStart">
+     <scroller :on-infinite="infinite" :noDataText="noDataTxt" ref="my_scroller" style="padding-top:2.25rem">
       <section class="topic-head-img">
         <img :src="headimg" alt="altText"/>
       </section>
@@ -105,7 +105,7 @@
         </div>
           <goods-list :list='goodsList'></goods-list>
       </div>
-    </vue-scroll>
+     </scroller>
   </div>
 </template>
 
@@ -142,7 +142,7 @@ export default {
       nodata: false,
 
       ph_goods_total:'123456', //总商品数量
-
+      noDataTxt: '已全部加载',
       page: 1, // 页码
       // 过滤条件
       filterParam:{
@@ -167,25 +167,6 @@ export default {
         }
       }, 
 
-      ops: {
-        vuescroll: {
-          mode: 'slide',
-          pullRefresh: {
-            enable: false
-          },
-          pushLoad: {
-            enable: true,
-            tips: {
-              deactive: '',
-              active: '',
-              start: '加载中...',
-              beforeDeactive: '加载完成'
-            },
-            auto: false,
-            autoLoadDistance: 10
-          }
-        }
-      },
 
       firstCategoryId: '',
       // secondCategoryId: '',
@@ -253,17 +234,23 @@ export default {
     },
     secondCategory(id) {
       this.where.secondCategoryId = id;
+      this.page = 1;
       this.show_category = false
+      tips.loading();
       this.getData(true)
     },
     toSort(param) {
       this.where.sortType = param;
-      this.show_sort = false
+      this.show_sort = false;
+      this.page = 1;
+      tips.loading();
       this.getData(true)
     },
     chooseBrand(id) {
       this.where.brandId = id;
       this.show_brand = false
+      this.page = 1;
+      tips.loading();
       this.getData(true)
     },
     chooseFilter(id) {
@@ -287,6 +274,8 @@ export default {
     },
     filterConfirm(){
       this.show_filter = false;
+      this.page = 1;
+      tips.loading();
       this.getData(true)
     },
     //  获取数据
@@ -311,6 +300,7 @@ export default {
             });
           });
           if (refresh) {
+            _this.goodsList.splice(0, _this.goodsList.length);
             _this.goodsList = _glist;
           } else {
             _this.goodsList = [..._this.goodsList, ..._glist];
@@ -321,20 +311,19 @@ export default {
           this.noData = true;
         }
         tips.loaded()
+      }).catch(() => {
+        // _this.page--;
       });
     },
-    handleLoadStart(vm, dom, done) {
-      let _this = this;
-      if (!_this.noData) {
+    infinite: function (done) {
+      if(this.noData) {
+        this.$refs.my_scroller.finishInfinite(true);
+        return;
+      }
+      let _this = this
+      setTimeout(function () {
         _this.page++;
         _this.getData();
-      }
-      setTimeout(function(){
-        done();
-      }, 2000)
-    },
-    handleLBD(vm, refreshDom, done) {
-      setTimeout(function(){
         done();
       }, 2000)
     }
