@@ -1,9 +1,9 @@
 <!-- 竖排商品列表组件 -->
 <template>
   <div class="good-list">
-    <div v-for="item in List" :key="item.goodsId" class="good-item" @click='toGoodDetail(item.goodsId)'>
+    <div v-for="(item, index) in List" :key="item.goodsId" class="good-item">
       <div class="good-img">
-          <img :src="item.img" alt="">
+          <img v-lazy="item.img" alt="">
       </div>
       <div class="good-info">
         <div class="aui-ellipsis-2 good-name fz26">{{item.name}}</div>
@@ -12,9 +12,11 @@
             <span>¥{{item.price}}</span>
             <del>¥{{item.del}}</del>
           </div>
-          <div class="btn defaut-btn fz26" v-if='item.status == 1' @click.stop="toGoodDetail(item.goodsId)">马上抢</div>
-          <div class="btn end-btn fz26" v-if='item.status == 2' @click.stop="toGoodDetail(item.goodsId)">已售罄</div>
-          <div class="btn defaut-btn fz26" v-if='item.status == 3' @click.stop="toGoodDetail(item.goodsId)">购买</div>
+          <div class="btn defaut-btn fz26" v-if='item.status == 1' @click='toGoodDetail(item.goodsId)'>马上抢</div>
+          <div class="btn end-btn fz26" v-if='item.status == 0'>已售罄</div>
+          <div class="btn defaut-btn fz26" v-if='item.status == 4' @click='toGoodDetail(item.goodsId)'>购买</div>
+          <div class="btn defaut-btn fz26" v-if='item.status == 2' @click='setRemind(index)'>提醒我</div>
+          <div class="btn end-btn fz26" v-if='item.status == 3'>已设置</div>
         </div>
       </div>
     </div>
@@ -28,20 +30,12 @@ export default {
       type: Array
     }
   },
-  computed: {
-    listeners() {
-      return {
-        // Pass all component listeners directly to input
-        ...this.$listeners,
-        // Override input listener to work with v-model
-        input: event => this.$emit("input", event.target.value)
-      }
-    },
-
-  },
   methods: {
-    toGoodDetail(id) {
-      console.log(id)
+    toGoodDetail(gid) {
+      this.$router.push({name: 'goodsDetail', params: {id: gid}})
+    },
+    setRemind(i) {
+      this.$emit('userSetRemind', i);
     }
   }
 }
