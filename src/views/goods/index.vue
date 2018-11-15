@@ -6,78 +6,80 @@
       </a>
       <div class="aui-title">{{$route.meta.title}}</div>
     </header>
-    <div class="ph-goods-detail" style="height:100vh;padding-top:2.25rem">
-      <div class="img-lb">
-        <swiper :options="swiperOption">
-          <swiper-slide v-for="(banner, index) in banners" :key="index">
-            <img :src="banner" />
-          </swiper-slide>
-          <div class="swiper-pagination" slot="pagination"></div>
-        </swiper>
-        <!-- <div class="sold-out">
-          <div class="out_icon">售罄</div>
-        </div> -->
-      </div>
-
-      <div class="down_con" v-if="isdown">限时特卖 {{down_time}}</div>
-      <div class="detail_price">
-        <span class="price">￥{{isdown?goods.discount_price:goods.ph_price}}</span>
-        <span class="yuanjia" v-if="isdown">原价:￥{{goods.ph_price}}</span>
-        <span class="market">市场价:￥{{goods.original_price}}</span>
-        <span>{{goods.zhekou}}折</span>
-      </div>
-      <div class="ph-detail-item-line"></div>
-      <div class="goods_name">{{goods.goods_name}}</div>
-    </div>
-    <div class="ph-nav-gap"></div>
-    <div class="ph-goods-servie">
-      <span class="title">服务</span>
-      <span class="item_list">
-        <span class="item"><i>•</i>低价保证</span>
-        <span class="item"><i>•</i>100%正品</span>
-        <span class="item"><i>•</i>专业鉴定</span>
-        <span class="item"><i>•</i>5天包退</span>
-      </span>
-      <span class="ck-service" @click="showService=true"><i class="iconfont icon-select"></i></span>
-    </div>
-    <div class="ph-nav-gap"></div>
-    <div class="ph-goods_info">
-      <div class="ph-goods-box-title">商品参数</div>
-      <div class="info">
-        <div class="item" v-for="(item, index) in goodsAttrs" :key="index">
-          <span class="l">{{item.pname}}</span>
-          <span>{{item.pval}}</span>
+    <div class="ph-scroller">
+      <scroller style="padding-top:2.25rem">
+        <div class="img-lb">
+          <swiper :options="swiperOption">
+            <swiper-slide v-for="(banner, index) in banners" :key="index">
+              <img :src="banner" />
+            </swiper-slide>
+            <div class="swiper-pagination" slot="pagination"></div>
+          </swiper>
+          <!-- <div class="sold-out">
+            <div class="out_icon">售罄</div>
+          </div> -->
         </div>
-      </div>
+        <div class="ph-goods-detail">
+          <div class="down_con" v-if="isdown">限时特卖 {{down_time}}</div>
+          <div class="detail_price">
+            <span class="price">￥{{isdown?goods.discount_price:goods.ph_price}}</span>
+            <span class="yuanjia" v-if="isdown">原价:￥{{goods.ph_price}}</span>
+            <span class="market">市场价:￥{{goods.original_price}}</span>
+            <span>{{goods.zhekou}}折</span>
+          </div>
+          <div class="ph-detail-item-line"></div>
+          <div class="goods_name">{{goods.goods_name}}</div>
+        </div>
+        <div class="ph-nav-gap"></div>
+        <div class="ph-goods-servie">
+          <span class="title">服务</span>
+          <span class="item_list">
+            <span class="item"><i>•</i>低价保证</span>
+            <span class="item"><i>•</i>100%正品</span>
+            <span class="item"><i>•</i>专业鉴定</span>
+            <span class="item"><i>•</i>5天包退</span>
+          </span>
+          <span class="ck-service" @click="showService=true"><i class="iconfont icon-select"></i></span>
+        </div>
+        <div class="ph-nav-gap"></div>
+        <div class="ph-goods_info">
+          <div class="ph-goods-box-title">商品参数</div>
+          <div class="info">
+            <div class="item" v-for="(item, index) in goodsAttrs" :key="index">
+              <span class="l">{{item.pname}}</span>
+              <span>{{item.pval}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="ph-nav-gap" v-if="goods.brand_desc!=''"></div>
+        <div class="ph-goods_brand" v-if="goods.brand_desc!=''">
+          <div class="ph-goods-box-title ph-mr30">品牌故事</div>
+          <div class="s_img">
+            <img :src="goods.brand_img">
+          </div>
+          <p class="s_con">{{goods.brand_desc}}</p>
+        </div>
+        <div class="ph-nav-gap"></div>
+        <div class="ph-goods_tp">
+          <div class="ph-goods-box-title ph-mr30">交易流程</div>
+          <img src="/static/img/goods-jylc.png" alt="">
+        </div>
+        <div class="ph-nav-gap"></div>
+        <div class="ph-goods_detail">
+          <div class="ph-goods-box-title">商品详情</div>
+          <div class="img-list">
+            <img v-lazy="item" v-for="(item, index) in goods.img_src" :key="index" alt="">
+          </div>
+        </div>
+        <div class="ph-nav-gap"></div>
+        <div class="ph-goods_live">猜你喜欢</div>
+        <div class="ph-goods_list">
+          <goods-list :list="goodsList"></goods-list>
+        </div>
+        <div style="padding-bottom: 3rem;"></div>
+      </scroller>
     </div>
-    <div class="ph-nav-gap" v-if="goods.brand_desc!=''"></div>
-    <div class="ph-goods_brand" v-if="goods.brand_desc!=''">
-      <div class="ph-goods-box-title ph-mr30">品牌故事</div>
-      <div class="s_img">
-        <img :src="goods.brand_img">
-      </div>
-      <p class="s_con">{{goods.brand_desc}}</p>
-    </div>
-    <div class="ph-nav-gap"></div>
-    <div class="ph-goods_tp">
-      <div class="ph-goods-box-title ph-mr30">交易流程</div>
-      <img src="/static/img/goods-jylc.png" alt="">
-    </div>
-    <div class="ph-nav-gap"></div>
-    <div class="ph-goods_detail">
-      <div class="ph-goods-box-title">商品详情</div>
-      <div class="img-list">
-        <img v-lazy="item" v-for="(item, index) in goods.img_src" :key="index" alt="">
-      </div>
-    </div>
-    <div class="ph-nav-gap"></div>
-    <div class="ph-goods_live">猜你喜欢</div>
-    <div class="ph-goods_list">
-      <goods-list :list="goodsList"></goods-list>
-    </div>
-
-    <div style="margin-bottom: 3.2rem;"></div>
-
+    
     <div v-transfer-dom>
       <popup v-model="showService" position="bottom">
         <div class="ph-service-popup">
@@ -98,7 +100,7 @@
     <div class="ph-goods-bar">
       <div class="button-box">
         <a href="tel:4000865285" class="button">咨询</a>
-        <input type="button" class="button" value="立即购买" @click="tobalance" v-if="goods.shelevs_type!=3">
+        <a class="button" @click="tobalance" v-if="goods.shelevs_type!=3">立即购买</a>
       </div>
     </div>
 
@@ -206,7 +208,7 @@ export default {
   .detail_price {
     padding: 1.25rem .75rem .75rem;
     color: #959595;
-    font-size: .45rem;
+    font-size: .55rem;
     .price {
       font-weight: 700;
       font-size: .85rem;
@@ -252,13 +254,13 @@ export default {
   }
 }
 .down_con {
-  height: 1.15rem;
-  line-height: 1.15rem;
+  height: 1.5rem;
+  line-height: 1.5rem;
   width: 100%;
   background-color: #09B6F2;
   text-align: center;
   color: #fff;
-  font-size: .55rem;
+  font-size: .6rem;
 }
 .ph-goods-servie {
   padding: .5rem .75rem .45rem;
@@ -358,7 +360,7 @@ export default {
   .s_con {
     padding: 0 .75rem .75rem;
     color: #1B1B1B;
-    font-size: .55rem;
+    font-size: .6rem;
     line-height: .8rem;
   }
 }
@@ -406,7 +408,7 @@ export default {
   .button {
     background-color: #fff;
     height:2rem;
-    border:2px solid #09B6F2;
+    border:1px solid #09B6F2;
     border-radius:1rem;
     color: #09B6F2;
     font-size: .75rem;
@@ -414,7 +416,7 @@ export default {
     margin-left: .75rem;
   }
   a {
-    line-height:2rem;
+    line-height:1.8rem;
     text-align: center;
   }
 }

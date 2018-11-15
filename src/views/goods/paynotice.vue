@@ -10,8 +10,8 @@
         <p>支付成功</p>
       </div>
       <div class="button-box">
-        <input type="button" class="button h" value="返回首页" @click="home">
-        <input type="button" class="button l" value="查看订单" @click="order">
+        <a class="button h" @click="home">返回首页</a>
+        <a class="button l" @click="order">查看订单</a>
       </div>
     </div>
   </div>
@@ -79,18 +79,18 @@ export default {
       height:2rem;
       border-radius:1rem;
       font-size: .75rem;
-      width: 42%;
+      padding: .5rem 1.8rem;
       margin:0 auto;
       font-weight:500;
       background-color: #fff;
     }
     .h {
-      border:2px solid #959595;
+      border:1px solid #959595;
       color: #959595;
       margin-right: .75rem;
     }
     .l {
-      border:2px solid #09B6F2;
+      border:1px solid #09B6F2;
       color: #09B6F2;
     }
   }

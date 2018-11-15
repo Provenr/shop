@@ -165,6 +165,7 @@ export default {
       item.isActive = true;
       this.special_list.splice(index, 1, item);
       this.currentSid = item.id;
+      this.page = 1;
       tips.loading();
       this.getSpecialGoods(true);
     },
@@ -382,7 +383,7 @@ export default {
         border-bottom: .1rem solid;
       }
       li{
-        height: 2.5rem;
+        height: 2.0rem;
         width: 1.6rem;
         display: flex;
         flex-direction: column;
