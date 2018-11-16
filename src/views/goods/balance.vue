@@ -7,19 +7,20 @@
       <div class="aui-title">{{$route.meta.title}}</div>
     </header>
     <div class="ph-bal-taikang">
-      <img src="/static/img/taikang-pay.png" alt="">
+      <img src="static/img/taikang-pay.png" alt="">
     </div>
     <div class="ph-nav-gap"></div>
     <div class="ph-bal-adder">
       <div class="box-title">
         <span class="l">配送方式</span>
         <span class="rl">
-          <a href="javascript:;" @click="showDistribution=true">{{distribution}}<i class="iconfont icon-youjiantou1"></i></a>
+          <a v-if="isAction" href="javascript:;" @click="showDistribution=true">{{distribution}}<i class="iconfont icon-youjiantou1"></i></a>
+          <span v-if="!isAction">{{distribution}}</span>
         </span>
       </div>
       <div v-if="showAddr">
         <div class="ph-title-line"></div>
-        <div class="adder_add" v-if="addrFlag==1">
+        <div class="adder_add" v-if="addrFlag==1" @click="selectAddr">
           <div class="con">
             <div class="c"><i class="iconfont icon-jiahao"></i>请添加收货地址</div>
             <div class="rl"><i class="iconfont icon-youjiantou1"></i></div>
@@ -28,15 +29,15 @@
         <div class="adder_dis" v-if="addrFlag==2">
           <div class="con">
             <div class="c">
-              <p class="cl fz26 fw" style="padding-bottom: .3rem;">姓名<span class="tel">18511112222</span></p>
-              <p class="fz22">地址：是垃圾地方快老实交代发昆仑山搭街坊立刻历史交锋流水数据副书记发射基地</p>
+              <p class="cl fz26 fw" style="padding-bottom: .3rem;">{{userAddr.name}}<span class="tel">{{userAddr.phone}}</span></p>
+              <p class="fz22">地址：{{userAddr.addr}}</p>
             </div>
             <div class="rl"><i class="iconfont icon-youjiantou1"></i></div>
           </div>
         </div>
-        <img src="/static/img/address-line.png" alt="">
+        <img src="static/img/address-line.png" alt="">
       </div>
-      
+
     </div>
     <div class="ph-nav-gap"></div>
     <div class="ph-bal-goods">
@@ -121,7 +122,7 @@ function MBC_PAYINFO() {
 
 import { getGoodsPay } from '@/api/goods'
 import { getUserInfo, getUserDefaultAddress, getAddress } from '@/api/user'
-import { createOrder } from '@/api/order'
+import { createOrder, getOrder, orderPay } from '@/api/order'
 import tips from '@/utils/tip'
 import { getPlatform } from '@/utils'
 
@@ -143,7 +144,9 @@ export default {
   data() {
     return {
       goods: {},
-      userAddr: {},
+      userAddr: {
+        name: '', phone:'', addr:''
+      },
       addrFlag: 1,
       showAddr: true,
       showDistribution: false,
@@ -155,6 +158,8 @@ export default {
         key: '2',
         value: '到店自提（仅支持北京自提）'
       }],
+      orderId: '',
+      isAction: true,
       form: {
         goodsid_str: '',
         payid: '10',
@@ -168,7 +173,15 @@ export default {
     }
   },
   created() {
-    this.getData()
+    this.orderId = this.$route.query.oid;
+    this.form.addrid = this.$route.query.addrid || '';
+    if (this.orderId) {
+      this.isAction = false;
+      this.getOrderInfo();
+    }
+    else {
+      this.getData()
+    }
   },
   methods: {
     // 获取数据
@@ -179,20 +192,49 @@ export default {
         this.goods = res.list[0];
         this.form.goodsid_str = this.goods.id;
         this.form.total = res.total;
-        // 获取用户默认地址
-        getUserDefaultAddress().then(addr => {
-          if(addr.list) {
-            this.addrFlag = 2;
-            this.userAddr = addr.list;
+        if (this.form.addrid) { // 获取地址信息
+          this.addrFlag = 2;
+          
+        } else {
+          // 获取用户默认地址
+          getUserDefaultAddress().then(addr => {
+            if(addr.list) {
+              this.addrFlag = 2;
+              this.userAddr = addr.list;
 
-          } else {
-            this.addrFlag = 1;
-          }
-        }).catch(error => {
-          tips.loaded();
-          tips.alert(error)
-        });
+            } else {
+              this.addrFlag = 1;
+            }
+          }).catch(error => {
+            tips.loaded();
+            tips.alert(error)
+          });
+        }
+        
         tips.loaded();
+      }).catch(error => {
+        tips.loaded()
+        tips.alert(error)
+      });
+    },
+    getOrderInfo () {
+      let that = this;
+      tips.loading();
+      getOrder(this.orderId).then(res => {
+        let data = res.list;
+        this.goods = data.goods;
+        this.distribution = data.address.shipping_type=='2'?'到店自提（仅支持北京自提）':'快递到家';
+        this.form.shipping_type = data.address.shipping_type;
+        this.addrFlag = data.address.shipping_type=="2"?2:1;
+        this.form.payid = data.pay_id;
+        this.form.total = data.jh_price;
+        this.form.message = data.message;
+        if(data.address.shipping_type == "1") {
+          this.userAddr.name = data.address.conta;
+          this.userAddr.phone = data.address.tel;
+          this.userAddr.name = data.address.citystr+data.address.adss_x;
+        }
+        tips.loaded()
       }).catch(error => {
         tips.loaded()
         tips.alert(error)
@@ -210,36 +252,59 @@ export default {
         this.form.addrid = '';
       }
     },
+    selectAddr() {
+      location.href = "";
+    },
     // 支付提交
     submit() {
       if(this.form.shipping_type == "1") {
-        if(this.form.addrid == "") {
+        if(!this.form.addrid) {
           tips.toast("请添加收货地址");
           return;
         }
       }
       tips.loading("支付中...");
-      createOrder(this.form).then(res => {
-        if(this.form.payid == "10") { // 建行支付
-          $("input[name='ORDERID']").val(res.order_sn);
-          $("input[name='PAYMENT']").val(res.total_fee);
-          $("input[name='MAGIC']").val(res.message);
-          // 判断平台
-          let os = getPlatform();
-          if(os == "android") {
-            window.mbcpay.b2c(getCCBY_PaySign());
-          } else if (os == "ios")  {
-            window.location = "/mbcpay.b2c ";
+      if(!this.orderId) {
+        createOrder(this.form).then(res => {
+          if(this.form.payid == "10") { // 建行支付
+            $("input[name='ORDERID']").val(res.order_sn);
+            $("input[name='PAYMENT']").val(res.total_fee);
+            $("input[name='MAGIC']").val(res.message);
+            // 判断平台
+            let os = getPlatform();
+            if(os == "android") {
+              window.mbcpay.b2c(getCCBY_PaySign());
+            } else if (os == "ios")  {
+              window.location = "/mbcpay.b2c ";
+            }
+          } else { // 微信支付
+            window.location.href = res.mweb_url + "&redirect_url=" + "/goods/pay/notice";
           }
-        } else { // 微信支付
-          window.location.href = res.mweb_url + "&redirect_url=" + "/goods/pay/notice";
-        }
-        tips.loaded()
-      }).catch(error => {
-        tips.loaded()
-        tips.alert(error)
-      });
-      
+          tips.loaded()
+        }).catch(error => {
+          tips.loaded()
+          tips.alert(error)
+        });
+      }
+      else {  //立即支付
+        orderPay({ orderid: this.orderId, pay_id: this.form.payid, total: this.form.total }).then(res => {
+          // if(this.form.payid == "10") { // 建行支付
+          //   // 判断平台
+          //   let os = getPlatform();
+          //   if(os == "android") {
+          //     window.mbcpay.b2c(getCCBY_PaySign());
+          //   } else if (os == "ios")  {
+          //     window.location = "/mbcpay.b2c ";
+          //   }
+          // } else { // 微信支付
+          //   window.location.href = res.mweb_url + "&redirect_url=" + "/goods/pay/notice";
+          // }
+          tips.loaded()
+        }).catch(error => {
+          tips.loaded()
+          tips.alert(error)
+        });
+      }
     }
   },
 }
@@ -282,6 +347,10 @@ export default {
           vertical-align: text-bottom;
           padding-left: 0.5rem;
         }
+      }
+      span {
+        color: #4C4C4C;
+        font-size: .7rem;
       }
     }
   }
@@ -397,8 +466,8 @@ export default {
     color: #4C4C4C;
     .l {
       font-size: .7rem;
-      i { 
-        font-size: 1rem; 
+      i {
+        font-size: 1rem;
         margin-right: 0.5rem;
       }
       .jh { color: #003b8f}

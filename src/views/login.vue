@@ -3,7 +3,7 @@
     <header class="aui-bar aui-bar-nav">登录</header>
     <div class="login-content">
       <div class="login-logo">
-        <img src="/static/img/LOGO.png" alt="胖虎奢侈品">
+        <img src="static/img/LOGO.png" alt="胖虎奢侈品">
       </div>
       <div class="login-content">
         <div class="list-block">
@@ -207,7 +207,7 @@ export default {
 
 .list-block .item-input input {
 	margin: 0;
-	line-height: 0.4rem;
+	line-height: 2.2rem;
 	width: 90%;
 	font-size: .7rem;
 	padding: 0 0 0 15px;
@@ -216,7 +216,7 @@ export default {
 	border-radius: 3px;
 	outline: 0;
 	background-color: #fff;
-	-webkit-appearance: none;
+  -webkit-appearance: none;
 }
 .iconfont{
 	color: #C4C4C4;
@@ -267,7 +267,32 @@ export default {
 .hide{
 	display: none;
 }
-
+input[type=button], input[type=reset], input[type=submit] {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.42;
+  position: relative;
+  display: inline-block;
+  margin-bottom: 0;
+  padding: 6px 12px;
+  cursor: pointer;
+  -webkit-transition: all;
+  transition: all;
+  -webkit-transition-timing-function: linear;
+  transition-timing-function: linear;
+  -webkit-transition-duration: .2s;
+  transition-duration: .2s;
+  text-align: center;
+  vertical-align: top;
+  white-space: nowrap;
+  border-radius: 3px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  background-color: #fff;
+  background-clip: padding-box;
+}
 
 </style>
 
