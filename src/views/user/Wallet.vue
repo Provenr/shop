@@ -15,7 +15,7 @@
               <div class="balance fz80">{{balance}}</div>
               <div class="my-wallet f28" style="color:#fff">账户余额(元)</div>
             </div>
-            <div class="wallet-exchange f28" @click="exchange()">
+            <div class="wallet-exchange fz28" @click="exchange()">
               <i class="iconfont icon-qiandai"></i>
               提现
             </div>
@@ -24,7 +24,7 @@
 
         <div class="title fb f30" ref="tit">资金明细</div>
 
-        <div class="consume-list-wrapper">
+        <div class="consume-list-wrapper" v-if="lists.length > 0">
           <div class="consume-item" v-for="(list,index) in lists" :key="index">
             <div class="item-top">
               <div class="name fb">{{list.remark}}</div>
@@ -35,6 +35,9 @@
             </div>
           </div>
         </div>
+        <!-- <div class="consume-list-wrapper" v-else>
+          <div class="empty fz28">暂无明细</div>
+        </div> -->
       </scroller>
     </div>
   </div>
@@ -43,10 +46,6 @@
 import tips from '@/utils/tip'
 import { myAccount } from '@/api/user'
 export default {
-//   components: {
-//     Header,
-//     Menu`
-//   },
   data() {
     return {
       title: "我的钱包",
@@ -59,6 +58,7 @@ export default {
       lists: [],
       page:1,
       noDataTxt: '已全部加载',
+      isempty: false
     };
   },
   methods: {
@@ -78,7 +78,8 @@ export default {
         // 商品
         let glist = res.list;
         let _glist = [];
-        if(glist) {
+        if(glist.length > 0) {
+          this.noData = false;
           // glist.forEach(function (item) {
           //   _glist.push({
           //     goodsId: item.id,
@@ -94,7 +95,7 @@ export default {
           } else {
             _this.lists = [..._this.lists, ...glist];
           }
-          this.noData = false;
+
         }
         else {
           this.noData = true;
@@ -126,12 +127,19 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+  .empty{
+    text-align: center;
+    height: 10rem;
+    line-height: 10rem;
+    background: #fff;
+    margin-top: 0.5rem
+  }
   .wallet-info{
     background: #fff;
     padding: 1.75rem 0.8rem 1.25rem;
     .wallet-info-wrapper{
       margin: 0 auto;
-      background: url('/static/img//me_wallet_bg.png') no-repeat;
+      background: url('/static/img/me_wallet_bg.png') no-repeat;
       background-size: 100% 100%;
       overflow: hidden;
       // width: 17.125rem;
@@ -176,7 +184,7 @@ export default {
 }
 .consume-list-wrapper{
   overflow-y: scroll;
-  // min-height: 40vh;
+  // min-height: 30px;
   // height: 100vh;
   background: #fff;
   // position: relative;

@@ -246,7 +246,8 @@ export default {
   ;border-bottom-right-radius:0.4rem;
   border-left:1px solid #C4C4C5;
   color: #868686;
-
+  outline: none;
+  margin-right: .5rem
 }
 .btnWrapper {
 	width: 100%;

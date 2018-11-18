@@ -1,7 +1,7 @@
 <template>
   <div class="aui-row">
     <header class="aui-bar aui-bar-nav">
-      <a class="aui-pull-left aui-btn">
+      <a class="aui-pull-left aui-btn" @click="$router.back(-1)">
         <span class="iconfont icon-leftarrow" style="font-size: 1rem"></span>
       </a>
       <div class="aui-title">{{$route.meta.title}}</div>
@@ -26,11 +26,11 @@
             <div class="rl"><i class="iconfont icon-youjiantou1"></i></div>
           </div>
         </div>
-        <div class="adder_dis" v-if="addrFlag==2">
+        <div class="adder_dis" v-if="addrFlag==2" @click="selectAddr">
           <div class="con">
             <div class="c">
-              <p class="cl fz26 fw" style="padding-bottom: .3rem;">{{userAddr.name}}<span class="tel">{{userAddr.phone}}</span></p>
-              <p class="fz22">地址：{{userAddr.addr}}</p>
+              <p class="cl fz26 fw" style="padding-bottom: .3rem;">{{userAddr.conta}}<span class="tel">{{userAddr.tel}}</span></p>
+              <p class="fz22">{{userAddr.citystr}}{{userAddr.adss_x}}</p>
             </div>
             <div class="rl"><i class="iconfont icon-youjiantou1"></i></div>
           </div>
@@ -194,13 +194,14 @@ export default {
         this.form.total = res.total;
         if (this.form.addrid) { // 获取地址信息
           this.addrFlag = 2;
-          
+
         } else {
           // 获取用户默认地址
           getUserDefaultAddress().then(addr => {
             if(addr.list) {
               this.addrFlag = 2;
               this.userAddr = addr.list;
+              this.form.addrid = addr.list.id;
 
             } else {
               this.addrFlag = 1;
@@ -210,7 +211,7 @@ export default {
             tips.alert(error)
           });
         }
-        
+
         tips.loaded();
       }).catch(error => {
         tips.loaded()
@@ -253,7 +254,8 @@ export default {
       }
     },
     selectAddr() {
-      location.href = "";
+      let goodsid = this.$route.params.id;
+      location.href = "/bank/mine/address/chooseAdd.html?refid=2&oid=" + goodsid;
     },
     // 支付提交
     submit() {

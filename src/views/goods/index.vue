@@ -188,7 +188,9 @@ export default {
     },
     // 结算
     tobalance() {
-      this.$router.push({ name: 'goodsBalance', params: { id: 123 }})
+      let goodsid = this.$route.params.id
+      console.log(goodsid)
+      this.$router.push({ name: 'goodsBalance', params: { id: goodsid }})
     }
   },
   watch: {
