@@ -6,7 +6,7 @@
     <div class="ph-notice-bg">
       <div class="hed"></div>
       <div class="icon">
-        <img src="/static/img/buy_paymentsuccess.png" />
+        <img src="static/img/buy_paymentsuccess.png" />
         <p>支付成功</p>
       </div>
       <div class="button-box">

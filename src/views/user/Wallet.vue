@@ -35,8 +35,8 @@
             </div>
           </div>
         </div>
-      </scroller> 
-    </div> 
+      </scroller>
+    </div>
   </div>
 </template>
 <script>
@@ -56,7 +56,7 @@ export default {
         head: "http://7xl1gc.com2.z0.glb.qiniucdn.com/1526613328789.304932"
       },
       wrapperHeight: 0,
-      lists: [], 
+      lists: [],
       page:1,
       noDataTxt: '已全部加载',
     };
@@ -74,7 +74,7 @@ export default {
       let _this = this;
       myAccount(_this.page).then(res => {
         _this.balance = res.account
-        
+
         // 商品
         let glist = res.list;
         let _glist = [];

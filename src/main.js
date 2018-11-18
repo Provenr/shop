@@ -3,8 +3,8 @@ import App from './App'
 import router from './router'
 import store from './store'
 
-import VConsole from 'vconsole'
-const vConsole = new VConsole()
+// import VConsole from 'vconsole'
+// const vConsole = new VConsole()
 
 import '@/assets/custom.css'
 
@@ -18,7 +18,6 @@ import VueScroller from 'vue-scroller'
 Vue.use(VueScroller)
 
 //import './permission'
-
 
 Vue.config.productionTip = false
 

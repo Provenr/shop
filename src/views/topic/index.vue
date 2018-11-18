@@ -33,13 +33,13 @@ export default {
       sid: this.$route.params.id,
       topic: {},
       goodsList: [],
-      page: 1,
+      page: 0,
       noData: false,
       noDataTxt: '已全部加载'
     }
   },
   created() {
-    this.getData(true)
+    //this.getData(true)
   },
   methods: {
     // 获取数据
@@ -87,7 +87,7 @@ export default {
         that.page++;
         that.getData();
         done();
-      }, 1500)
+      }, 2000)
     }
   }
 }

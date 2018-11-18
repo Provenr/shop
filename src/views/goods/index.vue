@@ -7,7 +7,7 @@
       <div class="aui-title">{{$route.meta.title}}</div>
     </header>
     <div class="ph-scroller">
-      <scroller style="padding-top:2.25rem">
+      <scroller style="padding-top:2.25rem;padding-bottom:3rem;">
         <div class="img-lb">
           <swiper :options="swiperOption">
             <swiper-slide v-for="(banner, index) in banners" :key="index">
@@ -62,7 +62,7 @@
         <div class="ph-nav-gap"></div>
         <div class="ph-goods_tp">
           <div class="ph-goods-box-title ph-mr30">交易流程</div>
-          <img src="/static/img/goods-jylc.png" alt="">
+          <img src="static/img/goods-jylc.png" alt="">
         </div>
         <div class="ph-nav-gap"></div>
         <div class="ph-goods_detail">
@@ -76,10 +76,9 @@
         <div class="ph-goods_list">
           <goods-list :list="goodsList"></goods-list>
         </div>
-        <div style="padding-bottom: 3rem;"></div>
       </scroller>
     </div>
-    
+
     <div v-transfer-dom>
       <popup v-model="showService" position="bottom">
         <div class="ph-service-popup">
@@ -91,7 +90,7 @@
             <p>胖虎拥有强大的资深鉴定师团队，中国二手奢侈品行业协会专业鉴定委员会授权中心，中检集团奢侈品鉴定中心战略合作协议，《时尚芭莎》官方鉴定和售后服务合作伙伴。</p>
             <h5>5天包退</h5>
             <p>收到胖虎奢侈品公司发给您的商品后，如对商品有真假质疑，请不要拆卸胖虎奢侈品正品保证防伪标签，可联系客服进行第三方检验中心检验。</p>
-            <input type="button" class="button" value="确认" @click="showService=false">
+            <a type="button" class="button" @click="showService=false">确认</a>
           </div>
         </div>
       </popup>
@@ -130,7 +129,7 @@ export default {
   },
   data() {
     return {
-      banners: ['/static/img/back_loading.png'],
+      banners: ['static/img/back_loading.png'],
       swiperOption: {
         pagination: {
           el:'.swiper-pagination'
@@ -312,8 +311,7 @@ export default {
     p { padding-bottom: 1rem; }
     .button {
       background-color: #fff;
-      height:2rem;
-      border:2px solid #09B6F2;
+      border:1px solid #09B6F2;
       border-radius:1rem;
       color: #09B6F2;
       font-size: .75rem;
@@ -321,6 +319,8 @@ export default {
       margin-left: .75rem;
       display:block;
       margin:0 auto;
+      text-align: center;
+      padding: 0.4rem 0;
     }
   }
 }

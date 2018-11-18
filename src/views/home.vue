@@ -6,7 +6,7 @@
         <section class="banner">
           <swiper :options="swiperOption">
             <swiper-slide>
-              <img src="/static/img/home-bank.png"/>
+              <img src="static/img/home-bank.png"/>
             </swiper-slide>
             <div class="swiper-pagination"  slot="pagination"></div>
           </swiper>
@@ -32,16 +32,16 @@
         </section>
         <section class="container home-topic-wrapper">
           <router-link class="left" :to="'/shop'">
-            <img src="/static/img/home-ziying.png" alt="">
+            <img src="static/img/home-ziying.png" alt="">
           </router-link>
           <div class="right">
             <router-link class="special_list" :to="'/topic/'+special_top.id">
-              <img src="/static/img/home-shagnxin.png" alt="">
+              <img src="static/img/home-shagnxin.png" alt="">
               <div class="title">{{special_top.title}}</div>
               <div class="num">{{special_top.count}}款</div>
             </router-link>
             <router-link class="special_list" :to="'/topic/'+special_button.id">
-              <img src="/static/img/home-jianlou.png" alt="">
+              <img src="static/img/home-jianlou.png" alt="">
               <div class="title">{{special_button.title}}</div>
               <div class="num">{{special_button.zhe}}</div>
             </router-link>
@@ -49,7 +49,7 @@
         </section>
         <!-- 限时抢购 -->
         <section class="home-sale-wrapper">
-          <div class="time-list">
+          <div class="time-list" v-if="is_specia">
             <ul :class="item.isActive?'active':''" class="nav-item" v-for="(item, index) in special_list" :key="index" @click="clickTime(index, item)">
               <li>
                 <span class="time fz32">{{item.time}}</span>
@@ -57,7 +57,7 @@
               </li>
             </ul>
           </div>
-          <div class="img-title">
+          <div class="img-title" v-if="is_specia">
             <img :src="special.img" alt="">
             <div class="countdown-head-box">
               <strong class="shop-head-name fz34">
@@ -69,6 +69,11 @@
                 <span>{{special.time.minute}}</span>
                 <span>{{special.time.second}}</span>
               </div>
+            </div>
+          </div>
+          <div class="img-title" v-if="!is_specia">
+            <div class="countdown-head-box" style="margin-top:0">
+              <strong class="shop-head-name fz34">猜你喜欢</strong>
             </div>
           </div>
           <column-list-item :List='goodsList' @userSetRemind="setRemind"></column-list-item>
@@ -111,6 +116,7 @@ export default {
       special: {
         time: {}
       },
+      is_specia: true,
       special_top: {},
       special_button: {},
       special_list: [],
@@ -139,6 +145,7 @@ export default {
       });
       // 获取专场数据
       getSpecialList().then(res => {
+        let that = this;
         let sList = res.list;
         if(res.msg == 1) {
           // 获取当前专场ID
@@ -154,8 +161,19 @@ export default {
           this.getSpecialGoods(true);
         }
         else {
-
+          this.is_specia = false;
+          sList.forEach(function (item) {
+            that.goodsList.push({
+              goodsId: item.id,
+              img: item.goods_images,
+              name: item.goods_name,
+              status: item.is_self==0?4:0,
+              price: item.is_discount==0?item.goods_price:item.discount_price,
+              del: item.goods_price
+            });
+          });
         }
+        tips.loaded();
       });
     },
     clickTime(index, item) {
@@ -171,6 +189,10 @@ export default {
     },
     getSpecialGoods(refresh) {
       getSpecialGoodsList({ id: this.currentSid, p: this.page }).then(res => {
+        if(res.code == 100) {
+          this.noData = true;
+          return;
+        }
         let glist = res.list;
         let _glist = [];
         let that = this;
@@ -263,12 +285,14 @@ export default {
         this.$refs.my_scroller.finishInfinite(true);
         return;
       }
-      var that = this
-      setTimeout(function () {
-        that.page++;
-        that.getSpecialGoods();
-        done();
-      }, 1500)
+      if(this.currentSid > 0) {
+        var that = this
+        setTimeout(function () {
+            that.page++;
+            that.getSpecialGoods();
+          done();
+        }, 2000)
+      }
     },
     recycle() {
 			if (this.token) {
@@ -279,9 +303,9 @@ export default {
     },
     repair() {
       if (this.token) {
-        let token = window.localStorage.getItem('token');	
-        let userid = window.localStorage.getItem('userid');	
-				let os = window.localStorage.getItem('os');	
+        let token = window.localStorage.getItem('token');
+        let userid = window.localStorage.getItem('userid');
+				let os = window.localStorage.getItem('os');
 				windows.location.href = 'https://apiv2-app.ponhu.cn/ccbyh/yanghu?userid='+userid+'&token='+token+'&os='+os;
 			}else{
         this.$router.replace({ path: "/login", query: { url: this.$router.history.current.fullPath } })
