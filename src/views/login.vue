@@ -101,7 +101,6 @@ export default {
       this.$store.dispatch('LoginByUser', this.loginForm).then(() => {
         getUserInfo().then(user => {
           OldSetUserInfo(user.list)
-          console.log(user);
         });
         tips.loaded()
         this.$router.push({ path: this.$route.query.url || '/' })

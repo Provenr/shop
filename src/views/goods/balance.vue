@@ -26,18 +26,17 @@
             <div class="rl"><i class="iconfont icon-youjiantou1"></i></div>
           </div>
         </div>
-        <div class="adder_dis" v-if="addrFlag==2" @click="selectAddr">
+        <div class="adder_dis" v-if="addrFlag==2">
           <div class="con">
             <div class="c">
-              <p class="cl fz26 fw" style="padding-bottom: .3rem;">{{userAddr.conta}}<span class="tel">{{userAddr.tel}}</span></p>
-              <p class="fz22">{{userAddr.citystr}}{{userAddr.adss_x}}</p>
+              <p class="cl fz26 fw" style="padding-bottom: .3rem;">{{userAddr.name}}<span class="tel">{{userAddr.phone}}</span></p>
+              <p class="fz22">{{userAddr.addr}}</p>
             </div>
-            <div class="rl"><i class="iconfont icon-youjiantou1"></i></div>
+            <div class="rl" v-if="isAction"><i class="iconfont icon-youjiantou1"></i></div>
           </div>
         </div>
         <img src="static/img/address-line.png" alt="">
       </div>
-
     </div>
     <div class="ph-nav-gap"></div>
     <div class="ph-bal-goods">
@@ -175,6 +174,7 @@ export default {
   created() {
     this.orderId = this.$route.query.oid;
     this.form.addrid = this.$route.query.addrid || '';
+
     if (this.orderId) {
       this.isAction = false;
       this.getOrderInfo();
@@ -194,15 +194,28 @@ export default {
         this.form.total = res.total;
         if (this.form.addrid) { // 获取地址信息
           this.addrFlag = 2;
-
+          getAddress(this.form.addrid).then(addr => {
+            if(addr.list) {
+              this.userAddr.name = addr.list.conta;
+              this.userAddr.phone = addr.list.tel;
+              this.userAddr.addr = addr.list.citystr+' '+addr.list.adss_x;
+              this.form.addrid = addr.list.id;
+            } else {
+              this.addrFlag = 1;
+            }
+          }).catch(error => {
+            tips.loaded();
+            tips.alert(error)
+          });;
         } else {
+          this.addrFlag = 2;
           // 获取用户默认地址
           getUserDefaultAddress().then(addr => {
             if(addr.list) {
-              this.addrFlag = 2;
-              this.userAddr = addr.list;
+              this.userAddr.name = addr.list.conta;
+              this.userAddr.phone = addr.list.tel;
+              this.userAddr.addr = addr.list.citystr+' '+addr.list.adss_x;
               this.form.addrid = addr.list.id;
-
             } else {
               this.addrFlag = 1;
             }
@@ -211,7 +224,6 @@ export default {
             tips.alert(error)
           });
         }
-
         tips.loaded();
       }).catch(error => {
         tips.loaded()
@@ -233,7 +245,7 @@ export default {
         if(data.address.shipping_type == "1") {
           this.userAddr.name = data.address.conta;
           this.userAddr.phone = data.address.tel;
-          this.userAddr.name = data.address.citystr+data.address.adss_x;
+          this.userAddr.addr = data.address.citystr+data.address.adss_x;
         }
         tips.loaded()
       }).catch(error => {
@@ -254,8 +266,7 @@ export default {
       }
     },
     selectAddr() {
-      let goodsid = this.$route.params.id;
-      location.href = "/bank/mine/address/chooseAdd.html?refid=2&oid=" + goodsid;
+      location.href = "/bank/mine/address/chooseAdd.html?refid=2&gid=" + this.$route.params.id;
     },
     // 支付提交
     submit() {

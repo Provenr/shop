@@ -1,89 +1,80 @@
 <template>
   <div>
-    <header class="aui-bar aui-bar-nav">
-       <a class="aui-pull-left aui-btn" @click="userCenter">
-        <span class="iconfont icon-mine" style="font-size: 1rem"></span>
-      </a>
-      <div class="aui-title"> {{$route.meta.title}}</div>
-    </header>
-    <scroller :on-infinite="infinite" :noDataText="noDataTxt" ref="my_scroller" style="padding-top:2.25rem">
-      <section class="banner">
-        <swiper :options="swiperOption">
-          <swiper-slide>
-            <img src="static/img/home-bank.jpg"/>
-          </swiper-slide>
-          <div class="swiper-pagination"  slot="pagination"></div>
-        </swiper>
-      </section>
-      <!-- 导航 -->
-      <section class="aui-grid">
-        <div class="aui-col-xs-3 ph-home-nav-item" @click="recycle">
-          <i class="iconfont icon-shepinhuishou"></i>
-          <div class="aui-grid-label">奢品回收</div>
-        </div>
-        <div class="aui-col-xs-3 ph-home-nav-item" @click="repair">
-          <i class="iconfont icon-yanghuweixiu"></i>
-          <div class="aui-grid-label">维护保养</div>
-        </div>
-        <div class="aui-col-xs-3 ph-home-nav-item" @click="identifyPic">
-          <i class="iconfont icon-zhaopianjianding"></i>
-          <div class="aui-grid-label">图片鉴定</div>
-        </div>
-        <div class="aui-col-xs-3 ph-home-nav-item" @click="identifyPhy">
-          <i class="iconfont icon-shiwujianding"></i>
-          <div class="aui-grid-label">实物鉴定</div>
-        </div>
-      </section>
-      <section class="container home-topic-wrapper">
-        <router-link class="left" :to="'/shop'">
-          <img src="static/img/home-ziying.png" alt="">
-        </router-link>
-        <div class="right">
-          <router-link class="special_list" :to="'/topic/'+special_top.id">
-            <img src="static/img/home-shagnxin.png" alt="">
-            <div class="title">{{special_top.title}}</div>
-            <div class="num">{{special_top.count}}款</div>
+    <header class="aui-bar aui-bar-nav">{{$route.meta.title}}</header>
+    <div class="ph-scroller">
+      <scroller :on-infinite="infinite" :noDataText="noDataTxt" ref="my_scroller" style="padding-top:2.25rem">
+        <section class="banner">
+          <swiper :options="swiperOption">
+            <swiper-slide>
+              <img src="static/img/home-bank.png"/>
+            </swiper-slide>
+            <div class="swiper-pagination"  slot="pagination"></div>
+          </swiper>
+        </section>
+        <!-- 导航 -->
+        <section class="aui-grid">
+          <div class="aui-col-xs-3 ph-home-nav-item" @click="recycle">
+            <i class="iconfont icon-shepinhuishou"></i>
+            <div class="aui-grid-label">奢品回收</div>
+          </div>
+          <div class="aui-col-xs-3 ph-home-nav-item" @click="repair">
+            <i class="iconfont icon-yanghuweixiu"></i>
+            <div class="aui-grid-label">维护保养</div>
+          </div>
+          <div class="aui-col-xs-3 ph-home-nav-item" @click="identifyPic">
+            <i class="iconfont icon-zhaopianjianding"></i>
+            <div class="aui-grid-label">图片鉴定</div>
+          </div>
+          <div class="aui-col-xs-3 ph-home-nav-item" @click="identifyPhy">
+            <i class="iconfont icon-shiwujianding"></i>
+            <div class="aui-grid-label">实物鉴定</div>
+          </div>
+        </section>
+        <section class="container home-topic-wrapper">
+          <router-link class="left" :to="'/shop'">
+            <img src="static/img/home-ziying.png" alt="">
           </router-link>
-          <router-link class="special_list" :to="'/topic/'+special_button.id">
-            <img src="static/img/home-jianlou.png" alt="">
-            <div class="title">{{special_button.title}}</div>
-            <div class="num">{{special_button.zhe}}</div>
-          </router-link>
-        </div>
-      </section>
-      <!-- 限时抢购 -->
-      <section class="home-sale-wrapper">
-        <div class="time-list" v-if="is_specia">
-          <ul :class="item.isActive?'active':''" class="nav-item" v-for="(item, index) in special_list" :key="index" @click="clickTime(index, item)">
-            <li>
-              <span class="time fz32">{{item.time}}</span>
-              <span class="fz24">{{item.day}}</span>
-            </li>
-          </ul>
-        </div>
-        <div class="img-title" v-if="is_specia">
-          <img :src="special.img" alt="">
-          <div class="countdown-head-box">
-            <strong class="shop-head-name fz34">
-              {{special.stxt}}
-            </strong>
-            <div class="shop-head-time" v-if="special.state!='3'">
-              <span>{{special.ttxt}}</span>
-              <span>{{special.time.hour}}</span>
-              <span>{{special.time.minute}}</span>
-              <span>{{special.time.second}}</span>
+          <div class="right">
+            <router-link class="special_list" :to="'/topic/'+special_top.id">
+              <img src="static/img/home-shagnxin.png" alt="">
+              <div class="title">{{special_top.title}}</div>
+              <div class="num">{{special_top.count}}款</div>
+            </router-link>
+            <router-link class="special_list" :to="'/topic/'+special_button.id">
+              <img src="static/img/home-jianlou.png" alt="">
+              <div class="title">{{special_button.title}}</div>
+              <div class="num">{{special_button.zhe}}</div>
+            </router-link>
+          </div>
+        </section>
+        <!-- 限时抢购 -->
+        <section class="home-sale-wrapper">
+          <div class="time-list">
+            <ul :class="item.isActive?'active':''" class="nav-item" v-for="(item, index) in special_list" :key="index" @click="clickTime(index, item)">
+              <li>
+                <span class="time fz32">{{item.time}}</span>
+                <span class="fz24">{{item.day}}</span>
+              </li>
+            </ul>
+          </div>
+          <div class="img-title">
+            <img :src="special.img" alt="">
+            <div class="countdown-head-box">
+              <strong class="shop-head-name fz34">
+                {{special.stxt}}
+              </strong>
+              <div class="shop-head-time" v-if="special.state!='3'">
+                <span>{{special.ttxt}}</span>
+                <span>{{special.time.hour}}</span>
+                <span>{{special.time.minute}}</span>
+                <span>{{special.time.second}}</span>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="img-title" v-if="!is_specia">
-          <div class="countdown-head-box" style="margin-top:0">
-            <strong class="shop-head-name fz34">猜你喜欢</strong>
-          </div>
-        </div>
-        <column-list-item :List='goodsList' @userSetRemind="setRemind"></column-list-item>
-      </section>
-    </scroller>
-
+          <column-list-item :List='goodsList' @userSetRemind="setRemind"></column-list-item>
+        </section>
+      </scroller>
+    </div>
   </div>
 </template>
 
@@ -120,7 +111,6 @@ export default {
       special: {
         time: {}
       },
-      is_specia: true,
       special_top: {},
       special_button: {},
       special_list: [],
@@ -131,8 +121,7 @@ export default {
   },
   computed: {
     token() {
-      // return this.$store.getters.token;
-      return localStorage.getItem('token');
+      return this.$store.getters.token;
     }
   },
   created () {
@@ -147,10 +136,12 @@ export default {
           this.special_top = res.list[0];
           this.special_button = res.list[1];
         }
+      }).catch(error => {
+        tips.loaded();
+        tips.alert(error)
       });
       // 获取专场数据
       getSpecialList().then(res => {
-        let that = this;
         let sList = res.list;
         if(res.msg == 1) {
           // 获取当前专场ID
@@ -166,19 +157,8 @@ export default {
           this.getSpecialGoods(true);
         }
         else {
-          this.is_specia = false;
-          sList.forEach(function (item) {
-            that.goodsList.push({
-              goodsId: item.id,
-              img: item.goods_images,
-              name: item.goods_name,
-              status: item.is_self==0?4:0,
-              price: item.is_discount==0?item.goods_price:item.discount_price,
-              del: item.goods_price
-            });
-          });
+
         }
-        tips.loaded();
       });
     },
     clickTime(index, item) {
@@ -194,10 +174,6 @@ export default {
     },
     getSpecialGoods(refresh) {
       getSpecialGoodsList({ id: this.currentSid, p: this.page }).then(res => {
-        if(res.code == 100) {
-          this.noData = true;
-          return;
-        }
         let glist = res.list;
         let _glist = [];
         let that = this;
@@ -267,7 +243,10 @@ export default {
         } else {
           that.noData = true;
         }
-      });
+      }).catch(error => {
+        tips.loaded();
+        tips.alert(error)
+      });;
     },
     setRemind(index) {
       if (this.token) {
@@ -290,21 +269,12 @@ export default {
         this.$refs.my_scroller.finishInfinite(true);
         return;
       }
-      if(this.currentSid > 0) {
-        var that = this
-        setTimeout(function () {
-            that.page++;
-            that.getSpecialGoods();
-          done();
-        }, 2000)
-      }
-    },
-    userCenter:function () {
-      if (this.token) {
-        location.href = this.toUrl + '/bank/pages/mine/index.html'
-      }else{
-        this.$router.replace({ path: "/login", query: { url: this.$router.history.current.fullPath } })
-			}
+      var that = this
+      setTimeout(function () {
+        that.page++;
+        that.getSpecialGoods();
+        done();
+      }, 1500)
     },
     recycle() {
 			if (this.token) {
