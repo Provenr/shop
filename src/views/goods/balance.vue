@@ -255,7 +255,7 @@ export default {
     },
     selectAddr() {
       let goodsid = this.$route.params.id;
-      location.href = "/bank/mine/address/chooseAdd.html?refid=2&oid=" + goodsid;
+      location.href = "/bank/mine/address/chooseAdd.html?refid=2&gid=" + goodsid;
     },
     // 支付提交
     submit() {
@@ -264,7 +264,7 @@ export default {
           tips.toast("请添加收货地址");
           return;
         }
-      }
+      }``
       tips.loading("支付中...");
       if(!this.orderId) {
         createOrder(this.form).then(res => {
