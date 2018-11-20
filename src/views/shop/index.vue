@@ -9,15 +9,19 @@
     <div class="ph-shop-filter">
       <div class="aui-col-xs-3" :class="selected == 'category' ? 'selectedClass' : ''" @click="tabchange('category')">
         <span>类别</span>
-        <i :class="[selected == 'brand' ? 'icon-arrow-up' : 'icon-arrow-down','iconfont']"></i>
+        <!-- <i :class="[selected == 'category' ? 'icon-arrow-up' : 'icon-arrow-down','iconfont']"></i> -->
       </div>
       <div class="aui-col-xs-3" :class="selected == 'brand' ? 'selectedClass' : ''" @click="tabchange('brand')">
         <span>品牌</span>
-        <i :class="[selected == 'brand' ? 'icon-arrow-up' : 'icon-arrow-down','iconfont']"></i>
+        <!-- <i :class="[selected == 'brand' ? 'icon-arrow-up' : 'icon-arrow-down','iconfont']"></i> -->
       </div>
-      <div class="aui-col-xs-3" :class="selected == 'sort' ? 'selectedClass' : ''" @click="tabchange('sort')">
-        <span>排序</span>
-        <i :class="[selected == 'brand' ? 'icon-arrow-up' : 'icon-arrow-down','iconfont']"></i>
+      <div class="aui-col-xs-3" :class="selected == 'sort' ? 'selectedClass' : ''" @click="tabchange('sort')" style="display:flex;align-items:center;justify-content: center;">
+        <span>价格</span>
+        <div style="display:flex;flex-direction:column">
+          <i :class="[where.sortType == 2 ? 'selectedClass' : 'noselectedClass','iconfont','icon-arrow-down']" style="font-size:10px;"></i>
+          <i :class="[where.sortType == 3 ? 'selectedClass' : 'noselectedClass','iconfont','icon-arrow-up']" style="font-size:10px;"></i>
+        </div>
+        
       </div>
       <div class="aui-col-xs-3" :class="selected == 'filter' ? 'selectedClass' : ''" @click="tabchange('filter')">
         <span>筛选</span>
@@ -94,8 +98,8 @@
       </div>
 
     </div>
-    <div class="ph-scroller" style="padding-top:2.25rem" v-if="!empty">
-     <scroller :on-infinite="infinite" :noDataText="noDataTxt" ref="my_scroller" >
+    <div class="ph-scroller"  v-if="!empty">
+     <scroller :on-infinite="infinite" :noDataText="noDataTxt" ref="my_scroller" style="padding-top:4.25rem">
       <section class="topic-head-img">
         <img :src="headimg" alt="altText"/>
       </section>
@@ -108,7 +112,7 @@
       </div>
      </scroller>
     </div>
-    <div v-if="empty">
+    <div v-if="empty" class="empty">
       <div class="empty-box">
         <img src="static/img/empty-icon.png" alt="" srcset="">
       </div>
@@ -153,7 +157,7 @@ export default {
 
       ph_goods_total:'123456', //总商品数量
       noDataTxt: '已全部加载',
-      page: 1, // 页码
+      page: 0, // 页码
       // 过滤条件
       filterParam:{
         'price':{
@@ -233,12 +237,28 @@ export default {
         return
       }
       if(name == 'sort') {
-        this.show_sort = true;
+        // this.show_sort = true;
+        if(this.where.sortType == ''){
+          this.where.sortType = 2;
+        }else{
+          this.where.sortType = this.where.sortType == 2 ? 3 : 2;
+        }
+        this.page = 1;
+        tips.loading();
+        this.getData(true)
         return
       }
     },
     firstCategory(id) {
       this.firstCategoryId = id;
+      if(id == 'all') {
+        this.where.secondCategoryId = '';
+        this.page = 1;
+        this.show_category = false
+        tips.loading();
+        this.getData(true)
+        return
+      }
       // 设置 二级分类
       this.secondCategoryList = this.secondCate.get(id);
     },
@@ -257,7 +277,11 @@ export default {
       this.getData(true)
     },
     chooseBrand(id) {
+      console.log(id)
       this.where.brandId = id;
+      if(id == 'all'){
+        this.where.brandId = '';
+      }
       this.show_brand = false
       this.page = 1;
       tips.loading();
@@ -268,6 +292,10 @@ export default {
     },
     anchor(anchorId) {
       console.log(anchorId)
+      if(anchorId == '#') {
+        document.querySelector('.brand').scrollTop = 0;
+        return
+      }
       let el = '#' + anchorId;
       let node = document.querySelector(el);
       let node_wrapper = document.querySelector('.brand');
@@ -292,15 +320,14 @@ export default {
     getData(refresh) {
       let _this = this;
       getOptimalGoods(this.where, this.page).then(res => {
-        console.log(res)
+
         _this.ph_goods_total = res.goodsnum
         
-        // 商品
-        let glist = res.list;
-        let _glist = [];
-        if(glist.length > 0) {
-          glist.forEach(function (item) {
-            _glist.push({
+        let glist = [];
+        if(res.list.length > 0) {
+          this.empty = false;
+          res.list.forEach(function (item) {
+            glist.push({
               goodsId: item.id,
               img: item.goods_images,
               name: item.goods_name,
@@ -311,15 +338,16 @@ export default {
           });
           if (refresh) {
             _this.goodsList.splice(0, _this.goodsList.length);
-            _this.goodsList = _glist;
+            _this.goodsList = glist;
           } else {
-            _this.goodsList = [..._this.goodsList, ..._glist];
+            _this.goodsList = [..._this.goodsList, ...glist];
           }
           this.noData = false;
-        }
-        else {
-          if(_this.goodsList.length == 0){
-            this.empty = true;
+        }else {
+          if (refresh) {
+            _this.empty = true;
+            console.log(_this.goodsList);
+            _this.goodsList.splice(0, _this.goodsList.length);
           }
           this.noData = true;
         }
@@ -347,13 +375,13 @@ export default {
 
     //  商品数据
     tips.loading();
-    _this.getData(true)
+    //_this.getData(true)
     // 分类列表
     getFirstCate().then(res =>{
       // console.log(res)
       let firstCate = [];
       let Category_list = res.list;
-
+      
       this.firstCategoryId = Category_list[0].id; // 默认 第一个一级分类id 为选中状态
 
       for (let item of Category_list){
@@ -366,6 +394,10 @@ export default {
       }
 
       this.firstCategoryList = firstCate;
+      this.firstCategoryList  = [...[{
+        id:'all',
+        name:'全部分类'
+      }],...this.firstCategoryList]
 
       let _firstCategoryId = this.firstCategoryId
       // console.log(this.secondCate)
@@ -382,6 +414,15 @@ function dealBrandList(arr) {
   all['index_list'] = []; //  字母索引表
   let baseArr = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '#'];
   let _index = []; 
+    all.brand_list['#'] = [
+    {
+      english: "",
+      first_letter: "#",
+      id: "all",
+      logo: "static/img/allbrand.png",
+      name: "全部品牌"
+    }
+  ]
   for(let i of baseArr){
     let tmp = $.Enumerable.From(arr)
       .Where("val => val.first_letter=='" + i + "'")
@@ -394,12 +435,25 @@ function dealBrandList(arr) {
         
       }
   }
+
+  all.index_list = [...['#'], ...all.index_list]
+  console.log(all)
   return all
 }
 
 </script>
 
 <style lang="less" scoped>
+.noselectedClass{
+  color: #333 !important;
+}
+.empty{
+  margin: 6rem auto;
+  text-align: center;
+  .empty-box{
+    margin-bottom: .5rem;
+  }
+}
 .filtercheck{
   background: #09B6F2 !important;
   color: #fff;
@@ -450,7 +504,7 @@ function dealBrandList(arr) {
     // background: #F7F7F7;
     .left-item{
 
-      border-bottom: 1px solid #ccc;
+      border-bottom: 1px solid #eee;
       line-height: 2rem;
       // padding: 0 0.3rem;
       padding: 0.3rem 0;

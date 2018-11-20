@@ -51,7 +51,7 @@ export default {
   height: 2.5rem;
   line-height: 2.5rem;
   top: 50%;
-  left: 50%;
+  left: 40%;
   border-radius: 50%;
   border: #09B6F2 1px solid;
   text-align: center;
@@ -62,7 +62,7 @@ export default {
   width: auto;
   position: fixed;
   top: 0;
-  right: 0;
+  right: 20%;
   height: 100%;
   text-align: center;
   z-index: 111;
