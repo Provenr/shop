@@ -206,7 +206,7 @@ export default {
           }).catch(error => {
             tips.loaded();
             tips.alert(error)
-          });;
+          });
         } else {
           this.addrFlag = 2;
           // 获取用户默认地址
