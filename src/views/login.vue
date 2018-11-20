@@ -73,6 +73,8 @@ export default {
       }
       let that = this;
       let t = 60
+      that.ttext = t + '秒后重试'
+      that.disabled = true;
       var timer = setInterval(function () {
         t--
         if (t > 0) {
@@ -206,7 +208,7 @@ export default {
 
 .list-block .item-input input {
 	margin: 0;
-	line-height: 2.2rem;
+	line-height: 1.2rem;
 	width: 90%;
 	font-size: .7rem;
 	padding: 0 0 0 15px;

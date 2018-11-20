@@ -1,17 +1,21 @@
 <template>
-  <div>
-    <header class="aui-bar aui-bar-nav">{{$route.meta.title}}</header>
+  <div class="aui-row">
+    <header class="aui-bar aui-bar-nav">
+       <a class="aui-pull-left aui-btn" @click="userCenter">
+        <span class="iconfont icon-mine" style="font-size: 1rem"></span>
+      </a>
+      <div class="aui-title">{{$route.meta.title}}</div>
+    </header>
     <div class="ph-scroller">
       <scroller :on-infinite="infinite" :noDataText="noDataTxt" ref="my_scroller" style="padding-top:2.25rem">
         <section class="banner">
           <swiper :options="swiperOption">
             <swiper-slide>
-              <img src="static/img/home-bank.png"/>
+              <img src="static/img/home-bank.jpg"/>
             </swiper-slide>
             <div class="swiper-pagination"  slot="pagination"></div>
           </swiper>
         </section>
-        <!-- 导航 -->
         <section class="aui-grid">
           <div class="aui-col-xs-3 ph-home-nav-item" @click="recycle">
             <i class="iconfont icon-shepinhuishou"></i>
@@ -47,9 +51,8 @@
             </router-link>
           </div>
         </section>
-        <!-- 限时抢购 -->
         <section class="home-sale-wrapper">
-          <div class="time-list">
+          <div class="time-list" v-if="is_specia">
             <ul :class="item.isActive?'active':''" class="nav-item" v-for="(item, index) in special_list" :key="index" @click="clickTime(index, item)">
               <li>
                 <span class="time fz32">{{item.time}}</span>
@@ -57,7 +60,7 @@
               </li>
             </ul>
           </div>
-          <div class="img-title">
+          <div class="img-title" v-if="is_specia">
             <img :src="special.img" alt="">
             <div class="countdown-head-box">
               <strong class="shop-head-name fz34">
@@ -69,6 +72,11 @@
                 <span>{{special.time.minute}}</span>
                 <span>{{special.time.second}}</span>
               </div>
+            </div>
+          </div>
+          <div class="img-title" v-if="!is_specia">
+            <div class="countdown-head-box" style="margin-top:0">
+              <strong class="shop-head-name fz34">猜你喜欢</strong>
             </div>
           </div>
           <column-list-item :List='goodsList' @userSetRemind="setRemind"></column-list-item>
@@ -111,6 +119,7 @@ export default {
       special: {
         time: {}
       },
+      is_specia: true,
       special_top: {},
       special_button: {},
       special_list: [],
@@ -136,12 +145,10 @@ export default {
           this.special_top = res.list[0];
           this.special_button = res.list[1];
         }
-      }).catch(error => {
-        tips.loaded();
-        tips.alert(error)
       });
       // 获取专场数据
       getSpecialList().then(res => {
+        let that = this;
         let sList = res.list;
         if(res.msg == 1) {
           // 获取当前专场ID
@@ -157,8 +164,22 @@ export default {
           this.getSpecialGoods(true);
         }
         else {
-
+          this.is_specia = false;
+          sList.forEach(function (item) {
+            that.goodsList.push({
+              goodsId: item.id,
+              img: item.goods_images,
+              name: item.goods_name,
+              status: item.is_self==0?4:0,
+              price: item.is_discount==0?item.goods_price:item.discount_price,
+              del: item.goods_price
+            });
+          });
         }
+        tips.loaded();
+      }).catch(error => {
+        tips.loaded();
+        tips.alert(error);
       });
     },
     clickTime(index, item) {
@@ -174,6 +195,10 @@ export default {
     },
     getSpecialGoods(refresh) {
       getSpecialGoodsList({ id: this.currentSid, p: this.page }).then(res => {
+        if(res.code == 100) {
+          this.noData = true;
+          return;
+        }
         let glist = res.list;
         let _glist = [];
         let that = this;
@@ -243,10 +268,7 @@ export default {
         } else {
           that.noData = true;
         }
-      }).catch(error => {
-        tips.loaded();
-        tips.alert(error)
-      });;
+      });
     },
     setRemind(index) {
       if (this.token) {
@@ -269,40 +291,54 @@ export default {
         this.$refs.my_scroller.finishInfinite(true);
         return;
       }
-      var that = this
-      setTimeout(function () {
-        that.page++;
-        that.getSpecialGoods();
-        done();
-      }, 1500)
+      if(this.currentSid > 0) {
+        var that = this
+        setTimeout(function () {
+            that.page++;
+            that.getSpecialGoods();
+          done();
+        }, 2000)
+      }
+    },
+    userCenter:function () {
+      let rurl = this.toUrl + '/pages/mine/index.html';
+      if (this.token) {
+        location.href = rurl
+      }else{
+        this.$router.replace({ path: "/login", query: { url: this.$router.history.current.fullPath } })
+			}
     },
     recycle() {
+      let rurl = this.toUrl + '/pages/recycle/index.html';
 			if (this.token) {
-				location.href = this.toUrl + '/pages/recycle/index.html'
+				location.href = rurl;
 			}else{
         this.$router.replace({ path: "/login", query: { url: this.$router.history.current.fullPath } })
 			}
     },
     repair() {
+      let token = window.localStorage.getItem('token');
+      let userid = window.localStorage.getItem('userid');
+      let os = window.localStorage.getItem('os');
+      let rurl = 'https://apiv2-app.ponhu.cn/ccbyh/yanghu?userid='+userid+'&token='+token+'&os='+os;
       if (this.token) {
-        let token = window.localStorage.getItem('token');
-        let userid = window.localStorage.getItem('userid');
-				let os = window.localStorage.getItem('os');
-				windows.location.href = 'https://apiv2-app.ponhu.cn/ccbyh/yanghu?userid='+userid+'&token='+token+'&os='+os;
+				location.href = rurl;
 			}else{
         this.$router.replace({ path: "/login", query: { url: this.$router.history.current.fullPath } })
 			}
     },
     identifyPic() {
+      let rurl = this.toUrl + '/pages/identifyPic/index.html';
       if (this.token) {
-				windows.location.href = process.env.WAP_URL + '/pages/identifyPic/index.html'
+			  location.href = rurl;
 			}else{
         this.$router.replace({ path: "/login", query: { url: this.$router.history.current.fullPath } })
 			}
     },
     identifyPhy() {
+      let rurl = this.toUrl + '/pages/identifyPhy/index.html'
       if (this.token) {
-				windows.location.href = process.env.WAP_URL + '/pages/identifyPhy/index.html'
+				location.href = rurl;
 			}else{
         this.$router.replace({ path: "/login", query: { url: this.$router.history.current.fullPath } })
 			}

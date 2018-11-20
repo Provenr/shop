@@ -7,7 +7,7 @@
       <div class="aui-title">{{$route.meta.title}}</div>
     </header>
     <div class="ph-scroller">
-      <scroller style="padding-top:2.25rem;padding-bottom:3rem;">
+      <scroller style="padding-top:2.25rem;">
         <div class="img-lb">
           <swiper :options="swiperOption">
             <swiper-slide v-for="(banner, index) in banners" :key="index">
@@ -188,9 +188,7 @@ export default {
     },
     // 结算
     tobalance() {
-      let goodsid = this.$route.params.id
-      console.log(goodsid)
-      this.$router.push({ name: 'goodsBalance', params: { id: goodsid }})
+      this.$router.push({ name: 'goodsBalance', params: { id: this.$route.params.id }})
     }
   },
   watch: {
@@ -423,7 +421,7 @@ export default {
   }
 }
 .ph-goods_list {
-  padding: 0 .45rem;
+  padding: 0 .45rem 3rem;
 }
 .ph-detail-item-line {
   border-bottom: 1px solid #E8E8E8;

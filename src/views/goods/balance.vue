@@ -77,7 +77,7 @@
 
     <div class="ph-bal-bar">
       <div class="sum-price">应付：￥{{form.total}}</div>
-      <input type="button" class="button" @click="submit" value="立即支付">
+      <a class="button" @click="submit">立即支付</a>
     </div>
 
     <form name="mbcpay_b2c">
@@ -498,6 +498,9 @@ export default {
   bottom: 0;
   background: #fff;
   margin:0px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   z-index: 1001;
   .sum-price {
     float: left;
@@ -510,12 +513,16 @@ export default {
     font-size: .7rem;
   }
   .button {
-    background-color: #09B6F2;
-    color: #fff;
-    height:2.5rem;
-    font-size: .7rem;
-    width: 7.5rem;
-    float:right;
+    background-color: #fff;
+    height: 2rem;
+    border: 1px solid #09B6F2;
+    border-radius: 1rem;
+    color: #09B6F2;
+    font-size: .75rem;
+    width: 6.5rem;
+    margin-right: 0.75rem;
+    text-align: center;
+    line-height: 1.8rem;
   }
 }
 .vux-popup-dialog {

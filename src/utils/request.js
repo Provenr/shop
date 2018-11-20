@@ -6,7 +6,7 @@ import router from '@/router'
 // 创建 axios 接口
 const service = axios.create({
   baseURL: process.env.SERVICE_API,
-  timeout: 5000, 
+  timeout: 10000, 
   responseType: "json",
   headers: {
     //'Content-Type': 'application/form-data'
@@ -39,7 +39,9 @@ service.interceptors.response.use(
     }
     else if (res.code == 100) { // token超时跳转登陆
       if (res.msg == '您的用户信息已经过期，请重新登录') {
-        router.replace({ path: "/login", query: { url: router.history.current.fullPath } })
+        store.dispatch('LogOut').then(() => {
+          router.replace({ path: "/login", query: { url: router.history.current.fullPath } })
+        })
       }
     }
     else { // 服务器异常
