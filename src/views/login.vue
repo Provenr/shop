@@ -105,7 +105,7 @@ export default {
           OldSetUserInfo(user.list)
         });
         tips.loaded()
-        this.$router.push({ path: this.$route.query.url || '/' })
+        this.$router.push({ path: '/' }) // this.$route.query.url || '/'
       }).catch(error => {
         tips.loaded()
         tips.toast(error)

@@ -4,6 +4,10 @@ import { post, get } from '@/utils/request'
 export function getTopicInfo(tid, page) {
   return post('/Index/showSpecail', { sid: tid, p: page })
 }
+// 获取首页专题
+export function getHomeTopicInfo(tid, page) {
+  return post('/Homepage/showSpecail', { sid: tid, p: page })
+}
 
 // 获取商品详情
 export function getGoodsInfo(gid) {
