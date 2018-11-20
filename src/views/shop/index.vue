@@ -26,7 +26,7 @@
     </div>
     <div class="ph-shop-filter-content">
       <div class="category"  v-transfer-dom>
-        <popup v-model="show_category" position="left" max-height="100%" width='60%'>
+        <popup v-model="show_category" position="left" max-height="100%" width='80%'>
           <div class="left">
             <div v-for="(item, index) in firstCategoryList" :key="index" class="left-item" :class="['left-item', firstCategoryId == item.id ? 'activeColor' : '']"  @click="firstCategory(item.id)">{{item.name}}</div>
           </div>
@@ -36,7 +36,7 @@
       </popup>
       </div>
       <div  v-transfer-dom>
-        <popup v-model="show_brand" position="left"  width="100%" should-scroll-top-on-show >
+        <popup v-model="show_brand" position="left"  width="80%" should-scroll-top-on-show >
           <div class="brand">
           <group>
             <brand-list :Alphabetic="index_list" @jump='anchor'></brand-list>
@@ -63,7 +63,7 @@
         </popup>
       </div>
       <div class="filter"  v-transfer-dom>
-        <popup v-model="show_filter" position="right" max-height="100%" width="80%" :hide-on-blur=false>
+        <popup v-model="show_filter" position="left" max-height="100%" width="80%" :hide-on-blur=false>
           <group>
             <div class="filter-wrapper">
               <div class="filter-tit">价格</div>
@@ -94,7 +94,8 @@
       </div>
 
     </div>
-     <scroller :on-infinite="infinite" :noDataText="noDataTxt" ref="my_scroller" style="padding-top:2.25rem">
+    <div class="ph-scroller" style="padding-top:2.25rem" v-if="!empty">
+     <scroller :on-infinite="infinite" :noDataText="noDataTxt" ref="my_scroller" >
       <section class="topic-head-img">
         <img :src="headimg" alt="altText"/>
       </section>
@@ -103,9 +104,16 @@
         <div class="count-total fz22">
           共为你找到{{ph_goods_total}}个商品
         </div>
-          <goods-list :list='goodsList'></goods-list>
+        <goods-list :list='goodsList'></goods-list>
       </div>
      </scroller>
+    </div>
+    <div v-if="empty">
+      <div class="empty-box">
+        <img src="static/img/empty-icon.png" alt="" srcset="">
+      </div>
+      未找到符合条件的商品~
+    </div>
   </div>
 </template>
 
@@ -117,6 +125,7 @@ import { getBrandList, getFirstCate, getOptimalGoods} from '@/api/goods'
 import tips from '@/utils/tip'
 
 import { TransferDom, Popup, Group} from 'vux'
+import { clean } from 'semver';
 
 export default {
   name: 'shop',
@@ -140,6 +149,7 @@ export default {
       show_sort: false,
       show_filter: false,
       nodata: false,
+
 
       ph_goods_total:'123456', //总商品数量
       noDataTxt: '已全部加载',
@@ -166,7 +176,7 @@ export default {
           5:'85新',
         }
       }, 
-
+      empty:false,
 
       firstCategoryId: '',
       // secondCategoryId: '',
@@ -288,7 +298,7 @@ export default {
         // 商品
         let glist = res.list;
         let _glist = [];
-        if(glist) {
+        if(glist.length > 0) {
           glist.forEach(function (item) {
             _glist.push({
               goodsId: item.id,
@@ -308,6 +318,9 @@ export default {
           this.noData = false;
         }
         else {
+          if(_this.goodsList.length == 0){
+            this.empty = true;
+          }
           this.noData = true;
         }
         tips.loaded()
