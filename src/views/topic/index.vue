@@ -20,7 +20,7 @@
 </template>
 
 <script> 
-import { getTopicInfo } from '@/api/goods'
+import { getTopicInfo, getHomeTopicInfo } from '@/api/goods'
 import tips from '@/utils/tip'
 
 import GoodsList from '@/components/GoodsList'
@@ -39,43 +39,74 @@ export default {
     }
   },
   created() {
+
     //this.getData(true)
   },
   methods: {
     // 获取数据
     getData(refresh) {
-      let that = this;
-      getTopicInfo(this.sid, this.page).then(res => {
-        this.topic = res.special;
-        // 商品
-        let glist = res.list;
-        let _glist = [];
-        if(glist) {
-          glist.forEach(function (item) {
-            _glist.push({
-              goodsId: item.id,
-              img: item.goods_images,
-              name: item.goods_name,
-              status: item.is_discount,
-              price: item.is_discount==0?item.goods_price:item.discount_price,
-              del: item.goods_price
+      if(this.$route.query.flag) {
+        getHomeTopicInfo(this.sid, this.page).then(res => {
+          this.topic = res.special;
+          let glist = [];
+          if(res.list.length > 0) {
+            res.list.forEach(function (item) {
+              glist.push({
+                goodsId: item.id,
+                img: item.goods_images,
+                name: item.goods_name,
+                status: item.is_discount,
+                price: item.is_discount==0?item.goods_price:item.discount_price,
+                del: item.goods_price
+              });
             });
-          });
 
-          if (refresh) {
-            that.goodsList = _glist;
+            if (refresh) {
+              this.goodsList = glist;
+            }
+            else {
+              this.goodsList = [...this.goodsList, ...glist];
+            }
+            this.noData = false;
           }
           else {
-            that.goodsList = [...that.goodsList, ..._glist];
+            this.noData = true;
           }
-          this.noData = false;
-        }
-        else {
-          this.noData = true;
-        }
-      }).catch(error => {
-        tips.alert(error)
-      });
+        }).catch(error => {
+          tips.alert(error)
+        });
+      }
+      else {
+        getTopicInfo(this.sid, this.page).then(res => {
+          this.topic = res.special;
+          let glist = [];
+          if(res.list.length > 0) {
+            res.list.forEach(function (item) {
+              glist.push({
+                goodsId: item.id,
+                img: item.goods_images,
+                name: item.goods_name,
+                status: item.is_discount,
+                price: item.is_discount==0?item.goods_price:item.discount_price,
+                del: item.goods_price
+              });
+            });
+
+            if (refresh) {
+              this.goodsList = glist;
+            }
+            else {
+              this.goodsList = [...this.goodsList, ...glist];
+            }
+            this.noData = false;
+          }
+          else {
+            this.noData = true;
+          }
+        }).catch(error => {
+          tips.alert(error)
+        });
+      }
     },
     infinite: function (done) {
       if(this.noData) {

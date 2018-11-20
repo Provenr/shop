@@ -39,7 +39,7 @@
             <img src="static/img/home-ziying.png" alt="">
           </router-link>
           <div class="right">
-            <router-link class="special_list" :to="'/topic/'+special_top.id">
+            <router-link class="special_list" :to="'/topic/'+special_top.id+'?flag=topnew'">
               <img src="static/img/home-shagnxin.png" alt="">
               <div class="title">{{special_top.title}}</div>
               <div class="num">{{special_top.count}}款</div>
