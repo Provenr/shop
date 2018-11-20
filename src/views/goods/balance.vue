@@ -6,7 +6,7 @@
       </a>
       <div class="aui-title">{{$route.meta.title}}</div>
     </header>
-    <div class="ph-bal-taikang">
+    <div class="ph-bal-taikang" @click="taikang">
       <img src="static/img/taikang-pay.png" alt="">
     </div>
     <div class="ph-nav-gap"></div>
@@ -266,7 +266,10 @@ export default {
       }
     },
     selectAddr() {
-      location.href = "/bank/mine/address/chooseAdd.html?refid=2&gid=" + this.$route.params.id;
+      location.href = "/mine/address/chooseAdd.html?refid=2&gid=" + this.$route.params.id;
+    },
+    taikang() {
+      location.href = "https://m.ponhu.cn/Taikang/index/gid/"+this.$route.params.id+"/id/"+this.userId+"/os/2";
     },
     // 支付提交
     submit() {
@@ -301,17 +304,17 @@ export default {
       }
       else {  //立即支付
         orderPay({ orderid: this.orderId, pay_id: this.form.payid, total: this.form.total }).then(res => {
-          // if(this.form.payid == "10") { // 建行支付
-          //   // 判断平台
-          //   let os = getPlatform();
-          //   if(os == "android") {
-          //     window.mbcpay.b2c(getCCBY_PaySign());
-          //   } else if (os == "ios")  {
-          //     window.location = "/mbcpay.b2c ";
-          //   }
-          // } else { // 微信支付
-          //   window.location.href = res.mweb_url + "&redirect_url=" + "/goods/pay/notice";
-          // }
+          if(this.form.payid == "10") { // 建行支付
+            // 判断平台
+            let os = getPlatform();
+            if(os == "android") {
+              window.mbcpay.b2c(getCCBY_PaySign());
+            } else if (os == "ios")  {
+              window.location = "/mbcpay.b2c ";
+            }
+          } else { // 微信支付
+            window.location.href = res.mweb_url + "&redirect_url=" + "/goods/pay/notice";
+          }
           tips.loaded()
         }).catch(error => {
           tips.loaded()
