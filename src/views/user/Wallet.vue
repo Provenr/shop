@@ -7,7 +7,7 @@
       <div class="aui-title">{{title}}</div>
     </header>
 
-    <div class="content">
+    <div class="content" style="height:100vh;">
       <scroller :on-infinite="infinite" :noDataText="noDataTxt" ref="my_scroller" style="padding-top:2.25rem">
         <div class="wallet-info">
           <div class="wallet-info-wrapper">

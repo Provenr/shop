@@ -91,7 +91,7 @@
             </div>
           </group>
           <div class="filter-btn-wrapper">
-            <button @click="filterCancel"  class="cancel">取消</button>
+            <button @click="filterCancel"  class="cancel">重置</button>
             <button @click="filterConfirm" >确定</button>
           </div>
         </popup>
@@ -305,7 +305,7 @@ export default {
         // node_wrapper.scrollTop = _Top;  // todo 滚动 兼容
     },
     filterCancel() {
-      this.show_filter = false;
+      // this.show_filter = false;
       this.where.filterPrice = '';
       this.where.filterGender = '';
       this.where.filterFineness = '';
