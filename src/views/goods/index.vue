@@ -24,8 +24,8 @@
           <div class="detail_price">
             <span class="price">￥{{isdown?goods.discount_price:goods.ph_price}}</span>
             <span class="yuanjia" v-if="isdown">原价:￥{{goods.ph_price}}</span>
-            <span class="market">市场价:￥{{goods.original_price}}</span>
-            <span>{{goods.zhekou}}折</span>
+            <span class="market" v-if="goods.original_price">市场价:￥{{goods.original_price}}</span>
+            <span v-if="goods.zhekou>0">{{goods.zhekou}}折</span>
           </div>
           <div class="ph-detail-item-line"></div>
           <div class="goods_name">{{goods.goods_name}}</div>
