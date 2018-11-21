@@ -59,11 +59,11 @@
         <span class="l"><i class="iconfont icon-jianhang jh"></i> 龙支付</span>
         <label><input class="aui-radio" type="radio" name="payBank" v-model="form.payid" value="10"></label>
       </div>
-      <div class="ph-line"></div>
+      <!-- <div class="ph-line"></div>
       <div class="item">
         <span class="l"><i class="iconfont icon-weixinzhifu1 wx"></i> 微信支付</span>
         <label><input class="aui-radio" type="radio" name="payBank" v-model="form.payid" value="2"></label>
-      </div>
+      </div> -->
     </div>
 
     <div v-transfer-dom>
@@ -73,7 +73,6 @@
         </group>
       </popup>
     </div>
-    <div style="padding-bottom:6rem;"></div>
     <div class="ph-bal-bar">
       <div class="sum-price">应付：￥{{form.total}}</div>
       <a class="button" @click="submit">立即支付</a>
