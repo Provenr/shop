@@ -421,7 +421,7 @@ export default {
   }
 }
 .ph-goods_list {
-  padding: 0 .45rem 3rem;
+  padding: 0 .45rem 6rem;
 }
 .ph-detail-item-line {
   border-bottom: 1px solid #E8E8E8;

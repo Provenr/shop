@@ -38,6 +38,7 @@ export function encryptMD5(str) {
 // 获取移动端平台
 export function getPlatform() {
   let ua = navigator.userAgent.toLowerCase()
+  alert(ua);
   if (ua.indexOf('Android') > -1 || ua.indexOf('Adr') > -1) {
     return 'android'
   }
