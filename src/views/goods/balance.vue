@@ -118,9 +118,23 @@ function getCCBY_PaySign() {
     "SUPPORTACCOUNTTYPE=" + mbcpay_b2c.SUPPORTACCOUNTTYPE.value;
 }
 // ios 建行支付
-function MBC_PAYINFO() {
-  return "{" + getCCBY_PaySign() + "}";
+function MBC_PAYINFO(){
+  var orderinfo =
+    "TXCODE="+mbcpay_b2c.TXCODE.value+","+
+    "WAPVER="+mbcpay_b2c.WAPVER.value+","+
+    "MERCHANTID="+mbcpay_b2c.MERCHANTID.value+","+
+    "ORDERID="+mbcpay_b2c.ORDERID.value+","+
+    "PAYMENT="+mbcpay_b2c.PAYMENT.value+","+
+    "MAGIC="+mbcpay_b2c.MAGIC.value+","+
+    "BRANCHID="+mbcpay_b2c.BRANCHID.value+","+
+    "POSID="+mbcpay_b2c.POSID.value+","+
+    "CURCODE="+mbcpay_b2c.CURCODE.value+","+
+    "REMARK1="+mbcpay_b2c.REMARK1.value+","+
+    "REMARK2="+mbcpay_b2c.REMARK2.value+","+
+    "SUPPORTACCOUNTTYPE="+mbcpay_b2c.SUPPORTACCOUNTTYPE.value;
+  return "{" + orderinfo + "}";
 }
+
 
 import { getGoodsPay } from '@/api/goods'
 import { getUserInfo, getUserDefaultAddress, getAddress } from '@/api/user'
@@ -295,7 +309,7 @@ export default {
             if(os == "android") {
               window.mbcpay.b2c(getCCBY_PaySign());
             } else if (os == "ios")  {
-              window.location = "/mbcpay.b2c ";
+              window.location = "/mbcpay.b2c";
             }
           } else { // 微信支付
             location.href = res.mweb_url + "&redirect_url=" + process.env.RESOURC_URL + "/goods/pay/paynotice?oid=" + this.orderId;
@@ -457,6 +471,11 @@ export default {
         text-align: left;
         line-height: .8rem;
         margin-bottom: .6rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
       }
       .price {
         flex:1;

@@ -95,7 +95,7 @@
         </div>
       </popup>
     </div>
-
+    <div style="height: 2.5rem;"></div>
     <div class="ph-goods-bar">
       <div class="button-box">
         <a href="tel:4000865285" class="button">咨询</a>
