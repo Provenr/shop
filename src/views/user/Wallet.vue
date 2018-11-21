@@ -139,7 +139,7 @@ export default {
     padding: 1.75rem 0.8rem 1.25rem;
     .wallet-info-wrapper{
       margin: 0 auto;
-      background: url('/static/img/me_wallet_bg.png') no-repeat;
+      background: url('../../../static/img/me_wallet_bg.png') no-repeat;
       background-size: 100% 100%;
       overflow: hidden;
       // width: 17.125rem;
