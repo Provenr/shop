@@ -6,65 +6,70 @@
       </a>
       <div class="aui-title">{{$route.meta.title}}</div>
     </header>
-    <div class="ph-bal-taikang" @click="taikang">
-      <img src="static/img/taikang-pay.png" alt="">
-    </div>
-    <div class="ph-nav-gap"></div>
-    <div class="ph-bal-adder">
-      <div class="box-title">
-        <span class="l">配送方式</span>
-        <span class="rl">
-          <a v-if="isAction" href="javascript:;" @click="showDistribution=true">{{distribution}}<i class="iconfont icon-youjiantou1"></i></a>
-          <span v-if="!isAction">{{distribution}}</span>
-        </span>
-      </div>
-      <div v-if="showAddr">
-        <div class="ph-title-line"></div>
-        <div class="adder_add" v-if="addrFlag==1" @click="selectAddr">
-          <div class="con">
-            <div class="c"><i class="iconfont icon-jiahao"></i>请添加收货地址</div>
-            <div class="rl"><i class="iconfont icon-youjiantou1"></i></div>
-          </div>
+    <div class="ph-scroller">
+      <scroller style="padding-top:2.25rem;">
+        <div class="ph-bal-taikang" @click="taikang">
+          <img src="static/img/taikang-pay.png" alt="">
         </div>
-        <div class="adder_dis" v-if="addrFlag==2">
-          <div class="con">
-            <div class="c">
-              <p class="cl fz26 fw" style="padding-bottom: .3rem;">{{userAddr.name}}<span class="tel">{{userAddr.phone}}</span></p>
-              <p class="fz22">{{userAddr.addr}}</p>
+        <div class="ph-nav-gap"></div>
+        <div class="ph-bal-adder">
+          <div class="box-title">
+            <span class="l">配送方式</span>
+            <span class="rl">
+              <a v-if="isAction" href="javascript:;" @click="showDistribution=true">{{distribution}}<i class="iconfont icon-youjiantou1"></i></a>
+              <span v-if="!isAction">{{distribution}}</span>
+            </span>
+          </div>
+          <div v-if="showAddr">
+            <div class="ph-title-line"></div>
+            <div class="adder_add" v-if="addrFlag==1" @click="selectAddr">
+              <div class="con">
+                <div class="c"><i class="iconfont icon-jiahao"></i>请添加收货地址</div>
+                <div class="rl"><i class="iconfont icon-youjiantou1"></i></div>
+              </div>
             </div>
-            <div class="rl" v-if="isAction"><i class="iconfont icon-youjiantou1"></i></div>
+            <div class="adder_dis" v-if="addrFlag==2" @click="selectAddr">
+              <div class="con">
+                <div class="c">
+                  <p class="cl fz26 fw" style="padding-bottom: .3rem;">{{userAddr.name}}<span class="tel">{{userAddr.phone}}</span></p>
+                  <p class="fz22">{{userAddr.addr}}</p>
+                </div>
+                <div class="rl" v-if="isAction"><i class="iconfont icon-youjiantou1"></i></div>
+              </div>
+            </div>
+            <img src="static/img/address-line.png" alt="">
           </div>
         </div>
-        <img src="static/img/address-line.png" alt="">
-      </div>
-    </div>
-    <div class="ph-nav-gap"></div>
-    <div class="ph-bal-goods">
-      <div class="goods-list">
-        <div class="item">
-          <img :src="goods.goods_images">
+        <div class="ph-nav-gap"></div>
+        <div class="ph-bal-goods">
+          <div class="goods-list">
+            <div class="item">
+              <img :src="goods.goods_images">
+            </div>
+            <div class="item-box">
+              <div class="name">{{goods.goods_name}}</div>
+              <div class="price">￥{{goods.ph_price}}</div>
+            </div>
+          </div>
+          <div class="ly">
+            <textarea placeholder="给卖家留言" v-model="form.message"></textarea>
+          </div>
         </div>
-        <div class="item-box">
-          <div class="name">{{goods.goods_name}}</div>
-          <div class="price">￥{{goods.ph_price}}</div>
+        <div class="ph-nav-gap"></div>
+        <div class="ph-bal-pay">
+          <div class="item">
+            <span class="l"><i class="iconfont icon-jianhang jh"></i> 龙支付</span>
+            <label><input class="aui-radio" type="radio" name="payBank" v-model="form.payid" value="10"></label>
+          </div>
+          <!-- <div class="ph-line"></div>
+          <div class="item">
+            <span class="l"><i class="iconfont icon-weixinzhifu1 wx"></i> 微信支付</span>
+            <label><input class="aui-radio" type="radio" name="payBank" v-model="form.payid" value="2"></label>
+          </div> -->
         </div>
-      </div>
-      <div class="ly">
-        <textarea placeholder="给卖家留言" v-model="form.message"></textarea>
-      </div>
+      </scroller>
     </div>
-    <div class="ph-nav-gap"></div>
-    <div class="ph-bal-pay">
-      <div class="item">
-        <span class="l"><i class="iconfont icon-jianhang jh"></i> 龙支付</span>
-        <label><input class="aui-radio" type="radio" name="payBank" v-model="form.payid" value="10"></label>
-      </div>
-      <!-- <div class="ph-line"></div>
-      <div class="item">
-        <span class="l"><i class="iconfont icon-weixinzhifu1 wx"></i> 微信支付</span>
-        <label><input class="aui-radio" type="radio" name="payBank" v-model="form.payid" value="2"></label>
-      </div> -->
-    </div>
+    
 
     <div v-transfer-dom>
       <popup v-model="showDistribution" position="bottom">
