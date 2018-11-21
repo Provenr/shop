@@ -38,11 +38,10 @@ export function encryptMD5(str) {
 // 获取移动端平台
 export function getPlatform() {
   let ua = navigator.userAgent.toLowerCase()
-  alert(ua);
-  if (ua.indexOf('Android') > -1 || ua.indexOf('Adr') > -1) {
+  if (ua.indexOf('android') > -1 || ua.indexOf('Adr') > -1) {
     return 'android'
   }
-  if (!!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
+  if (!!ua.match(/\(i[^;]+;( U;)? cpu.+mac os x/)) {
     return 'ios'
   }
   return 'pc'

@@ -90,7 +90,7 @@
 import 'swiper/dist/css/swiper.css'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import { getSpecialSum, getSpecialList, getSpecialGoodsList, setSpecialRemind } from '@/api/shop'
-import { secTotime } from '@/utils'
+import { secTotime, getPlatform } from '@/utils'
 import tips from '@/utils/tip'
 
 import columnListItem from '@/components/ColumnListItem'
