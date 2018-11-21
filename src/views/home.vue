@@ -134,18 +134,12 @@ export default {
     }
   },
   created () {
+    this.getSum();
     this.getData();
   },
   methods: {
     getData() {
       tips.loading();
-      // 获取统计数据
-      getSpecialSum().then(res => {
-        if (res.list.length > 1) {
-          this.special_top = res.list[0];
-          this.special_button = res.list[1];
-        }
-      });
       // 获取专场数据
       getSpecialList().then(res => {
         let that = this;
@@ -181,6 +175,17 @@ export default {
         tips.loaded();
         tips.alert(error);
       });
+    },
+    getSum() {
+      // 获取统计数据
+      getSpecialSum().then(res => {
+        if (res.list.length > 1) {
+          this.special_top = res.list[0];
+          this.special_button = res.list[1];
+        }
+      }).catch(error => {
+        console.log(error);
+      });;
     },
     clickTime(index, item) {
       this.special_list.forEach(function (sp) {

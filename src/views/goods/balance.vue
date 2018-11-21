@@ -294,7 +294,7 @@ export default {
               window.location = "/mbcpay.b2c ";
             }
           } else { // 微信支付
-            window.location.href = res.mweb_url + "&redirect_url=" + "/goods/pay/notice";
+            location.href = res.mweb_url + "&redirect_url=" + process.env.RESOURC_URL + "/goods/pay/paynotice?oid=" + this.orderId;
           }
           tips.loaded()
         }).catch(error => {
@@ -313,7 +313,7 @@ export default {
               window.location = "/mbcpay.b2c ";
             }
           } else { // 微信支付
-            window.location.href = res.mweb_url + "&redirect_url=" + "/goods/pay/notice";
+            location.href = res.mweb_url + "&redirect_url=" + process.env.RESOURC_URL + "/goods/pay/paynotice?oid=" + this.orderId;
           }
           tips.loaded()
         }).catch(error => {

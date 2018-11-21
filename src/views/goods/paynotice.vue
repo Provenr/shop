@@ -23,15 +23,15 @@ export default {
   data() {
     return {
       pageType: 1,
-
+      thoUrl: process.env.WAP_URL
     }
   },
   methods: {
     home() {
-
+      this.$router.replace({ path: "/" })
     },
     order() {
-
+      location.href = this.thoUrl + '/shoplist/orderDetail.html?orderid=' + this.$route.query.oid;
     }
   }
 }
