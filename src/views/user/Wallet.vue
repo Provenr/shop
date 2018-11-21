@@ -10,7 +10,7 @@
     <div class="content" style="height:100vh;">
       <scroller :on-infinite="infinite" :noDataText="noDataTxt" ref="my_scroller" style="padding-top:2.25rem">
         <div class="wallet-info">
-          <div class="wallet-info-wrapper">
+          <div class="wallet-info-wrapper" :style="{'background-image':bgimg}">
             <div class="wallet-wrapper">
               <div class="balance fz80">{{balance}}</div>
               <div class="my-wallet f28" style="color:#fff">账户余额(元)</div>
@@ -55,6 +55,7 @@ export default {
         head: "http://7xl1gc.com2.z0.glb.qiniucdn.com/1526613328789.304932"
       },
       wrapperHeight: 0,
+      bgimg: "url(" + require("../../assets/img/me_wallet_bg.png") + ")",
       lists: [],
       page:1,
       noDataTxt: '已全部加载',
@@ -139,7 +140,8 @@ export default {
     padding: 1.75rem 0.8rem 1.25rem;
     .wallet-info-wrapper{
       margin: 0 auto;
-      background: url('../../../static/img/me_wallet_bg.png') no-repeat;
+      // background: url('../../../assets/img/me_wallet_bg.png') no-repeat;
+      background-repeat: no-repeat;
       background-size: 100% 100%;
       overflow: hidden;
       // width: 17.125rem;
