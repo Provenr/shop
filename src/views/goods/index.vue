@@ -142,6 +142,7 @@ export default {
       goodsList: [],
       isdown: false,
       down_time: '',
+      toUrl: process.env.WAP_URL,
       showService: false
     }
   },
@@ -189,7 +190,13 @@ export default {
     },
     // 结算
     tobalance() {
-      this.$router.push({ name: 'goodsBalance', params: { id: this.$route.params.id }})
+      if(this.goods.goods_status == "4") {
+        tips.alert("该商品已被别人拍下，如果买家20分钟内未付款，您就可以购买该商品了")
+      } else {
+        //this.$router.push({ name: 'goodsBalance', params: { id: this.$route.params.id }})
+        location.href = this.toUrl + '/pages/mine/shoplist/balance.html?gid=' + this.$route.params.id;
+      }
+      
     }
   },
   watch: {
