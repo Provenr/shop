@@ -332,8 +332,9 @@ export default {
               img: item.goods_images,
               name: item.goods_name,
               status: item.is_discount,
-              price: item.ph_price,
-              del: item.original_price
+              price: item.is_discount==0?item.goods_price:item.discount_price,
+              del: item.goods_price,
+              shelevs_type: item.shelevs_type
             });
           });
           if (refresh) {

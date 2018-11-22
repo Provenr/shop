@@ -97,26 +97,10 @@
       <input type="hidden" name="REMARK2" value="" />
       <input type="hidden" name="SUPPORTACCOUNTTYPE" value="3" />
     </form>
-
   </div>
 </template>
 
 <script>
-
-function getCCBY_PaySign() {
-  return "TXCODE=" + mbcpay_b2c.TXCODE.value + "," +
-		"WAPVER=" + mbcpay_b2c.WAPVER.value + "," +
-		"MERCHANTID=" + mbcpay_b2c.MERCHANTID.value + "," +
-		"ORDERID=" + mbcpay_b2c.ORDERID.value + "," +
-		"PAYMENT=" + mbcpay_b2c.PAYMENT.value + "," +
-		"MAGIC=" + mbcpay_b2c.MAGIC.value + "," +
-		"BRANCHID=" + mbcpay_b2c.BRANCHID.value + "," +
-		"POSID=" + mbcpay_b2c.POSID.value + "," +
-		"CURCODE=" + mbcpay_b2c.CURCODE.value + "," +
-		"REMARK1=" + mbcpay_b2c.REMARK1.value + "," +
-		"REMARK2=" + mbcpay_b2c.REMARK2.value + "," +
-    "SUPPORTACCOUNTTYPE=" + mbcpay_b2c.SUPPORTACCOUNTTYPE.value;
-}
 // ios 建行支付
 function MBC_PAYINFO(){
   var orderinfo =
@@ -133,6 +117,25 @@ function MBC_PAYINFO(){
     "REMARK2="+mbcpay_b2c.REMARK2.value+","+
     "SUPPORTACCOUNTTYPE="+mbcpay_b2c.SUPPORTACCOUNTTYPE.value;
   return "{" + orderinfo + "}";
+}
+</script>
+
+
+<script>
+
+function getCCBY_PaySign() {
+  return "TXCODE=" + mbcpay_b2c.TXCODE.value + "," +
+		"WAPVER=" + mbcpay_b2c.WAPVER.value + "," +
+		"MERCHANTID=" + mbcpay_b2c.MERCHANTID.value + "," +
+		"ORDERID=" + mbcpay_b2c.ORDERID.value + "," +
+		"PAYMENT=" + mbcpay_b2c.PAYMENT.value + "," +
+		"MAGIC=" + mbcpay_b2c.MAGIC.value + "," +
+		"BRANCHID=" + mbcpay_b2c.BRANCHID.value + "," +
+		"POSID=" + mbcpay_b2c.POSID.value + "," +
+		"CURCODE=" + mbcpay_b2c.CURCODE.value + "," +
+		"REMARK1=" + mbcpay_b2c.REMARK1.value + "," +
+		"REMARK2=" + mbcpay_b2c.REMARK2.value + "," +
+    "SUPPORTACCOUNTTYPE=" + mbcpay_b2c.SUPPORTACCOUNTTYPE.value;
 }
 
 
@@ -309,7 +312,7 @@ export default {
             if(os == "android") {
               window.mbcpay.b2c(getCCBY_PaySign());
             } else if (os == "ios")  {
-              window.location = "/mbcpay.b2c";
+              location = "/mbcpay.b2c";
             }
           } else { // 微信支付
             location.href = res.mweb_url + "&redirect_url=" + process.env.RESOURC_URL + "/goods/pay/paynotice?oid=" + this.orderId;
