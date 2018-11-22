@@ -6,17 +6,17 @@
       </a>
       <div class="aui-title">{{$route.meta.title}}</div>
     </header>
-     <!-- <section class="home-sale-wrapper">
-          <div class="time-list" v-if="is_specia" style="overflow:auto">
+    <section class="home-sale-tab-container">
+          <div class="time-list" v-if="is_specia">
             <ul :class="item.isActive?'active':''" class="nav-item" v-for="(item, index) in special_list" :key="index" @click="clickTime(index, item)">
               <li>
-                <span class="time fz32">{{item.time}}</span>
+                <span class="time fz32 fw">{{item.time}}</span>
                 <span class="fz24">{{item.day}}</span>
               </li>
             </ul>
           </div>
-        </section> -->
-    <div class="ph-scroller">
+       </section>
+    <div class="ph-scroller" style="margin-top:500px;">
       <scroller :on-infinite="infinite" :noDataText="noDataTxt" ref="my_scroller" style="padding-top:2.25rem">
         <section class="banner">
           <swiper :options="swiperOption">
@@ -65,7 +65,7 @@
           <div class="time-list" v-if="is_specia">
             <ul :class="item.isActive?'active':''" class="nav-item" v-for="(item, index) in special_list" :key="index" @click="clickTime(index, item)">
               <li>
-                <span class="time fz32">{{item.time}}</span>
+                <span class="time fz32 fw">{{item.time}}</span>
                 <span class="fz24">{{item.day}}</span>
               </li>
             </ul>
@@ -433,10 +433,10 @@ export default {
 .home-sale-tab-container{
   width: 100%;
   // height: 50px;
-  background-color: rgba(0,0,0,0.8);
   white-space: nowrap;
-  // overflow: hidden;
-  overflow-x: scroll; /* 1 */
+  overflow: hidden;
+  background: #fff;
+  overflow-x: scroll !important; 
   -webkit-backface-visibility: hidden;
   -webkit-perspective: 1000;
   -webkit-overflow-scrolling: touch; /* 2 */
@@ -447,19 +447,19 @@ export default {
   .time-list{
     background: #fff;
     box-sizing: border-box;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    white-space: nowrap;
-    &::-webkit-scrollbar{
-      display: none;
-    }
+    overflow-x: scroll !important; 
+    // overflow-y: hidden;
+    // white-space: nowrap;
+    // &::-webkit-scrollbar{
+    //   display: none;
+    // }
     .nav-item{
       width: 3.6rem;
       height: 2.5rem;
       display: inline-block;
       &.active {
         color: #FC2A3E;
-        border-bottom: .1rem solid;
+        border-bottom: .2rem solid;
       }
       li{
         height: 2.0rem;
