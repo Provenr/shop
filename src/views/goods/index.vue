@@ -129,7 +129,7 @@ export default {
   },
   data() {
     return {
-      banners: ['static/img/back_loading.png'],
+      banners: [],  //'static/img/back_loading.png'
       swiperOption: {
         pagination: {
           el:'.swiper-pagination'
@@ -166,7 +166,8 @@ export default {
             name: item.goods_name,
             status: item.is_discount,
             price: item.is_discount==0?item.goods_price:item.discount_price,
-            del: item.goods_price
+            del: item.goods_price,
+            shelevs_type: item.shelevs_type
           });
         });
 
@@ -193,7 +194,9 @@ export default {
   },
   watch: {
     '$route' (to, from) {
-      this.goodsList = [];
+      this.goods = {};
+      this.goodsList.splice(0, this.goodsList.length);
+      this.banners.splice(0, this.banners.length);
       this.getData();
     }
   }

@@ -3,7 +3,10 @@
 <section class="good-list">
   <div class="good-item" target="_blank" v-for="item in list" :key="item.goodsId" @click="to(item.goodsId)">
      <div class="good-img">
-          <img v-lazy="item.img" alt="">
+        <img v-lazy="item.img" alt="">
+        <div class="sold-out" v-if="item.shelevs_type==3">
+          <img class="out_icon" src="static/img/goods_sq.png" alt="">
+        </div>
       </div>
       <div class="good-info">
         <div class="aui-ellipsis-1 good-name fz26">{{item.name}}</div>
@@ -62,10 +65,32 @@ i{
     .good-img {
       // width: 8.7rem;
       height: 8.7rem;
+      position:relative;
       img {
         display: block;
         // width: 8.7rem;
         height: 8.7rem
+      }
+      .sold-out {
+        height: 100%;
+        width: 100%;
+        background:transparent;
+        background:rgba(0,0,0,0.2);
+        position: absolute;
+        top: 0;
+        z-index: 12;
+        .out_icon {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          -ms-transform: translate(-50%,-50%);
+          -moz-transform: translate(-50%,-50%);
+          -o-transform: translate(-50%,-50%);
+          transform: translate(-50%,-50%);
+          color: #fff;
+          width: 4rem;
+          height: 4rem;
+        }
       }
     }
     .good-info {
