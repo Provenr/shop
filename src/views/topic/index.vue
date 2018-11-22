@@ -89,7 +89,8 @@ export default {
                 name: item.goods_name,
                 status: item.is_discount,
                 price: item.is_discount==0?item.goods_price:item.discount_price,
-                del: item.goods_price
+                del: item.goods_price,
+                shelevs_type: item.shelevs_type
               });
             });
 

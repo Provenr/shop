@@ -1,6 +1,10 @@
 // ios 建行支付
-export function iospay (str) {
-  return function MBC_PAYINFO(){
-    return "{" + str + "}";
-  }
+function MBC_PAYINFO(str){
+  return "{" + str + "}";
 }
+
+function MBC_PAY(){
+  window.location="/mbcpay.b2c";
+}
+
+export { MBC_PAYINFO, MBC_PAY }
