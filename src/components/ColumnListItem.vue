@@ -1,7 +1,7 @@
 <!-- 竖排商品列表组件 -->
 <template>
   <div class="good-list">
-    <div v-for="(item, index) in List" :key="item.goodsId" class="good-item">
+    <div v-for="(item, index) in List" :key="item.goodsId" class="good-item" @click='toGoodDetail(item.goodsId)'> 
       <div class="good-img">
           <img v-lazy="item.img" alt="">
       </div>
@@ -12,10 +12,10 @@
             <span>¥{{item.price}}</span>
             <del>¥{{item.del}}</del>
           </div>
-          <div class="btn defaut-btn fz26" v-if='item.status == 1' @click='toGoodDetail(item.goodsId)'>马上抢</div>
+          <div class="btn defaut-btn fz26" v-if='item.status == 1'>马上抢</div>
           <div class="btn end-btn fz26" v-if='item.status == 0'>已售罄</div>
-          <div class="btn defaut-btn fz26" v-if='item.status == 4' @click='toGoodDetail(item.goodsId)'>购买</div>
-          <div class="btn defaut-btn fz26" v-if='item.status == 2' @click='setRemind(index)'>提醒我</div>
+          <div class="btn defaut-btn fz26" v-if='item.status == 4'>购买</div>
+          <div class="btn defaut-btn fz26" v-if='item.status == 2' @click.stop='setRemind(index)'>提醒我</div>
           <div class="btn end-btn fz26" v-if='item.status == 3'>已设置</div>
         </div>
       </div>

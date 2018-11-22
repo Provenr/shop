@@ -48,7 +48,7 @@
               <div class="brand-title" :id="key">{{key}}</div>
               <div v-for="item in value" :key='item.id' @click="chooseBrand(item.id)" class="brand-item line">
                 <span class="logo">
-                  <!-- <img :src="item.logo" alt="" srcset=""> -->
+                  <img :src="item.logo" alt="" srcset="">
                 </span>
                 <span class="brand-name">{{item.name}}</span>
               </div>
@@ -585,7 +585,7 @@ function dealBrandList(arr) {
   }
   .brand-name{
     margin-left: .4rem;
-    font-size: 0.44rem;
+    font-size: 0.64rem;
   }
 }
 .brand{

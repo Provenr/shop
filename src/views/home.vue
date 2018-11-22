@@ -6,6 +6,16 @@
       </a>
       <div class="aui-title">{{$route.meta.title}}</div>
     </header>
+     <!-- <section class="home-sale-wrapper">
+          <div class="time-list" v-if="is_specia" style="overflow:auto">
+            <ul :class="item.isActive?'active':''" class="nav-item" v-for="(item, index) in special_list" :key="index" @click="clickTime(index, item)">
+              <li>
+                <span class="time fz32">{{item.time}}</span>
+                <span class="fz24">{{item.day}}</span>
+              </li>
+            </ul>
+          </div>
+        </section> -->
     <div class="ph-scroller">
       <scroller :on-infinite="infinite" :noDataText="noDataTxt" ref="my_scroller" style="padding-top:2.25rem">
         <section class="banner">
@@ -51,7 +61,7 @@
             </router-link>
           </div>
         </section>
-        <section class="home-sale-wrapper">
+       <section class="home-sale-tab-container">
           <div class="time-list" v-if="is_specia">
             <ul :class="item.isActive?'active':''" class="nav-item" v-for="(item, index) in special_list" :key="index" @click="clickTime(index, item)">
               <li>
@@ -60,6 +70,16 @@
               </li>
             </ul>
           </div>
+       </section>
+        <section class="home-sale-wrapper">
+          <!-- <div class="time-list" v-if="is_specia">
+            <ul :class="item.isActive?'active':''" class="nav-item" v-for="(item, index) in special_list" :key="index" @click="clickTime(index, item)">
+              <li>
+                <span class="time fz32">{{item.time}}</span>
+                <span class="fz24">{{item.day}}</span>
+              </li>
+            </ul>
+          </div> -->
           <div class="img-title" v-if="is_specia">
             <img :src="special.img" alt="">
             <div class="countdown-head-box">
@@ -83,6 +103,7 @@
         </section>
       </scroller>
     </div>
+    
   </div>
 </template>
 
@@ -409,9 +430,20 @@ export default {
     }
   }
 }
-.home-sale-wrapper{
-  margin: .6rem 0;
-  box-sizing: border-box;
+.home-sale-tab-container{
+  width: 100%;
+  // height: 50px;
+  background-color: rgba(0,0,0,0.8);
+  white-space: nowrap;
+  // overflow: hidden;
+  overflow-x: scroll; /* 1 */
+  -webkit-backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  -webkit-overflow-scrolling: touch; /* 2 */
+  text-align: justify; /* 3 */
+  &::-webkit-scrollbar {
+    display: none;
+  }
   .time-list{
     background: #fff;
     box-sizing: border-box;
@@ -434,12 +466,17 @@ export default {
         width: 1.6rem;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: space-around;
         align-items: center;
         margin: 0 auto;
       }
     }
   }
+}
+.home-sale-wrapper{
+  margin: 0 0 .6rem 0;
+  box-sizing: border-box;
+  
   .img-title{
     padding: .75rem;
     background: #fff;

@@ -84,20 +84,19 @@
     </div>
 
     <form name="mbcpay_b2c">
-      <input type="hidden" name="TXCODE" value=" SP7010" />
+      <input type="hidden" name="TXCODE" value="SP7010" />
       <input type="hidden" name="WAPVER" value="1.2" />
       <input type="hidden" name="MERCHANTID" value="105100000020361" />
-      <input type="hidden" name="ORDERID" value="" />
-      <input type="hidden" name="PAYMENT" value="0.01" />
-      <input type="hidden" name="MAGIC" value="" />
+      <input type="hidden" name="ORDERID" id="ORDERID_ID" value="" />
+      <input type="hidden" name="PAYMENT" id="PAYMENT" value="0.01" />
+      <input type="hidden" name="MAGIC" id="MAGIC" value="" />
       <input type="hidden" name="BRANCHID" value="110000000" />
       <input type="hidden" name="POSID" value="008181422" />
       <input type="hidden" name="CURCODE" value="01" />
       <input type="hidden" name="REMARK1" value="" />
       <input type="hidden" name="REMARK2" value="" />
       <input type="hidden" name="SUPPORTACCOUNTTYPE" value="3" />
-    </form>
-
+		</form>
   </div>
 </template>
 
@@ -117,6 +116,7 @@ function getCCBY_PaySign() {
 		"REMARK2=" + mbcpay_b2c.REMARK2.value + "," +
     "SUPPORTACCOUNTTYPE=" + mbcpay_b2c.SUPPORTACCOUNTTYPE.value;
 }
+
 // ios 建行支付
 function MBC_PAYINFO(){
   var orderinfo =
@@ -134,7 +134,6 @@ function MBC_PAYINFO(){
     "SUPPORTACCOUNTTYPE="+mbcpay_b2c.SUPPORTACCOUNTTYPE.value;
   return "{" + orderinfo + "}";
 }
-
 
 import { getGoodsPay } from '@/api/goods'
 import { getUserInfo, getUserDefaultAddress, getAddress } from '@/api/user'
@@ -301,9 +300,9 @@ export default {
       if(!this.orderId) {
         createOrder(this.form).then(res => {
           if(this.form.payid == "10") { // 建行支付
-            $("input[name='ORDERID']").val(res.order_sn);
-            $("input[name='PAYMENT']").val(res.total_fee);
-            $("input[name='MAGIC']").val(res.message);
+            $("#ORDERID_ID").val(res.order_sn);
+            $("#PAYMENT").val(res.total_fee);
+            $("#MAGIC").val(res.message);
             // 判断平台
             let os = getPlatform();
             if(os == "android") {
@@ -328,7 +327,7 @@ export default {
             if(os == "android") {
               window.mbcpay.b2c(getCCBY_PaySign());
             } else if (os == "ios")  {
-              window.location = "/mbcpay.b2c ";
+              window.location = "/mbcpay.b2c";
             }
           } else { // 微信支付
             location.href = res.mweb_url + "&redirect_url=" + process.env.RESOURC_URL + "/goods/pay/paynotice?oid=" + this.orderId;
