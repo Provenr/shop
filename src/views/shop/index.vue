@@ -101,7 +101,7 @@
     <div class="ph-scroller"  v-if="!empty">
      <scroller :on-infinite="infinite" :noDataText="noDataTxt" ref="my_scroller" style="padding-top:4.25rem">
       <section class="topic-head-img">
-        <img :src="headimg" alt="altText"/>
+        <img :src="headimg" alt=""/>
       </section>
 
       <div class="content">
@@ -114,7 +114,7 @@
     </div>
     <div v-if="empty" class="empty">
       <div class="empty-box">
-        <img src="static/img/empty-icon.png" alt="" srcset="">
+        <img src="static/img/empty-icon.png" alt="" srcset="" >
       </div>
       未找到符合条件的商品~
     </div>
@@ -155,7 +155,7 @@ export default {
       nodata: false,
 
 
-      ph_goods_total:'123456', //总商品数量
+      ph_goods_total:'', //总商品数量
       noDataTxt: '已全部加载',
       page: 0, // 页码
       // 过滤条件
@@ -209,7 +209,7 @@ export default {
       secondCategoryList: [], // 二级分类列表
       brandlist:[], // 品牌列表
       index_list:[], // 字母索引
-      headimg:'https://img-zscdn.ponhu.cn/FsrUhU8lFrpki6bk1spi2ffuW0K5', // banner图
+      headimg:'', // banner图
       goodsList: []
     }
   },
@@ -322,6 +322,7 @@ export default {
       getOptimalGoods(this.where, this.page).then(res => {
 
         _this.ph_goods_total = res.goodsnum
+        _this.headimg = res.img
         
         let glist = [];
         if(res.list.length > 0) {
@@ -451,8 +452,13 @@ function dealBrandList(arr) {
 .empty{
   margin: 6rem auto;
   text-align: center;
+  color: #888;
   .empty-box{
     margin-bottom: .5rem;
+    img{
+      width: 6rem;
+      margin: 0 auto 1rem
+    }
   }
 }
 .filtercheck{

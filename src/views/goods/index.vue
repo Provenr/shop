@@ -1,7 +1,7 @@
 <template>
   <div class="aui-row">
     <header class="aui-bar aui-bar-nav">
-      <a class="aui-pull-left aui-btn" @click="$router.back(-1)">
+      <a class="aui-pull-left aui-btn" @click="back">
         <span class="iconfont icon-leftarrow" style="font-size: 1rem"></span>
       </a>
       <div class="aui-title">{{$route.meta.title}}</div>
@@ -146,6 +146,11 @@ export default {
       showService: false
     }
   },
+  computed: {
+    token() {
+      return this.$store.getters.token;
+    }
+  },
   created() {
     this.getData()
   },
@@ -193,11 +198,17 @@ export default {
       if(this.goods.goods_status == "4") {
         tips.alert("该商品已被别人拍下，如果买家20分钟内未付款，您就可以购买该商品了")
       } else {
-        //this.$router.push({ name: 'goodsBalance', params: { id: this.$route.params.id }})
-        location.href = this.toUrl + '/pages/mine/shoplist/balance.html?gid=' + this.$route.params.id;
+        if (this.token) {
+          location.href = this.toUrl + '/pages/mine/shoplist/balance.html?gid=' + this.$route.params.id;
+        }else{
+          this.$router.replace({ path: "/login", query: { url: this.$router.history.current.fullPath } })
+        }
       }
-      
+    },
+    back() {
+      this.$router.go(-1)
     }
+
   },
   watch: {
     '$route' (to, from) {

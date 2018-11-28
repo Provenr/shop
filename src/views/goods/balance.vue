@@ -102,6 +102,8 @@
 </template>
 
 <script>
+
+
 function getCCBY_PaySign() {
   return "TXCODE=" + mbcpay_b2c.TXCODE.value + "," +
 		"WAPVER=" + mbcpay_b2c.WAPVER.value + "," +
@@ -117,33 +119,15 @@ function getCCBY_PaySign() {
     "SUPPORTACCOUNTTYPE=" + mbcpay_b2c.SUPPORTACCOUNTTYPE.value;
 }
 
-// // ios 建行支付
-// function MBC_PAYINFO(){
-//   var orderinfo =
-//     "TXCODE="+mbcpay_b2c.TXCODE.value+","+
-//     "WAPVER="+mbcpay_b2c.WAPVER.value+","+
-//     "MERCHANTID="+mbcpay_b2c.MERCHANTID.value+","+
-//     "ORDERID="+mbcpay_b2c.ORDERID.value+","+
-//     "PAYMENT="+mbcpay_b2c.PAYMENT.value+","+
-//     "MAGIC="+mbcpay_b2c.MAGIC.value+","+
-//     "BRANCHID="+mbcpay_b2c.BRANCHID.value+","+
-//     "POSID="+mbcpay_b2c.POSID.value+","+
-//     "CURCODE="+mbcpay_b2c.CURCODE.value+","+
-//     "REMARK1="+mbcpay_b2c.REMARK1.value+","+
-//     "REMARK2="+mbcpay_b2c.REMARK2.value+","+
-//     "SUPPORTACCOUNTTYPE="+mbcpay_b2c.SUPPORTACCOUNTTYPE.value;
-//   return "{" + orderinfo + "}";
-// }
-
 import { getGoodsPay } from '@/api/goods'
 import { getUserInfo, getUserDefaultAddress, getAddress } from '@/api/user'
 import { createOrder, getOrder, orderPay } from '@/api/order'
 import tips from '@/utils/tip'
 import { getPlatform } from '@/utils'
 
-import { TransferDom, Popup, Radio, Group } from 'vux'
 
-import { MBC_PAYINFO, MBC_PAY } from '../../../static/js/ccbyios.js'
+
+import { TransferDom, Popup, Radio, Group } from 'vux'
 
 export default {
   name: 'goodsBalance',
@@ -309,9 +293,8 @@ export default {
             if(os == "android") {
               window.mbcpay.b2c(getCCBY_PaySign());
             } else if (os == "ios")  {
-              MBC_PAYINFO(getCCBY_PaySign())
-              MBC_PAY();
-              //location = "/mbcpay.b2c";
+              iospay(getCCBY_PaySign())
+              location = "/mbcpay.b2c";
             }
           } else { // 微信支付
             location.href = res.mweb_url + "&redirect_url=" + process.env.RESOURC_URL + "/goods/pay/paynotice?oid=" + this.orderId;
@@ -330,9 +313,7 @@ export default {
             if(os == "android") {
               window.mbcpay.b2c(getCCBY_PaySign());
             } else if (os == "ios")  {
-              MBC_PAYINFO(getCCBY_PaySign())
-              MBC_PAY();
-              //window.location = "/mbcpay.b2c";
+              window.location = "/mbcpay.b2c";
             }
           } else { // 微信支付
             location.href = res.mweb_url + "&redirect_url=" + process.env.RESOURC_URL + "/goods/pay/paynotice?oid=" + this.orderId;

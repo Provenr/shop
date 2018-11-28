@@ -6,16 +6,6 @@
       </a>
       <div class="aui-title">{{$route.meta.title}}</div>
     </header>
-    <section class="home-sale-tab-container">
-          <div class="time-list" v-if="is_specia">
-            <ul :class="item.isActive?'active':''" class="nav-item" v-for="(item, index) in special_list" :key="index" @click="clickTime(index, item)">
-              <li>
-                <span class="time fz32 fw">{{item.time}}</span>
-                <span class="fz24">{{item.day}}</span>
-              </li>
-            </ul>
-          </div>
-       </section>
     <div class="ph-scroller" style="margin-top:500px;">
       <scroller :on-infinite="infinite" :noDataText="noDataTxt" ref="my_scroller" style="padding-top:2.25rem">
         <section class="banner">
@@ -447,14 +437,14 @@ export default {
   .time-list{
     background: #fff;
     box-sizing: border-box;
-    overflow-x: scroll !important; 
+    // overflow-x: scroll !important; 
     // overflow-y: hidden;
     // white-space: nowrap;
     // &::-webkit-scrollbar{
     //   display: none;
     // }
     .nav-item{
-      width: 3.6rem;
+      width: 25%;
       height: 2.5rem;
       display: inline-block;
       &.active {
@@ -462,11 +452,11 @@ export default {
         border-bottom: .2rem solid;
       }
       li{
-        height: 2.0rem;
+        height: 2.3rem;
         width: 1.6rem;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
+        justify-content: center;
         align-items: center;
         margin: 0 auto;
       }
