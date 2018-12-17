@@ -19,3 +19,8 @@ export function getSpecialGoodsList(data) {
 export function setSpecialRemind(data) {
   return post('Ccbshop/remind', data)
 }
+
+// 获取建行唯一表示
+export function getCCBParams(data) {
+  return post('/Brand/jh_test', data)
+}

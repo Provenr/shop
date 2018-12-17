@@ -31,6 +31,12 @@ export const constantRouterMap = [
     meta: { title: '商品详情', isAuth: false  }
   },
   {
+    path: '/cart',
+    component: _import('goods/cart'),
+    name: 'cart',
+    meta: { title: '心愿单' }
+  },
+  {
     path: '/goods/:id/balance',
     component: _import('goods/balance'),
     name: 'goodsBalance',
