@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     to(gid) {
-      this.$router.push({name: 'goodsDetail', params: {id: gid}})
+      this.$router.push({name: 'goodsDetail', params: {id: gid}, query: { url: this.$router.history.current.fullPath } })
     }
   }
 }

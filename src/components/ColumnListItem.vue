@@ -32,7 +32,8 @@ export default {
   },
   methods: {
     toGoodDetail(gid) {
-      this.$router.push({name: 'goodsDetail', params: {id: gid}})
+      //this.$router.push({name: 'goodsDetail', params: {id: gid}})
+      this.$router.push({name: 'goodsDetail', params: {id: gid}, query: { url: this.$router.history.current.fullPath } })
     },
     setRemind(i) {
       this.$emit('userSetRemind', i);
