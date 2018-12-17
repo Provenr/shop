@@ -1,7 +1,7 @@
 <template>
   <div class="aui-row">
     <header class="aui-bar aui-bar-nav">
-      <a class="aui-pull-left aui-btn" @click="$router.back(-1)">
+      <a class="aui-pull-left aui-btn" href="javascript:;" @click="back">
         <span class="iconfont icon-leftarrow" style="font-size: 1rem"></span>
       </a>
       <div class="aui-title">{{topic.title}}</div>
@@ -121,6 +121,9 @@ export default {
         that.getData();
         done();
       }, 2000)
+    },
+    back() {
+      this.$router.push({ path: '/' });
     }
   }
 }

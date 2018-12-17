@@ -1,7 +1,7 @@
 <template>
   <div class="aui-row">
     <header class="aui-bar aui-bar-nav">
-      <a class="aui-pull-left aui-btn" @click="back">
+      <a class="aui-pull-left aui-btn" href="javascript:;" @click="back">
         <span class="iconfont icon-leftarrow" style="font-size: 1rem"></span>
       </a>
       <div class="aui-title">{{$route.meta.title}}</div>
@@ -155,6 +155,9 @@ export default {
     this.getData()
   },
   methods: {
+    back() {
+      this.$router.push({ path: this.$route.query.url });
+    },
     // 获取数据
     getData() {
       let that = this;
@@ -201,17 +204,15 @@ export default {
         if (this.token) {
           location.href = this.toUrl + '/pages/mine/shoplist/balance.html?gid=' + this.$route.params.id;
         }else{
-          this.$router.replace({ path: "/login", query: { url: this.$router.history.current.fullPath } })
+          this.$router.replace({ path: "/login" })
         }
       }
-    },
-    back() {
-      this.$router.go(-1)
     }
 
   },
   watch: {
     '$route' (to, from) {
+      console.log(to, from)
       this.goods = {};
       this.goodsList.splice(0, this.goodsList.length);
       this.banners.splice(0, this.banners.length);
