@@ -1,23 +1,27 @@
 <template>
   <div class="aui-row">
     <header class="aui-bar aui-bar-nav">
-      <a class="aui-pull-left aui-btn" @click="userCenter">
+      <!-- <a class="aui-pull-left aui-btn" @click="userCenter">
         <span class="iconfont icon-mine" style="font-size: 1rem"></span>
-      </a>
+      </a> -->
       <div class="aui-title">{{$route.meta.title}}</div>
     </header>
-    <div class="ph-scroller" style="margin-top:500px;">
-      <scroller
+    <!-- <div class="ph-scroller" style="margin-top:500px;"> -->
+    <div class="ph-scroller" style="height:100%;padding-bottom:2rem;">
+      <!-- <scroller
         :on-infinite="infinite"
         :noDataText="noDataTxt"
         ref="my_scroller"
         style="padding-top:2.25rem"
-      >
+      > -->
         <section class="banner">
           <swiper :options="swiperOption">
             <swiper-slide>
-              <img src="static/img/home-bank.jpg">
+              <img src="static/img/activity_header.jpg">
             </swiper-slide>
+            <!-- <swiper-slide>
+              <img src="static/img/home-temai.png">
+            </swiper-slide> -->
             <div class="swiper-pagination" slot="pagination"></div>
           </swiper>
         </section>
@@ -27,6 +31,7 @@
             <div class="aui-grid-label">奢品回收</div>
           </div>
           <div class="aui-col-xs-3 ph-home-nav-item" @click="repair">
+             <div class="aui-badge home-aui-badge"><img src="static/img/dflag.gif" alt="" srcset=""></div>
             <i class="iconfont icon-yanghuweixiu"></i>
             <div class="aui-grid-label">维护保养</div>
           </div>
@@ -40,69 +45,23 @@
           </div>
         </section>
         <section class="container home-topic-wrapper">
-          <router-link class="left" :to="'/shop'">
-            <img src="static/img/home-ziying.png" alt>
+          <router-link  :to="'/shop'">
+            <img src="static/img/activity_two.jpg" alt>
           </router-link>
-          <div class="right">
-            <router-link class="special_list" :to="'/topic/'+special_top.id+'?flag=topnew'">
-              <img src="static/img/home-shagnxin.png" alt>
-              <div class="title">{{special_top.title}}</div>
-              <div class="num">{{special_top.count}}款</div>
-            </router-link>
-            <router-link class="special_list" :to="'/topic/'+special_button.id">
-              <img src="static/img/home-jianlou.png" alt>
-              <div class="title">{{special_button.title}}</div>
-              <div class="num">{{special_button.zhe}}</div>
-            </router-link>
-          </div>
         </section>
-        <section class="home-sale-tab-container">
-          <div class="time-list" v-if="is_specia">
-            <ul
-              :class="item.isActive?'active':''"
-              class="nav-item"
-              v-for="(item, index) in special_list"
-              :key="index"
-              @click="clickTime(index, item)"
-            >
-              <li>
-                <span class="time fz32 fw">{{item.time}}</span>
-                <span class="fz24">{{item.day}}</span>
-              </li>
-            </ul>
-          </div>
-        </section>
+       
         <section class="home-sale-wrapper">
-          <!-- <div class="time-list" v-if="is_specia">
-            <ul :class="item.isActive?'active':''" class="nav-item" v-for="(item, index) in special_list" :key="index" @click="clickTime(index, item)">
-              <li>
-                <span class="time fz32">{{item.time}}</span>
-                <span class="fz24">{{item.day}}</span>
-              </li>
-            </ul>
-          </div>-->
-          <div class="img-title" v-if="is_specia">
-            <img :src="special.img" alt>
-            <div class="countdown-head-box">
-              <strong class="shop-head-name fz34">{{special.stxt}}</strong>
-              <div class="shop-head-time" v-if="special.state!='3'">
-                <span>{{special.ttxt}}</span>
-                <span>{{special.time.hour}}</span>
-                <span>{{special.time.minute}}</span>
-                <span>{{special.time.second}}</span>
-              </div>
-            </div>
-          </div>
-          <div class="img-title" v-if="!is_specia">
-            <div class="countdown-head-box" style="margin-top:0">
-              <strong class="shop-head-name fz34">猜你喜欢</strong>
-            </div>
-          </div>
-          <column-list-item :List="goodsList" @userSetRemind="setRemind"></column-list-item>
+          <goods-list :list="goodsList" @userSetRemind="setRemind"></goods-list>
         </section>
-      </scroller>
+
+        <section class="container home-introduce c999">
+          <div class="loadmore fz28 c333"  @click="checkmore">点击查看更多>></div>
+          <div class="fz24" style="margin-bottom:.3rem">本服务由胖虎奢侈品提供</div>
+          <div class="fz24">客服电话：<a href="4000865285" class="home-tel c999">400-086-5285</a>（10:00-18:30）</div>
+        </section>
+      <!-- </scroller> -->
     </div>
-    <nav class="mui-bar mui-bar-tab">
+    <!-- <nav class="mui-bar mui-bar-tab">
       <a href="/bank" class="mui-tab-item mui-active">
         <span class="mui-icon iconfont icon-home"></span>
         <span class="mui-tab-label">首页</span>
@@ -115,7 +74,8 @@
         <span class="mui-icon iconfont icon-mine"></span>
         <span class="mui-tab-label">我的</span>
       </a>
-    </nav>
+    </nav> -->
+    <tab-nav></tab-nav>
   </div>
 </template>
 
@@ -128,13 +88,15 @@ import {
   getSpecialGoodsList,
   setSpecialRemind
 } from "@/api/shop";
-import { secTotime, getPlatform } from "@/utils";
+import { secTotime, getPlatform, getQuery} from "@/utils";
 import tips from "@/utils/tip";
 
 import axios from "axios";
 import qs from "qs";
+import { clean } from 'semver';
 
-import columnListItem from "@/components/ColumnListItem";
+import TabNav from "@/components/TabNav";
+import GoodsList from "@/components/GoodsList";
 
 const TestServe = axios.create({
   baseURL: "http://pre.apiv1-app2018.ponhu.cn/Brand/jh_test",
@@ -146,12 +108,14 @@ const TestServe = axios.create({
   }
 });
 
+
 export default {
   name: "home",
   components: {
     swiper,
     swiperSlide,
-    columnListItem
+    GoodsList,
+    TabNav
   },
   data() {
     return {
@@ -189,10 +153,10 @@ export default {
     this.getData();
   },
   mounted() {
-    let _user_id = localStorage.getItem("");
-    let remark1 = "";
-    let _ccb = "CCBTIMESTAMP";
-    let sign = "";
+    let _user_id = localStorage.getItem("user_id");
+    let remark1 = getQuery('remark1');
+    let _ccb = getQuery('CCBTIMESTAMP');
+    let sign = getQuery('CCBSIGN');
     axios
       .post(
         "http://pre.apiv1-app2018.ponhu.cn/Brand/jh_test",
@@ -467,19 +431,8 @@ export default {
         });
       }
     },
-    cart() {
-      // let rurl = this.toUrl + "/pages/identifyPhy/index.html";
-      if (this.token) {
-        // location.href = rurl;
-         this.$router.push({
-          path: "/cart",
-        });
-      } else {
-        this.$router.replace({
-          path: "/login",
-          query: { url: this.$router.history.current.fullPath }
-        });
-      }
+    checkmore(){
+
     }
   }
 };
@@ -504,43 +457,9 @@ export default {
 }
 .home-topic-wrapper {
   display: flex;
-  margin: 0.6rem 0;
-  padding-top: 0.8rem;
-  padding-bottom: 0.8rem;
-  .left {
-    width: 8.375rem;
-    height: 7.2rem;
-    img {
-      display: block;
-      width: 8.375rem;
-      height: 7.2rem;
-    }
-  }
-  .right {
-    width: 8.375rem;
-    margin-left: 0.4rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    .special_list {
-      position: relative;
-      .num {
-        top: 1.8rem;
-        position: absolute;
-        font-size: 0.65rem;
-        color: #666666;
-        left: 0.8rem;
-      }
-      .title {
-        position: absolute;
-        top: 0.8rem;
-        left: 0.8rem;
-        font-size: 0.85rem;
-        font-weight: 500;
-        color: #333333;
-      }
-    }
-  }
+  // margin: 0.6rem 0;
+  padding: .45rem;
+  background: #f7f7f7;
 }
 .home-sale-tab-container {
   width: 100%;
@@ -586,9 +505,9 @@ export default {
   }
 }
 .home-sale-wrapper {
-  margin: 0 0 0.6rem 0;
+  // margin: 0 0 0.6rem 0;
   box-sizing: border-box;
-
+  padding: 0 .45rem;
   .img-title {
     padding: 0.75rem;
     background: #fff;
@@ -684,5 +603,24 @@ export default {
 .mui-focusin>.mui-bar-header-secondary,.mui-focusin>.mui-bar-nav {
     position: absolute
 }
+.home-aui-badge{
+  background-color: transparent;
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  z-index: 0;
+  width: 3rem;
+}
 
+.home-tel{
+  text-decoration: underline;
+}
+.home-introduce{
+  background: #f7f7f7;
+  text-align: center;
+  padding-bottom: 2rem;
+  .loadmore{
+    margin-bottom: .7rem
+  }
+}
 </style>

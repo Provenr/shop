@@ -117,3 +117,16 @@ export function removeLocalStorage(key) {
   window.localStorage.removeItem(key)
 }
 /* -----------------------------localStorage------------------------------------ End */
+
+export function getQuery (pa) {
+  var url = window.location.href.replace(/#+.*$/, ''),
+      params = url.substring(url.indexOf("?") + 1, url.length).split("&"),
+      param = {};
+  for (var i = 0; i < params.length; i++) {
+      var pos = params[i].indexOf('='),//查找name=value
+          key = params[i].substring(0, pos),
+          val = params[i].substring(pos + 1);//提取value
+      param[key] = val;
+  }
+  return (typeof(param[pa]) == "undefined") ? "" : param[pa];
+}
