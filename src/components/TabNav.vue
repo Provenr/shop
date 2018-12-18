@@ -42,12 +42,8 @@ export default {
       }
     },
     cart() {
-      // let rurl = this.toUrl + "/pages/identifyPhy/index.html";
       if (this.token) {
-        // location.href = rurl;
-         this.$router.push({
-          path: "/cart",
-        });
+        this.$router.push({path: '/goods/balance/cart', query: {flag: 'tab'}})
       } else {
         this.$router.replace({
           path: "/login",
