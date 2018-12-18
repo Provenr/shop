@@ -88,7 +88,7 @@ import {
   getSpecialGoodsList,
   setSpecialRemind
 } from "@/api/shop";
-import { secTotime, getPlatform, getQuery} from "@/utils";
+import { secTotime, getPlatform, getQuery,setLocalStorage} from "@/utils";
 import tips from "@/utils/tip";
 
 import axios from "axios";
@@ -157,8 +157,14 @@ export default {
     let remark1 = getQuery('remark1');
     let _ccb = getQuery('CCBTIMESTAMP');
     let sign = getQuery('CCBSIGN');
-    axios
-      .post(
+    let CCBSINGNMODEL = {
+          user_id: _user_id,
+          remark1: remark1,
+          CCBTIMESTAMP: _ccb,
+          CCBSIGN: sign
+        };
+    window.localStorage.setItem('CCBSINGNMODEL', JSON.stringify(CCBSINGNMODEL))
+    axios.post(
         "http://pre.apiv1-app2018.ponhu.cn/Brand/jh_test",
         {
           user_id: _user_id,
