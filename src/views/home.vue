@@ -512,6 +512,7 @@ export default {
 }
 .home-sale-wrapper {
   // margin: 0 0 0.6rem 0;
+  min-height: 6rem;
   box-sizing: border-box;
   padding: 0 .45rem;
   .img-title {
@@ -545,70 +546,7 @@ export default {
   }
 }
 
-.mui-bar {
-  position: fixed;
-  z-index: 10;
-  right: 0;
-  left: 0;
-  height: 0.5rem;
-  line-height: 1.2;
-  background-color: #fff;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  box-shadow: 0 0 1px rgba(0,0,0,.85);
-}
-.mui-bar .iconfont{
-  font-size: 1.2rem;
-}
-.mui-bar-tab {
-  bottom: 0;
-  display: table;
-  width: 100%;
-  height: 50px;
-  padding: 0;
-  table-layout: fixed;
-  border-top: 0;
-  border-bottom: 0;
-  -webkit-touch-callout: none;
-}
-
-.mui-bar-tab .mui-tab-item {
-  display: table-cell;
-  overflow: hidden;
-  width: 1%;
-  height: 50px;
-  text-align: center;
-  vertical-align: middle;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  color: #929292;
-}
-
-.mui-bar-tab .mui-tab-item.mui-active {
-  color: #09B6F2;
-}
-
-.mui-bar-tab .mui-tab-item .iconfont{
-  top: 3px;
-  width: 24px;
-  height: 24px;
-  // padding-top: 0;
-  // padding-bottom: 0;
-}
-.mui-bar-tab .mui-tab-item .mui-icon~.mui-tab-label {
-  font-size: 11px;
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis
-}
-
-.mui-bar-tab .mui-tab-item .mui-icon:active {
-    background: 0 0
-}
-
-.mui-focusin>.mui-bar-header-secondary,.mui-focusin>.mui-bar-nav {
-    position: absolute
-}
+// 
 .home-aui-badge{
   background-color: transparent;
   position: absolute;
