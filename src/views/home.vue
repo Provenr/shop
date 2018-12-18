@@ -75,7 +75,7 @@
         <span class="mui-tab-label">我的</span>
       </a>
     </nav> -->
-    <tab-nav></tab-nav>
+    <tab-nav :active="'home'"></tab-nav>
   </div>
 </template>
 

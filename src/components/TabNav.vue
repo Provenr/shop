@@ -1,14 +1,14 @@
 <template>
    <nav class="mui-bar mui-bar-tab">
-      <a class="mui-tab-item mui-active">
+      <a  :class="['mui-tab-item',active == 'home' ? 'mui-active' : '']">
         <span class="mui-icon iconfont icon-home"></span>
         <span class="mui-tab-label">首页</span>
       </a>
-      <a class="mui-tab-item" @click.prevent="cart">
+      <a  :class="['mui-tab-item',active == 'cart' ? 'mui-active' : '']" @click.prevent="cart">
         <span class="mui-icon iconfont icon-xinyuandan"></span>
         <span class="mui-tab-label">心愿单</span>
       </a>
-      <a class="mui-tab-item" @click.prevent="userCenter">
+      <a  :class="['mui-tab-item',active == 'mine' ? 'mui-active' : '']" @click.prevent="userCenter">
         <span class="mui-icon iconfont icon-mine"></span>
         <span class="mui-tab-label">我的</span>
       </a>
@@ -22,7 +22,9 @@ export default {
     }
   },
   props: {
-   
+   active: {
+      type: String,
+    },
   },
   computed: {
     token() {
@@ -50,6 +52,11 @@ export default {
           query: { url: this.$router.history.current.fullPath }
         });
       }
+    },
+    home() {
+       this.$router.push({
+          path: "/home",
+        });
     }
   }
 }
