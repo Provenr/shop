@@ -51,15 +51,28 @@
               <div class="price">￥{{goods.ph_price}}</div>
             </div>
           </div>
+          <div class="goods-list">
+            <div class="item">
+              <img :src="goods.goods_images">
+            </div>
+            <div class="item-box">
+              <div class="name">{{goods.goods_name}}</div>
+              <div class="price">￥{{goods.ph_price}}</div>
+            </div>
+          </div>
           <div class="ly">
             <textarea placeholder="给卖家留言" v-model="form.message"></textarea>
           </div>
         </div>
         <div class="ph-nav-gap"></div>
         <div class="ph-bal-pay">
-          <div class="item">
+          <!-- <div class="item">
             <span class="l"><i class="iconfont icon-jianhang jh"></i> 龙支付</span>
             <label><input class="aui-radio" type="radio" name="payBank" v-model="form.payid" value="10"></label>
+          </div> -->
+          <div class="item">
+            <span class="l">满减优惠</span>
+            <label>-￥200</label>
           </div>
           <!-- <div class="ph-line"></div>
           <div class="item">
@@ -78,6 +91,7 @@
         </group>
       </popup>
     </div>
+    <div style="height: 2.5rem;"></div>
     <div class="ph-bal-bar">
       <div class="sum-price">应付：￥{{form.total}}</div>
       <a class="button" @click="submit">立即支付</a>

@@ -98,8 +98,13 @@
     <div style="height: 2.5rem;"></div>
     <div class="ph-goods-bar">
       <div class="button-box">
-        <a href="tel:4000865285" class="button">咨询</a>
+        <a href="tel:4000865285" class="item">
+          <i class="iconfont icon-message"></i>
+          <div class="doc">咨询</div>
+        </a>
+        <a class="button" @click="addcart" v-if="goods.shelevs_type!=3">加入心愿单</a>
         <a class="button" @click="tobalance" v-if="goods.shelevs_type!=3">立即购买</a>
+        <a href="javascript:;" class="onbutton" v-if="goods.shelevs_type==3">已售罄</a>
       </div>
     </div>
 
@@ -112,7 +117,7 @@ import 'swiper/dist/css/swiper.css'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import { TransferDom, Popup } from 'vux'
 
-import { getGoodsInfo } from '@/api/goods'
+import { getGoodsInfo, addShoppingCart } from '@/api/goods'
 import { secTotime } from '@/utils'
 import tips from '@/utils/tip'
 
@@ -202,17 +207,33 @@ export default {
         tips.alert("该商品已被别人拍下，如果买家20分钟内未付款，您就可以购买该商品了")
       } else {
         if (this.token) {
-          location.href = this.toUrl + '/pages/mine/shoplist/balance.html?gid=' + this.$route.params.id;
+          //this.$router.push({ path: "/goods/"+this.$route.params.id+"/balance" })
+          location.href = this.toUrl + '/pages/mine/shoplist/balance.html?flag=info&gid=' + this.$route.params.id;
         }else{
           this.$router.replace({ path: "/login" })
         }
+      }
+    },
+    // 加入心愿单
+    addcart() {
+      if (this.token) {
+        tips.loading();
+        addShoppingCart(this.$route.params.id).then(res => {
+          this.$router.push({path: '/goods/balance/cart', query: {url: this.$router.history.current.fullPath ,flag: 'info'}})
+          tips.loaded();
+        }).catch(error => {
+          tips.loaded();
+          tips.alert(error)
+        });
+      }
+      else {
+        this.$router.replace({ path: "/login" })
       }
     }
 
   },
   watch: {
     '$route' (to, from) {
-      console.log(to, from)
       this.goods = {};
       this.goodsList.splice(0, this.goodsList.length);
       this.banners.splice(0, this.banners.length);
@@ -411,7 +432,9 @@ export default {
   line-height:1rem;
   padding: .75rem .75rem .7rem;
 }
-
+.bar-bottom {
+  bottom: 2.5rem;
+}
 .ph-goods-bar {
   width: 100%;
   height: 3rem;
@@ -425,7 +448,21 @@ export default {
     height: 3rem;
     align-items: center;
     justify-content: flex-end;
-    margin-right: 1.2rem;
+    margin-right: .8rem;
+    .item {
+      flex: 1;
+      text-align: left;
+      color: #333333;
+      padding-left: .6rem;
+      line-height: 1rem;
+      i {
+        font-size: 1rem;
+        padding-left: .2rem;
+      }
+      .doc {
+        font-size: .4rem;
+      }
+    }
   }
   .button {
     background-color: #fff;
@@ -433,6 +470,16 @@ export default {
     border:1px solid #09B6F2;
     border-radius:1rem;
     color: #09B6F2;
+    font-size: .75rem;
+    width: 5.75rem;
+    margin-left: .75rem;
+  }
+  .onbutton {
+    background-color: #fff;
+    height:2rem;
+    border:1px solid #666666;
+    border-radius:1rem;
+    color: #666666;
     font-size: .75rem;
     width: 5.75rem;
     margin-left: .75rem;

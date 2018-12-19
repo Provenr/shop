@@ -25,6 +25,22 @@ export function getFirstCate(gid) {
   return post('/Homepage/firstCate', { })
 }
 
+// 添加购物车
+export function addShoppingCart(gid) {
+  return post('/Shoppingcart/addShoppingCart', { goodsid: gid })
+}
+// 购物车列表
+export function getShoppingCartList() {
+  return post('/Shoppingcart/ShoppingCartLists')
+}
+// 删除购物车
+export function delShoppingcart(ids) {
+  return post('/Shoppingcart/delOneGoods', { cart_id: ids })
+}
+// 去结算
+export function getGoodsPays(ids) {
+  return post('/Shoppingcart/goSettlement', { goodsid: ids })
+}
 // 立即购买
 export function getGoodsPay(gid) {
   return post('/Shoppingcart/goSettlementOne', { goodsid: gid })
