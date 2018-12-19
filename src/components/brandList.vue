@@ -38,7 +38,6 @@ export default {
   }
 }
 </script>
-</script>
 
 <style lang="less" scoped>
 .opacity{

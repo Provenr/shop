@@ -25,16 +25,22 @@ export const constantRouterMap = [
     meta: { title: '专题', isAuth: false  }
   },
   {
+    path: '/topic/mark/info',
+    component: _import('topic/mark'),
+    name: 'topic',
+    meta: { title: '活动规则', isAuth: false }
+  },
+  {
     path: '/goods/:id',
     component: _import('goods/index'),
     name: 'goodsDetail',
     meta: { title: '商品详情', isAuth: false  }
   },
   {
-    path: '/cart',
+    path: '/goods/balance/cart',
     component: _import('goods/cart'),
-    name: 'cart',
-    meta: { title: '心愿单' }
+    name: 'shopingCart',
+    meta: { title: '心愿单', isAuth: true }
   },
   {
     path: '/goods/:id/balance',

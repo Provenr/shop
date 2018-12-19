@@ -73,6 +73,7 @@ export default {
   background-color: #fff;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
+  //box-shadow: 0 0 1px rgba(0,0,0,.85);
 }
 .mui-bar .iconfont{
   font-size: 1.2rem;
