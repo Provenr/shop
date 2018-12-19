@@ -119,7 +119,7 @@ export function removeLocalStorage(key) {
 /* -----------------------------localStorage------------------------------------ End */
 
 export function getQuery (pa) {
-  var url = window.location.href.replace(/#+.*$/, ''),
+  var url = window.location.href,
       params = url.substring(url.indexOf("?") + 1, url.length).split("&"),
       param = {};
   for (var i = 0; i < params.length; i++) {

@@ -153,7 +153,7 @@ export default {
     this.getData();
   },
   mounted() {
-    let _user_id = localStorage.getItem("user_id");
+    let _user_id = getQuery('user_id');
     let remark1 = getQuery('remark1');
     let _ccb = getQuery('CCBTIMESTAMP');
     let sign = getQuery('CCBSIGN');
@@ -438,7 +438,9 @@ export default {
       }
     },
     checkmore(){
-
+      this.$router.replace({
+          path: "/login",
+        });
     }
   }
 };
