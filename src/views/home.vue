@@ -439,7 +439,7 @@ export default {
     },
     checkmore(){
       this.$router.replace({
-          path: "/login",
+          path: "/shop",
         });
     }
   }
