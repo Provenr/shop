@@ -32,6 +32,17 @@
   </div>
 </template>
 
+<script>
+export default {
+  methods: {
+    back(){
+      this.$router.push({ path: this.$route.query.url });
+    }
+  }
+}
+</script>
+
+
 <style lang="less" scoped>
 .ph-topic-rule {
   background-color: #FFF;

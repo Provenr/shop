@@ -16,7 +16,7 @@
       > -->
         <section class="banner">
           <swiper :options="swiperOption">
-            <swiper-slide>
+            <swiper-slide @click.native="rule">
               <img src="static/img/activity_header.jpg">
             </swiper-slide>
             <!-- <swiper-slide>
@@ -88,6 +88,9 @@ import {
   getSpecialGoodsList,
   setSpecialRemind
 } from "@/api/shop";
+import {
+  getHomeTopicInfo
+} from "@/api/goods";
 import { secTotime, getPlatform, getQuery,setLocalStorage} from "@/utils";
 import tips from "@/utils/tip";
 
@@ -97,17 +100,6 @@ import { clean } from 'semver';
 
 import TabNav from "@/components/TabNav";
 import GoodsList from "@/components/GoodsList";
-
-const TestServe = axios.create({
-  baseURL: "http://pre.apiv1-app2018.ponhu.cn/Brand/jh_test",
-  timeout: 10000,
-  responseType: "json",
-  headers: {
-    //'Content-Type': 'application/form-data'
-    "Content-Type": "application/x-www-form-urlencoded"
-  }
-});
-
 
 export default {
   name: "home",
@@ -149,8 +141,9 @@ export default {
     }
   },
   created() {
-    this.getSum();
-    this.getData();
+    // this.getSum();
+    // this.getData();
+    this.activeData();
   },
   mounted() {
     let _user_id = getQuery('user_id');
@@ -212,7 +205,7 @@ export default {
                 break;
               }
             }
-            this.special_list = sList;
+            this.goods_list = sList;
             // 获取特卖专场商品
             this.getSpecialGoods(true);
           } else {
@@ -236,6 +229,34 @@ export default {
         .catch(error => {
           tips.loaded();
           tips.alert(error);
+        });
+    },
+    activeData(){
+      getHomeTopicInfo(96, 1, 100)
+        .then(res => {
+          let that = this;
+          let sList = [];
+            for (let item of res.list) {
+              sList.push({
+              goodsId: item.id,
+              img: item.goods_images,
+              name: item.goods_name,
+              price: item.ph_price,
+              del: item.original_price
+            });
+            }
+            this.goodsList = sList;
+          tips.loaded();
+        })
+        .catch(error => {
+          tips.loaded();
+          tips.alert(error);
+        });
+    },
+    rule(){
+      this.$router.push({
+          path: "/topic/mark/info",
+          query: { url: this.$router.history.current.fullPath }
         });
     },
     getSum() {

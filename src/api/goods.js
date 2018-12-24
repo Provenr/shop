@@ -5,8 +5,8 @@ export function getTopicInfo(tid, page) {
   return post('/Index/showSpecail', { sid: tid, p: page })
 }
 // 获取首页专题
-export function getHomeTopicInfo(tid, page) {
-  return post('/Homepage/showSpecail', { sid: tid, p: page })
+export function getHomeTopicInfo(tid, page, row='') {
+  return post('/Homepage/showSpecail', { sid: tid, p: page, row: row })
 }
 
 // 获取商品详情
