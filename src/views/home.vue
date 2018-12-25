@@ -97,6 +97,7 @@ import tips from "@/utils/tip";
 import axios from "axios";
 import qs from "qs";
 import { clean } from 'semver';
+import { SERVICE_API } from '../../config/prod.env';
 
 import TabNav from "@/components/TabNav";
 import GoodsList from "@/components/GoodsList";
@@ -132,7 +133,8 @@ export default {
       special_list: [],
       setInter: "",
       goodsList: [],
-      toUrl: process.env.WAP_URL
+      toUrl: process.env.WAP_URL,
+      SERVICE_API: process.env.SERVICE_API
     };
   },
   computed: {
@@ -420,8 +422,7 @@ export default {
       let token = window.localStorage.getItem("token");
       let userid = window.localStorage.getItem("userid");
       let os = window.localStorage.getItem("os");
-      let rurl =
-        "https://apiv2-app.ponhu.cn/ccbyh/yanghu?userid=" +
+      let rurl = this.SERVICE_API + "/ccbyh/yanghu?userid=" +
         userid +
         "&token=" +
         token +
