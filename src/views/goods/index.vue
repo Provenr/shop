@@ -15,9 +15,9 @@
             </swiper-slide>
             <div class="swiper-pagination" slot="pagination"></div>
           </swiper>
-          <!-- <div class="sold-out">
-            <div class="out_icon">售罄</div>
-          </div> -->
+          <div class="swiper-cart" @click="goCart">
+            <img src="static/img/cart.png" alt="">
+          </div>
         </div>
         <div class="ph-goods-detail">
           <div class="down_con" v-if="isdown">限时特卖 {{down_time}}</div>
@@ -102,9 +102,9 @@
           <i class="iconfont icon-message"></i>
           <div class="doc">咨询</div>
         </a>
-        <a class="button" @click="addcart" v-if="goods.shelevs_type!=3">加入心愿单</a>
-        <a class="button" @click="tobalance" v-if="goods.shelevs_type!=3">立即购买</a>
-        <a href="javascript:;" class="onbutton" v-if="goods.shelevs_type==3">已售罄</a>
+        <a class="button" @click="addcart" v-if="goods.goods_status==1">加入心愿单</a>
+        <a class="button" @click="tobalance" v-if="goods.goods_status==1">立即购买</a>
+        <a href="javascript:;" class="onbutton" v-if="goods.goods_status!=1">已售罄</a>
       </div>
     </div>
 
@@ -118,6 +118,7 @@ import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import { TransferDom, Popup } from 'vux'
 
 import { getGoodsInfo, addShoppingCart } from '@/api/goods'
+import { verIdentical } from '@/api/order'
 import { secTotime } from '@/utils'
 import tips from '@/utils/tip'
 
@@ -208,7 +209,29 @@ export default {
       } else {
         if (this.token) {
           //this.$router.push({ path: "/goods/"+this.$route.params.id+"/balance" })
-          location.href = this.toUrl + '/pages/mine/shoplist/balance.html?flag=info&gid=' + this.$route.params.id;
+          // 验证签名
+          
+          let that = this;
+          let jh_obj = window.localStorage.getItem('CCBSINGNMODEL');
+          verIdentical(JSON.parse(jh_obj)).then(res => {
+            if (res.is_fromjh == 1) {
+              location.href = this.toUrl + '/pages/mine/shoplist/balance.html?flag=info&gid=' + this.$route.params.id;
+            } else {
+              var dialog = new auiDialog({})
+              dialog.alert({
+                title: '温馨提示',
+                msg: '建行登录失效，需先登录建行APP才能享受活动优惠',
+                buttons: ['去登录', '原价购买']
+              }, function (ret) {
+                if (ret.buttonIndex == 2) {
+                  location.href = that.toUrl + '/pages/mine/shoplist/balance.html?flag=info&gid=' + that.$route.params.id;
+                }
+              })
+            }
+          }).catch(error => {
+            tips.alert(error)
+          });
+          
         }else{
           this.$router.replace({ path: "/login" })
         }
@@ -219,8 +242,8 @@ export default {
       if (this.token) {
         tips.loading();
         addShoppingCart(this.$route.params.id).then(res => {
-          this.$router.push({path: '/goods/balance/cart', query: {url: this.$router.history.current.fullPath ,flag: 'info'}})
           tips.loaded();
+          tips.toast("添加成功！");
         }).catch(error => {
           tips.loaded();
           tips.alert(error)
@@ -229,8 +252,10 @@ export default {
       else {
         this.$router.replace({ path: "/login" })
       }
+    },
+    goCart() {
+      this.$router.push({path: '/goods/balance/cart', query: {url: this.$router.history.current.fullPath ,flag: 'info'}})
     }
-
   },
   watch: {
     '$route' (to, from) {
@@ -274,25 +299,18 @@ export default {
   }
   .img-lb {
     position:relative;
-    .sold-out {
-      height: 100%;
-      width: 100%;
-      background:transparent;
-      background:rgba(0,0,0,0.2);
-      position: absolute;
-      top: 0;
-      z-index: 12;
-      .out_icon {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        -ms-transform: translate(-50%,-50%);
-        -moz-transform: translate(-50%,-50%);
-        -o-transform: translate(-50%,-50%);
-        transform: translate(-50%,-50%);
-        color: #fff;
-      }
-    }
+  }
+}
+.swiper-cart {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  img {
+    position: absolute;
+    color: #fff;
   }
 }
 .down_con {

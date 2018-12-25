@@ -1,6 +1,6 @@
 <template>
    <nav class="mui-bar mui-bar-tab">
-      <a  :class="['mui-tab-item',active == 'home' ? 'mui-active' : '']">
+      <a  :class="['mui-tab-item',active == 'home' ? 'mui-active' : '']" @click.prevent="home">
         <span class="mui-icon iconfont icon-home"></span>
         <span class="mui-tab-label">首页</span>
       </a>
