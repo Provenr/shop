@@ -56,11 +56,11 @@
     </div>
     <div v-if="empty" class="empty">
       <div class="empty-box">
-        <img src="static/img/empty-icon.png" alt="" srcset="" >
+        <img src="static/img/empty-icon.png" alt="">
       </div>
       暂无心愿单商品~
     </div>
-    <tab-nav :active="'cart'" v-if="showTab"></tab-nav>
+    <tab-nav :active="'cart'"></tab-nav>
   </div>
 </template>
 

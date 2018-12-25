@@ -21,5 +21,8 @@ export function orderPay(data) {
 }
 
 
-
+// 验证签名
+export function verIdentical(data) {
+  return post('Ccbshop/is_identical', data)
+}
 

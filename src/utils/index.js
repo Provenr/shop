@@ -128,5 +128,5 @@ export function getQuery (pa) {
           val = params[i].substring(pos + 1);//提取value
       param[key] = val;
   }
-  return (typeof(param[pa]) == "undefined") ? "" : param[pa];
+  return (typeof(param[pa]) == "undefined") ? "" : param[pa].replace('#/', '');
 }

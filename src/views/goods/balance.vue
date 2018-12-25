@@ -288,7 +288,7 @@ export default {
       location.href = this.thoUrl + "/pages/mine/address/chooseAdd.html?refid=2&gid=" + this.$route.params.id;
     },
     taikang() {
-      location.href = "https://m.ponhu.cn/Taikang/index/gid/"+this.$route.params.id+"/id/"+this.userId+"/os/2";
+      location.href = "http://pre.m.ponhu.cn/taikang/ccb/gid/"+this.$route.params.id+"/id/"+this.userId+"/os/2";
     },
     // 支付提交
     submit() {

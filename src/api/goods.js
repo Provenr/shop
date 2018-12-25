@@ -11,7 +11,7 @@ export function getHomeTopicInfo(tid, page, row='') {
 
 // 获取商品详情
 export function getGoodsInfo(gid) {
-  return post('/Goods/goodsDetailtop', { goodsid: gid })
+  return post('/Goods/ccbgoodsDetailtop', { goodsid: gid })
 }
 // 获取品牌列表
 export function getBrandList(gid) {

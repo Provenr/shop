@@ -146,10 +146,10 @@ export default {
     this.activeData();
   },
   mounted() {
-    let _user_id = getQuery('user_id');
-    let remark1 = getQuery('remark1');
-    let _ccb = getQuery('CCBTIMESTAMP');
-    let sign = getQuery('CCBSIGN');
+    let _user_id = '517D146704EDFE4E9D5E2D9BB8FFCC39';
+    let remark1 = '';
+    let _ccb = '1545620429372';
+    let sign = '2077a7770ff3ea8798788c2bc5aae2b32d04f470d1159b46fdfac0e480db63e3f5ab4ef63c424dcbb8585b263936eeec7aae6775099a583a5d391210855ee82199c00a270f86f377eb2299c3b5f948962f09611b102e33802f55177e41ee42bea5b60190b5d2150a59343c7039c870d2a3d95bb59289703a32b9bc6592317678';
     let CCBSINGNMODEL = {
           user_id: _user_id,
           remark1: remark1,
@@ -158,7 +158,7 @@ export default {
         };
     window.localStorage.setItem('CCBSINGNMODEL', JSON.stringify(CCBSINGNMODEL))
     axios.post(
-        "http://pre.apiv1-app2018.ponhu.cn/Brand/jh_test",
+        "http://pre.apiv2-app.ponhu.cn/Homepage/jh_test",
         {
           user_id: _user_id,
           remark1: remark1,
