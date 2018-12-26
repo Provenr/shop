@@ -7,7 +7,7 @@
       <div class="aui-title">{{$route.meta.title}}</div>
     </header>
     <div class="ph-scroller" v-if="!empty">
-      <scroller style="padding-top:2.25rem;">
+      <scroller>
         <div class="cart_list">
           <div class="list_box" v-for="(item,index) in goodsList" :key="index" @click="toInfo(item.id)">
             <swipe-del :swipeData="item" @delItem="handleDelItem">
@@ -29,16 +29,18 @@
           <div class="title">以下商品无法购买</div>
           <div class="cart_list">
             <div class="list_box" v-for="(item,index) in soldGoodsList" :key="index" @click="toInfo(item.id)">
-              <div class="goods-info">
-                <div class="img-box">
-                  <img :src="item.goods_images + '?imageView2/1/w/300/h/300'" />
-                  <div class="pos">已售罄</div>
+              <swipe-del :swipeData="item" @delItem="handleDelItem">  
+                <div class="goods-info">
+                  <div class="img-box">
+                    <img :src="item.goods_images + '?imageView2/1/w/300/h/300'" />
+                    <div class="pos">已售罄</div>
+                  </div>
+                  <div class="text-box">
+                    <div class="goods-title">{{item.goods_name}}</div>
+                    <div class="goods-price">￥{{item.ph_price}}</div>
+                  </div>
                 </div>
-                <div class="text-box">
-                  <div class="goods-title">{{item.goods_name}}</div>
-                  <div class="goods-price">￥{{item.ph_price}}</div>
-                </div>
-              </div>
+              </swipe-del>
             </div>
           </div>
         </div>
@@ -66,7 +68,6 @@
 
 <style lang="less" scoped>
 .empty{
-  margin: 6rem auto;
   text-align: center;
   color: #888;
   .empty-box{

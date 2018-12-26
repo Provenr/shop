@@ -89,7 +89,7 @@ import {
   setSpecialRemind
 } from "@/api/shop";
 import {
-  getHomeTopicInfo
+  getHomeGoods
 } from "@/api/goods";
 import { secTotime, getPlatform, getQuery,setLocalStorage} from "@/utils";
 import tips from "@/utils/tip";
@@ -97,7 +97,6 @@ import tips from "@/utils/tip";
 import axios from "axios";
 import qs from "qs";
 import { clean } from 'semver';
-import { SERVICE_API } from '../../config/prod.env';
 
 import TabNav from "@/components/TabNav";
 import GoodsList from "@/components/GoodsList";
@@ -152,12 +151,17 @@ export default {
     let remark1 = '';
     let _ccb = '1545620429372';
     let sign = '2077a7770ff3ea8798788c2bc5aae2b32d04f470d1159b46fdfac0e480db63e3f5ab4ef63c424dcbb8585b263936eeec7aae6775099a583a5d391210855ee82199c00a270f86f377eb2299c3b5f948962f09611b102e33802f55177e41ee42bea5b60190b5d2150a59343c7039c870d2a3d95bb59289703a32b9bc6592317678';
+    
+    // let _user_id = this.$route.query.user_id || ''; //getQuery('user_id');
+    // let remark1 = this.$route.query.remark1 || ''; //getQuery('remark1');
+    // let _ccb = this.$route.query.CCBTIMESTAMP || ''; //getQuery('CCBTIMESTAMP');
+    // let sign = this.$route.query.CCBSIGN || ''; //getQuery('CCBSIGN');
     let CCBSINGNMODEL = {
-          user_id: _user_id,
-          remark1: remark1,
-          CCBTIMESTAMP: _ccb,
-          CCBSIGN: sign
-        };
+      user_id: _user_id,
+      remark1: remark1,
+      CCBTIMESTAMP: _ccb,
+      CCBSIGN: sign
+    };
     window.localStorage.setItem('CCBSINGNMODEL', JSON.stringify(CCBSINGNMODEL))
     axios.post(
         "http://pre.apiv2-app.ponhu.cn/Homepage/jh_test",
@@ -234,7 +238,7 @@ export default {
         });
     },
     activeData(){
-      getHomeTopicInfo(96, 1, 100)
+      getHomeGoods({ sid: 607, p: 1, rows: 100 })
         .then(res => {
           let that = this;
           let sList = [];

@@ -72,6 +72,12 @@ export const constantRouterMap = [
     name: 'wallet',
     meta: { title: '我的钱包' }
   },
+  {
+    path: '/onlineservice',
+    component: _import('user/onlineservice'),
+    name: 'onlineservice',
+    meta: { title: '在线客服' }
+  },
 ]
 
 export default new Router({

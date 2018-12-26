@@ -9,6 +9,11 @@ export function getHomeTopicInfo(tid, page, row='') {
   return post('/Homepage/showSpecail', { sid: tid, p: page, row: row })
 }
 
+// 获取促销活动首页商品信息
+export function getHomeGoods(data) {
+  return post('/Ccbindex/getIndexSpecial', data)
+}
+
 // 获取商品详情
 export function getGoodsInfo(gid) {
   return post('/Goods/ccbgoodsDetailtop', { goodsid: gid })
@@ -27,11 +32,11 @@ export function getFirstCate(gid) {
 
 // 添加购物车
 export function addShoppingCart(gid) {
-  return post('/Shoppingcart/addShoppingCart', { goodsid: gid })
+  return post('/Ccbshoppingcart/addShoppingCart', { goodsid: gid })
 }
 // 购物车列表
 export function getShoppingCartList() {
-  return post('/Shoppingcart/ShoppingCartLists')
+  return post('/Ccbshoppingcart/ShoppingCartLists')
 }
 // 删除购物车
 export function delShoppingcart(ids) {
@@ -48,7 +53,7 @@ export function getGoodsPay(gid) {
 
 //  胖虎优选
 export function getOptimalGoods(option, page) {
-  return post('/Goods/zyindex', 
+  return post('/Ccbindex/selfGoodsList',
   { 
     storeid: option.storeid,
     cateid: option.secondCategoryId, 

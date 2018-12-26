@@ -98,13 +98,17 @@
     <div style="height: 2.5rem;"></div>
     <div class="ph-goods-bar">
       <div class="button-box">
-        <a href="tel:4000865285" class="item">
+        <!-- <a href="tel:4000865285" class="item">
           <i class="iconfont icon-message"></i>
           <div class="doc">咨询</div>
-        </a>
+        </a> -->
+        <router-link :to="'/onlineservice?url='+$router.history.current.fullPath" class="item">
+          <i class="iconfont icon-message"></i>
+          <div class="doc">咨询</div>
+        </router-link>
         <a class="button" @click="addcart" v-if="goods.goods_status==1">加入心愿单</a>
         <a class="button" @click="tobalance" v-if="goods.goods_status==1">立即购买</a>
-        <a href="javascript:;" class="onbutton" v-if="goods.goods_status!=1">已售罄</a>
+        <a href="javascript:;" class="onbutton" v-if="goods.goods_status==2||goods.goods_status==4">已售罄</a>
       </div>
     </div>
 
