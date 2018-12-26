@@ -422,12 +422,15 @@ export default {
       let token = window.localStorage.getItem("token");
       let userid = window.localStorage.getItem("userid");
       let os = window.localStorage.getItem("os");
+      let CCBSINGNMODEL = JSON.parse(window.localStorage.getItem("CCBSINGNMODEL"));
       let rurl = this.SERVICE_API + "/ccbyh/yanghu?userid=" +
         userid +
         "&token=" +
         token +
         "&os=" +
-        os;
+        os + 
+        '&ccbUid=' +
+        CCBSINGNMODEL.user_id 
       if (this.token) {
         location.href = rurl;
       } else {
