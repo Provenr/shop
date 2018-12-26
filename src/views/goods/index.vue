@@ -147,6 +147,7 @@ export default {
         loop:true
         //autoHeight: true
       },
+      goodsid: this.$route.params.id,
       goods: {},
       goodsAttrs: [],
       goodsList: [],
@@ -172,8 +173,9 @@ export default {
     getData() {
       let that = this;
       tips.loading();
-      getGoodsInfo(this.$route.params.id).then(res => {
+      getGoodsInfo(this.goodsid).then(res => {
         this.goods = res.list;
+        this.goodsid = res.list.id;
         this.banners = this.goods.img_src;
         this.goodsAttrs = res.canshu;
         // 猜你喜欢
@@ -219,7 +221,7 @@ export default {
           let jh_obj = window.localStorage.getItem('CCBSINGNMODEL');
           verIdentical(JSON.parse(jh_obj)).then(res => {
             if (res.is_fromjh == 1) {
-              location.href = this.toUrl + '/pages/mine/shoplist/balance.html?flag=info&gid=' + this.$route.params.id;
+              location.href = this.toUrl + '/pages/mine/shoplist/balance.html?flag=info&gid=' + this.goodsid;
             } else {
               var dialog = new auiDialog({})
               dialog.alert({
@@ -228,7 +230,7 @@ export default {
                 buttons: ['去登录', '原价购买']
               }, function (ret) {
                 if (ret.buttonIndex == 2) {
-                  location.href = that.toUrl + '/pages/mine/shoplist/balance.html?flag=info&gid=' + that.$route.params.id;
+                  location.href = that.toUrl + '/pages/mine/shoplist/balance.html?flag=info&gid=' + that.goodsid;
                 }
               })
             }

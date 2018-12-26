@@ -1,6 +1,6 @@
 <template>
   <div class="aui-row">
-    <header class="aui-bar aui-bar-nav">
+    <header class="aui-bar aui-bar-nav" style="position:fixed">
       <!-- <a class="aui-pull-left aui-btn" @click="userCenter">
         <span class="iconfont icon-mine" style="font-size: 1rem"></span>
       </a> -->
