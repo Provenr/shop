@@ -359,6 +359,8 @@ export default {
         tips.loaded()
       }).catch(() => {
         // _this.page--;
+        this.noData = true;
+        tips.loaded()
       });
     },
     infinite: function (done) {
