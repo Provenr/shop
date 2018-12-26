@@ -7,7 +7,7 @@
       <div class="aui-title">{{$route.meta.title}}</div>
     </header>
     <div class="ph-scroller" v-if="!empty">
-      <scroller>
+      <scroller style="padding-top:2.25rem;">
         <div class="cart_list">
           <div class="list_box" v-for="(item,index) in goodsList" :key="index" @click="toInfo(item.id)">
             <swipe-del :swipeData="item" @delItem="handleDelItem">
@@ -47,9 +47,9 @@
       </scroller>
     </div>
     <div :style="showTab?'height: 5rem;':'height: 2.5rem;'"></div>
-    <div class="ph-goods-bar" :class="showTab?'bar-botton':'bar-botton-mr'" v-if="!empty">
-      <div class="left-del">
-        <div @click="selectAll" class="all_select_box">
+    <div class="ph-goods-bar" :class="showTab?'bar-botton':'bar-botton-mr'">
+      <div class="left-del" @click="selectAll">
+        <div class="all_select_box">
           <label><input class="aui-radio icon_check" v-model="allChecked" type="checkbox"></label>
           <div class="all_select">全选</div>
         </div>
@@ -62,7 +62,7 @@
       </div>
       暂无心愿单商品~
     </div>
-    <tab-nav :active="'cart'"></tab-nav>
+    <tab-nav :active="'cart'" v-if="showTab"></tab-nav>
   </div>
 </template>
 

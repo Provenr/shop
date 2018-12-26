@@ -260,7 +260,7 @@ export default {
       }
     },
     goCart() {
-      this.$router.push({path: '/goods/balance/cart', query: {url: this.$router.history.current.fullPath ,flag: 'info'}})
+      this.$router.push({path: '/goods/balance/cart', query: {url: this.$router.history.current.fullPath , flag:'info'}})
     }
   },
   watch: {
